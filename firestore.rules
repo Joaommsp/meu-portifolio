@@ -1,0 +1,46 @@
+rules_version = '2';
+
+// Firestore Security Rules — produção
+//
+// Cole o conteúdo abaixo em:
+//   Firebase Console → Firestore Database → Rules
+//
+// Antes de colar, ATUALIZE a função `isAdmin()` com o UID
+// real da conta admin (Authentication → Users → coluna User UID).
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Verifica se o request é do admin autenticado.
+    // Substitua o UID pelo seu (mesmo valor de NEXT_PUBLIC_ADMIN_UID).
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid == 'm9GLhNQbNZRbwFT3l6M8XiJSIpF3';
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // POSTS
+    //   Leitura pública: só posts com `published == true`.
+    //   Admin: leitura total + escrita.
+    // ─────────────────────────────────────────────────────────
+    match /posts/{postId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // PROJECTS
+    //   Leitura pública total (sem flag de "published" no schema).
+    //   Admin: escrita.
+    // ─────────────────────────────────────────────────────────
+    match /projects/{projectId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Default: nega tudo (defense in depth).
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

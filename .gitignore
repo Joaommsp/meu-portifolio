@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# backup do hero re-encodado (mantém só o usado no site)
+/public/hero-video/hero.original.mp4
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
