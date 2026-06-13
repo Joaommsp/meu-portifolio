@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu } from "lucide-react"
 
@@ -49,9 +50,16 @@ export function MobileNav() {
           <Link
             href="/"
             onClick={() => setOpen(false)}
-            className="font-display text-lg font-semibold tracking-tight"
+            className="inline-flex items-center"
+            aria-label="João Marcos · página inicial"
           >
-            joão<span className="text-brand">.</span>marcos
+            <Image
+              src="/logo-light.png"
+              alt="João Marcos"
+              width={36}
+              height={36}
+              className="size-9"
+            />
           </Link>
         </div>
 

@@ -38,6 +38,46 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+    // ─────────────────────────────────────────────────────────
+    // GAMES
+    //   Leitura pública: só games com `published == true`.
+    //   Admin: leitura total + escrita.
+    // ─────────────────────────────────────────────────────────
+    match /games/{gameId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // BOOKS
+    //   Leitura pública: só books com `published == true`.
+    //   Admin: leitura total + escrita.
+    // ─────────────────────────────────────────────────────────
+    match /books/{bookId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // GUESTBOOK
+    //   Leitura pública: qualquer um vê todas mensagens.
+    //   Escrita: user autenticado pode criar/editar/deletar SÓ a própria
+    //     entrada (docId === auth.uid).
+    //   Admin: pode deletar qualquer entrada (moderação de spam).
+    //   Validação: message não vazia, máx 280 chars.
+    // ─────────────────────────────────────────────────────────
+    match /guestbook/{userId} {
+      allow read: if true;
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.userId == userId
+        && request.resource.data.message is string
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 280;
+      allow delete: if isAdmin()
+        || (request.auth != null && request.auth.uid == userId);
+    }
+
     // Default: nega tudo (defense in depth).
     match /{document=**} {
       allow read, write: if false;

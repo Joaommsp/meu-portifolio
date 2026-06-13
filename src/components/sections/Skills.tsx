@@ -37,8 +37,7 @@ export function Skills() {
         </ScrollReveal>
         <ScrollReveal delay={0.1}>
           <p className="mt-4 max-w-xl text-muted-foreground">
-            12 ferramentas que uso pra entregar projetos em produção. Passe
-            o mouse pra pausar a esteira.
+            Ferramentas que uso pra entregar projetos em produção. 
           </p>
         </ScrollReveal>
       </div>
@@ -70,11 +69,11 @@ export function Skills() {
       {/* Edge fades */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent"
+        className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient sm:w-32-to-r from-background to-transparent"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent"
+        className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient sm:w-32-to-l from-background to-transparent"
       />
     </section>
   )

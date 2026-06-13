@@ -15,9 +15,12 @@ export type NavItem = {
 export const NAV_ITEMS: readonly NavItem[] = [
   { href: "/", label: "Início" },
   { href: "/sobre", label: "Sobre" },
+  { href: "/now", label: "Agora" },
   { href: "/projetos", label: "Projetos" },
   { href: "/blog", label: "Blog" },
   { href: "/games", label: "Games" },
+  { href: "/livros", label: "Livros" },
+  { href: "/guestbook", label: "Guestbook" },
   { href: "/contato", label: "Contato" },
 ] as const
 
@@ -63,4 +66,4 @@ export const SOCIAL_LINKS: readonly SocialLink[] = [
   },
 ] as const
 
-export const CONTACT_EMAIL = "joao22melo_2023@outlook.com"
+export const CONTACT_EMAIL = "jmmsp2003@hotmail.com"

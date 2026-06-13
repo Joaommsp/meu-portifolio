@@ -6,6 +6,7 @@ import {
   PROJECT_STATUSES,
 } from "@/types/project"
 import { GAME_STATUSES } from "@/types/game"
+import { BOOK_STATUSES } from "@/types/book"
 
 /* ──────────────────────────────────────────────────────────────
    Helpers compartilhados
@@ -202,6 +203,53 @@ export const gameFormSchema = z.object({
 })
 
 export type GameFormValues = z.infer<typeof gameFormSchema>
+
+/* ──────────────────────────────────────────────────────────────
+   BOOK FORM
+   ────────────────────────────────────────────────────────────── */
+
+export const bookFormSchema = z.object({
+  slug: slugSchema,
+  title: z
+    .string()
+    .trim()
+    .min(1, "Título obrigatório")
+    .max(200, "Título muito longo"),
+  author: z
+    .string()
+    .trim()
+    .min(1, "Autor(a) obrigatório")
+    .max(150, "Autor muito longo"),
+  shortDescription: z
+    .string()
+    .trim()
+    .min(10, "Descrição curta deve ter ao menos 10 caracteres")
+    .max(200, "Descrição curta muito longa"),
+  synopsis: z
+    .string()
+    .trim()
+    .min(20, "Sinopse muito curta (mínimo 20 caracteres)"),
+  whyILikeIt: z
+    .string()
+    .trim()
+    .min(20, "Diga ao menos um pouco do porquê (mínimo 20 caracteres)"),
+  coverImage: requiredUrlSchema,
+  genres: z
+    .array(z.string().trim().min(1).max(40))
+    .max(10, "Máximo 10 gêneros"),
+  status: z.enum(BOOK_STATUSES, { message: "Status inválido" }),
+  yearRead: z
+    .number()
+    .int()
+    .min(1900, "Ano inválido")
+    .max(new Date().getFullYear() + 1, "Ano no futuro?"),
+  pages: z.number().int().min(0).max(99999).nullable(),
+  rating: z.number().min(0).max(10).nullable(),
+  featured: z.boolean(),
+  published: z.boolean(),
+})
+
+export type BookFormValues = z.infer<typeof bookFormSchema>
 
 /* ──────────────────────────────────────────────────────────────
    CONTACT FORM (público, página /contato)

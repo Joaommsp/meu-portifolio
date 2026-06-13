@@ -20,11 +20,14 @@ import type { Game, GameDoc, GameInput } from "@/types/game"
 
 const GAMES_COLLECTION = "games"
 
-/** Converte GameDoc (Firestore) → Game (UI). */
+/** Converte GameDoc (Firestore) → Game (UI). Normaliza arrays ausentes. */
 function toGame(id: string, data: Omit<GameDoc, "id">): Game {
   return {
     ...data,
     id,
+    gallery: Array.isArray(data.gallery) ? data.gallery : [],
+    platforms: Array.isArray(data.platforms) ? data.platforms : [],
+    genres: Array.isArray(data.genres) ? data.genres : [],
     createdAt: data.createdAt.toDate(),
     updatedAt: data.updatedAt.toDate(),
   }

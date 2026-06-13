@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
       // Capas de jogos — PlayStation Store + IGDB (banco de dados de games)
       { protocol: "https", hostname: "image.api.playstation.com" },
       { protocol: "https", hostname: "images.igdb.com" },
+      // Avatars Google (guestbook)
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
     ],
     formats: ["image/avif", "image/webp"],
   },

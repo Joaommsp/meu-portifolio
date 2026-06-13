@@ -24,6 +24,8 @@ function toProject(id: string, data: Omit<ProjectDoc, "id">): Project {
   return {
     ...data,
     id,
+    gallery: Array.isArray(data.gallery) ? data.gallery : [],
+    technologies: Array.isArray(data.technologies) ? data.technologies : [],
     startDate: data.startDate.toDate(),
     endDate: data.endDate?.toDate() ?? null,
     createdAt: data.createdAt.toDate(),

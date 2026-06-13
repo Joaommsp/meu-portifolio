@@ -27,7 +27,7 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://joaomarcos.dev"
 const SITE_NAME = "João Marcos"
 const SITE_DESCRIPTION =
-  "Portfolio pessoal de João Marcos — desenvolvedor frontend e designer UI/UX. Projetos, artigos e experimentos em React, Next.js e Tailwind."
+  "João Marcos — frontend dev e designer de UI/UX. Construo coisas com React, Next.js e Tailwind. Aqui ficam meus projetos, posts e o resto."
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -70,7 +70,15 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
-  icons: { icon: "/favicon.ico" },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 }
 
 export const viewport: Viewport = {

@@ -4,17 +4,24 @@ import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollReveal } from "@/components/animations"
 import { ProjectCard } from "@/components/projects/ProjectCard"
-import { sampleProjects } from "@/lib/mocks/sample-data"
+import { getAllProjects } from "@/lib/data/projects"
 
-export function FeaturedProjects() {
-  const featured = sampleProjects.filter((p) => p.featured).slice(0, 3)
+export async function FeaturedProjects() {
+  const all = await getAllProjects()
+  // Tenta featured primeiro, cai pros 3 mais recentes se ninguém marcado
+  const marked = all.filter((p) => p.featured)
+  const featured =
+    marked.length > 0 ? marked.slice(0, 3) : all.slice(0, 3)
+
+  // Se não tem projeto nenhum, não renderiza a seção
+  if (featured.length === 0) return null
 
   return (
     <section
       id="featured-projects"
       className="container mx-auto max-w-6xl scroll-mt-20 px-6 py-32"
     >
-      <div className="mb-12 flex items-end justify-between gap-4">
+      <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
         <div>
           <ScrollReveal>
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">

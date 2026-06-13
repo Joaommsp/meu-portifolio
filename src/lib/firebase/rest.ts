@@ -16,6 +16,7 @@ import type {
   ProjectStatus,
 } from "@/types/project"
 import type { Game, GameStatus } from "@/types/game"
+import type { Book, BookStatus } from "@/types/book"
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? ""
 const BASE = PROJECT_ID
@@ -424,4 +425,124 @@ export async function restGetGameBySlug(slug: string): Promise<Game | null> {
     limit: 1,
   })
   return docs[0] ? toGame(docs[0]) : null
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* Books                                                       */
+/* ─────────────────────────────────────────────────────────── */
+
+type BookRest = {
+  id: string
+  slug: string
+  title: string
+  author: string
+  shortDescription: string
+  synopsis: string
+  whyILikeIt: string
+  coverImage: string
+  genres: string[]
+  status: BookStatus
+  yearRead: number
+  pages: number | null
+  rating: number | null
+  featured: boolean
+  published: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
+function toBook(doc: RestDocument): Book {
+  const u = unwrapDoc<BookRest>(doc)
+  return {
+    id: u.id,
+    slug: u.slug ?? "",
+    title: u.title ?? "",
+    author: u.author ?? "",
+    shortDescription: u.shortDescription ?? "",
+    synopsis: u.synopsis ?? "",
+    whyILikeIt: u.whyILikeIt ?? "",
+    coverImage: u.coverImage ?? "",
+    genres: Array.isArray(u.genres) ? u.genres : [],
+    status: (u.status as BookStatus) ?? "lido",
+    yearRead:
+      typeof u.yearRead === "number"
+        ? u.yearRead
+        : new Date().getFullYear(),
+    pages: typeof u.pages === "number" ? u.pages : null,
+    rating: typeof u.rating === "number" ? u.rating : null,
+    featured: Boolean(u.featured),
+    published: Boolean(u.published),
+    createdAt: u.createdAt ?? new Date(),
+    updatedAt: u.updatedAt ?? new Date(),
+  }
+}
+
+export async function restListBooks(
+  options: { publishedOnly?: boolean; featuredOnly?: boolean } = {}
+): Promise<Book[]> {
+  const filters = []
+  if (options.publishedOnly) {
+    filters.push({
+      fieldFilter: {
+        field: { fieldPath: "published" },
+        op: "EQUAL",
+        value: { booleanValue: true },
+      },
+    })
+  }
+  if (options.featuredOnly) {
+    filters.push({
+      fieldFilter: {
+        field: { fieldPath: "featured" },
+        op: "EQUAL",
+        value: { booleanValue: true },
+      },
+    })
+  }
+
+  const where =
+    filters.length === 0
+      ? undefined
+      : filters.length === 1
+      ? filters[0]
+      : { compositeFilter: { op: "AND", filters } }
+
+  // Sem orderBy — evita exigir índice composto. Sort em memória abaixo.
+  const docs = await runQuery({
+    from: [{ collectionId: "books" }],
+    where,
+    limit: 100,
+  })
+  const books = docs.map(toBook)
+  books.sort((a, b) => b.yearRead - a.yearRead)
+  return books
+}
+
+export async function restGetBookBySlug(slug: string): Promise<Book | null> {
+  const docs = await runQuery({
+    from: [{ collectionId: "books" }],
+    where: {
+      compositeFilter: {
+        op: "AND",
+        filters: [
+          {
+            fieldFilter: {
+              field: { fieldPath: "slug" },
+              op: "EQUAL",
+              value: { stringValue: slug },
+            },
+          },
+          {
+            fieldFilter: {
+              field: { fieldPath: "published" },
+              op: "EQUAL",
+              value: { booleanValue: true },
+            },
+          },
+        ],
+      },
+    },
+    limit: 1,
+  })
+  return docs[0] ? toBook(docs[0]) : null
 }

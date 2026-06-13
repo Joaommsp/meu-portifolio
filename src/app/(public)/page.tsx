@@ -5,6 +5,7 @@ import { GithubSection } from "@/components/sections/GithubSection"
 import { WakatimeStats } from "@/components/sections/WakatimeStats"
 import { FeaturedProjects } from "@/components/sections/FeaturedProjects"
 import { LatestPosts } from "@/components/sections/LatestPosts"
+import { FeaturedGames } from "@/components/sections/FeaturedGames"
 import { ContactCTA } from "@/components/sections/ContactCTA"
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
       <WakatimeStats />
       <FeaturedProjects />
       <LatestPosts />
+      <FeaturedGames />
       <ContactCTA />
     </>
   )

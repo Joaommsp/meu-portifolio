@@ -10,6 +10,10 @@ import {
   Mail,
   Wrench,
   Gamepad2,
+  BookMarked,
+  Sparkles,
+  Award,
+  MessageCircle,
   ArrowRight,
 } from "lucide-react"
 
@@ -34,6 +38,13 @@ const PAGES = [
   { id: "home", title: "Início", href: "/", icon: Home, shortcut: "G H" },
   { id: "sobre", title: "Sobre", href: "/sobre", icon: User, shortcut: "G S" },
   {
+    id: "now",
+    title: "Agora",
+    href: "/now",
+    icon: Sparkles,
+    shortcut: "G N",
+  },
+  {
     id: "projetos",
     title: "Projetos",
     href: "/projetos",
@@ -49,6 +60,13 @@ const PAGES = [
     shortcut: "G G",
   },
   {
+    id: "livros",
+    title: "Livros",
+    href: "/livros",
+    icon: BookMarked,
+    shortcut: "G L",
+  },
+  {
     id: "contato",
     title: "Contato",
     href: "/contato",
@@ -56,6 +74,20 @@ const PAGES = [
     shortcut: "G C",
   },
   { id: "uses", title: "Uses", href: "/uses", icon: Wrench, shortcut: "G U" },
+  {
+    id: "recap",
+    title: `Recap ${new Date().getFullYear()}`,
+    href: `/recap/${new Date().getFullYear()}`,
+    icon: Award,
+    shortcut: "G R",
+  },
+  {
+    id: "guestbook",
+    title: "Guestbook",
+    href: "/guestbook",
+    icon: MessageCircle,
+    shortcut: "G K",
+  },
 ] as const
 
 export function CommandPalette({ open, onOpenChange }: Props) {

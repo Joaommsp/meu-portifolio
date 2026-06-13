@@ -276,7 +276,7 @@ export default async function BlogPostPage({ params }: Props) {
       {related.length > 0 && (
         <section className="border-t border-border bg-card/30 py-24">
           <div className="container mx-auto max-w-6xl px-6">
-            <div className="mb-12 flex items-end justify-between gap-4">
+            <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
               <div>
                 <ScrollReveal>
                   <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">

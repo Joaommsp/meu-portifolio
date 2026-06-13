@@ -67,27 +67,35 @@ type TimelineItem = {
 
 const TIMELINE: TimelineItem[] = [
   {
-    year: "2024 — agora",
+    year: "2025 — agora",
     title: "Frontend Developer",
-    org: "GFI · Polícia Militar PMPA",
+    org: "GFI · Consultoria Especializada",
     description:
-      "Construindo plataforma interna de gestão com React, Next.js e Tailwind. Multi-tenant, dark/light modes, dashboards comparativos.",
+      "Plataforma de gestão financeira em React, Next.js e Tailwind. Multi-tenant, dashboards comparativos, foco em produto.",
     type: "work",
   },
   {
-    year: "2022 — agora",
-    title: "Sistemas de Informação (8º semestre)",
+    year: "2023 — 2025",
+    title: "Design Gráfico",
+    org: "Egrafil · Gráfica Independência LTDA",
+    description:
+      "Criação de identidade visual, peças para redes sociais e materiais gráficos — repertório visual que hoje aplico em interface.",
+    type: "work",
+  },
+  {
+    year: "2021 — 2025",
+    title: "Bacharelado em Sistemas de Informação",
     org: "UNIRIOS — Centro Universitário do Rio São Francisco",
     description:
-      "Bacharelado focado em desenvolvimento de software, banco de dados, engenharia de requisitos e gestão de projetos.",
+      "Formado em 2025. Foco em desenvolvimento de software, banco de dados e engenharia de requisitos.",
     type: "education",
   },
   {
-    year: "2021",
-    title: "Frontend Training",
+    year: "2023",
+    title: "Bootcamps Frontend",
     org: "Dio.me",
     description:
-      "Bootcamps de HTML/CSS/JS, React e ecossistema. Aceleração focada em projetos práticos.",
+      "HTML/CSS/JS, React e o resto do ecossistema. Aprendi mais aqui em 6 meses do que esperava — projetos práticos batem teoria de qualquer dia.",
     type: "education",
   },
   {
@@ -95,7 +103,7 @@ const TIMELINE: TimelineItem[] = [
     title: "Serviços Administrativos",
     org: "SENAC BA · 1.000h",
     description:
-      "Curso técnico complementar — base de gestão e organização que carrego pra produtos digitais até hoje.",
+      "Curso técnico que parece distante de código, mas a parte de processo e organização ainda me ajuda em produto até hoje.",
     type: "education",
   },
 ]
@@ -154,37 +162,37 @@ const SOFT_SKILLS: SoftSkill[] = [
     icon: MessageCircle,
     label: "Comunicação clara",
     description:
-      "Tradução fluida entre design, produto e engenharia — sem perda de intenção.",
+      "Falo a mesma língua com designer, PM e back. Menos ruído entre o que foi pedido e o que sai.",
   },
   {
     icon: Users,
-    label: "Trabalho em equipe",
+    label: "Time",
     description:
-      "Code review construtivo, pair programming e cultura de feedback.",
+      "Code review sem ego, pair quando precisa, feedback honesto. Sem drama.",
   },
   {
     icon: Target,
-    label: "Foco em outcomes",
+    label: "Foco no problema",
     description:
-      "Decisões guiadas pelo problema do usuário, não pela ferramenta da moda.",
+      "Decisão de stack vem depois do problema, nunca antes. Ferramenta da moda não é argumento.",
   },
   {
     icon: Brain,
-    label: "Aprendizado contínuo",
+    label: "Curiosidade",
     description:
-      "Lendo, experimentando e revisando práticas todo dia. Curiosidade como rotina.",
+      "Leio, testo, quebro coisas em side projects. O que aprendo hoje aparece no trabalho semana que vem.",
   },
   {
     icon: Heart,
-    label: "Atenção a detalhe",
+    label: "Detalhe",
     description:
-      "Spacing, easing, copy, ARIA — o detalhe que ninguém nota é o que faz parecer profissional.",
+      "Spacing, easing, copy, ARIA. Ninguém comenta — mas é o que separa amador de profissional.",
   },
   {
     icon: Sparkles,
-    label: "Pensamento de design",
+    label: "Design",
     description:
-      "Estética é função. Interface bonita resolve o problema melhor do que feia.",
+      "Estética é função. Interface bonita resolve o problema melhor que feia, e ponto.",
   },
 ]
 
@@ -232,14 +240,6 @@ export default function SobrePage() {
             </h1>
           </SlideIn>
           <SlideIn direction="up" delay={0.25}>
-            <p className="mt-8 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              Tô no 8º semestre de Sistemas de Informação na UNIRIOS, em
-              Paulo Afonso/BA. Há ~3 anos construo interfaces de produto —
-              hoje principalmente em React e Next.js, com obsessão por
-              detalhes de UX e clean code.
-            </p>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.35}>
             <Button
               variant="outline"
               className="mt-8"
@@ -261,68 +261,79 @@ export default function SobrePage() {
       {/* Bio extendida */}
       <section className="container mx-auto max-w-4xl px-6 py-24">
         <div className="grid gap-12 md:grid-cols-[280px_1fr] md:items-start">
-          <ScrollReveal direction="left">
-            <div className="relative mx-auto md:sticky md:top-24 md:mx-0">
-              <div
-                aria-hidden
-                className="absolute -inset-4 rounded-2xl opacity-50 blur-2xl"
-                style={{
-                  background:
-                    "radial-gradient(circle, var(--brand-glow) 0%, transparent 70%)",
-                }}
-              />
-              <div className="relative aspect-square w-64 overflow-hidden rounded-xl border-2 border-brand/30 bg-card">
-                <Image
-                  src="https://github.com/Joaommsp.png"
-                  alt="João Marcos"
-                  width={256}
-                  height={256}
-                  className="size-full object-cover"
-                  priority
+          <div className="self-start md:sticky md:top-24">
+            <ScrollReveal direction="left">
+              <div className="relative mx-auto md:mx-0">
+                <div
+                  aria-hidden
+                  className="absolute -inset-4 rounded-2xl opacity-50 blur-2xl"
+                  style={{
+                    background:
+                      "radial-gradient(circle, var(--brand-glow) 0%, transparent 70%)",
+                  }}
                 />
+                <div className="relative aspect-square w-64 overflow-hidden rounded-xl border-2 border-brand/30 bg-card">
+                  <Image
+                    src="https://github.com/Joaommsp.png"
+                    alt="João Marcos"
+                    width={256}
+                    height={256}
+                    className="size-full object-cover"
+                    priority
+                  />
+                </div>
               </div>
-            </div>
-          </ScrollReveal>
+            </ScrollReveal>
+          </div>
 
           <div className="space-y-5 text-lg leading-relaxed text-muted-foreground">
             <ScrollReveal direction="right">
               <p>
                 <span className="text-foreground">Comecei programando</span>{" "}
-                aos 17 mexendo em CSS pra customizar perfis de redes
-                sociais. Foi quando descobri que escrever código pra mudar
-                o jeito que algo aparecia era a coisa mais legal do mundo.
-                Daí pra <code className="font-mono text-sm">git push</code>{" "}
-                no primeiro repo público foi questão de tempo.
+                aos 17 mexendo em CSS. Foi quando descobri que escrever
+                código pra mudar o jeito que algo aparecia era a coisa
+                mais legal do mundo. Daí pra{" "}
+                <code className="font-mono text-sm">git push</code> no
+                primeiro repo público foi questão de tempo.
               </p>
             </ScrollReveal>
             <ScrollReveal direction="right" delay={0.05}>
               <p>
-                Hoje trabalho como{" "}
+                Hoje trabalho com{" "}
                 <span className="text-foreground">
-                  desenvolvedor frontend
+                  desenvolvimento de dashboards interativos
                 </span>{" "}
-                no projeto GFI da Polícia Militar da Bahia, construindo
-                uma plataforma interna de gestão de pessoal e perícias.
-                Stack: Next.js, TypeScript, Tailwind, com bastante atenção
-                a performance, acessibilidade e UX.
+                — interfaces que precisam mostrar muito dado sem virar
+                ruído. Stack do dia-a-dia: Next.js, TypeScript, Tailwind,
+                com atenção a performance, acessibilidade e UX.
               </p>
             </ScrollReveal>
             <ScrollReveal direction="right" delay={0.1}>
               <p>
                 Na ponta de design, uso{" "}
                 <span className="text-foreground">Figma</span> pra
-                prototipar e desenhar componentes antes de codar — o que
-                significa que entrego mais rápido e com menos retrabalho.
-                Acredito que o melhor frontend dev é meio designer, e o
-                melhor designer é meio dev.
+                prototipar e desenhar componentes antes de codar — entrego
+                mais rápido e com menos retrabalho. Acho que o melhor
+                frontend dev é meio designer, e o melhor designer é meio
+                dev.
               </p>
             </ScrollReveal>
             <ScrollReveal direction="right" delay={0.15}>
               <p>
-                Fora do trabalho, gosto de explorar ferramentas novas,
+                Uso <span className="text-foreground">IA</span> no dia-a-dia
+                pra acelerar e prototipar ideias rápido — mas o que conta pra
+                mim é a{" "}
+                <span className="text-foreground">
+                  criatividade e a gestão de ideias
+                </span>
+                , não a ferramenta.
+              </p>
+            </ScrollReveal>
+            <ScrollReveal direction="right" delay={0.2}>
+              <p>
+                Fora do trabalho, gosto de testar ferramentas novas,
                 escrever sobre o que aprendi (ver o blog) e jogar uns
-                games quando o cérebro pede pausa. Fanático por podcasts
-                de produto e fundadores.
+                games quando o cérebro pede pausa.
               </p>
             </ScrollReveal>
           </div>
@@ -515,7 +526,8 @@ export default function SobrePage() {
         </ScrollReveal>
         <ScrollReveal delay={0.05}>
           <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-            Curtiu? <span className="text-gradient-brand">Vamos trocar uma ideia.</span>
+            Disponível para projetos.{" "}
+            <span className="text-gradient-brand">Entre em contato.</span>
           </h2>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>

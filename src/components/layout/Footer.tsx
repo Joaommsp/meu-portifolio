@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { NAV_ITEMS, SOCIAL_LINKS, CONTACT_EMAIL } from "@/lib/nav"
 import { SpotifyNowPlaying } from "@/components/sections/SpotifyNowPlaying"
 
@@ -13,13 +14,23 @@ export function Footer() {
           <div className="space-y-3">
             <Link
               href="/"
-              className="inline-block font-display text-lg font-semibold tracking-tight"
+              className="inline-flex items-center gap-2 transition-opacity hover:opacity-80"
+              aria-label="João Marcos"
             >
-              joão<span className="text-brand">.</span>marcos
+              <Image
+                src="/logo-light.png"
+                alt="João Marcos"
+                width={32}
+                height={32}
+                className="size-8"
+              />
+              <span className="font-display text-base font-semibold tracking-tight">
+                joão<span className="text-brand">.</span>marcos
+              </span>
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Frontend developer & UI/UX designer construindo interfaces
-              modernas e experiências memoráveis.
+              Frontend dev & designer. React, Next.js e atenção ao detalhe.
+              De Paulo Afonso, BA.
             </p>
             <a
               href={`mailto:${CONTACT_EMAIL}`}

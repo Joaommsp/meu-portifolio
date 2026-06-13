@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 
@@ -44,12 +45,17 @@ export function Header() {
         >
           <Link
             href="/"
-            className="font-display text-base font-semibold tracking-tight transition-opacity hover:opacity-80"
+            className="inline-flex items-center transition-opacity hover:opacity-80"
             aria-label="João Marcos · página inicial"
           >
-            joão
-            <span className="text-brand">.</span>
-            marcos
+            <Image
+              src="/logo-light.png"
+              alt="João Marcos"
+              width={36}
+              height={36}
+              className="size-9"
+              priority
+            />
           </Link>
         </motion.div>
 

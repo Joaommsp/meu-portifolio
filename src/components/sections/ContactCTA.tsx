@@ -38,7 +38,7 @@ export function ContactCTA() {
       <div className="container relative mx-auto max-w-3xl px-6 py-32 text-center">
         <ScrollReveal>
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-            05 · Contato
+            06 · Contato
           </p>
         </ScrollReveal>
 
@@ -63,9 +63,13 @@ export function ContactCTA() {
 
         <ScrollReveal delay={0.2}>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Button size="lg" render={<a href={`mailto:${CONTACT_EMAIL}`} />}>
+            <Button
+              size="lg"
+              className="min-w-0 max-w-full"
+              render={<a href={`mailto:${CONTACT_EMAIL}`} />}
+            >
               <Mail className="size-4" data-icon="inline-start" />
-              {CONTACT_EMAIL}
+              <span className="truncate">{CONTACT_EMAIL}</span>
             </Button>
             <Button
               size="lg"

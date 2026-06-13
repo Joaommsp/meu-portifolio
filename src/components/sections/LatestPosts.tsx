@@ -4,11 +4,11 @@ import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollReveal } from "@/components/animations"
 import { PostCard } from "@/components/blog/PostCard"
-import { samplePosts } from "@/lib/mocks/sample-data"
+import { getAllPublishedPosts } from "@/lib/data/posts"
 
-export function LatestPosts() {
-  const latest = samplePosts
-    .filter((p) => p.published)
+export async function LatestPosts() {
+  const posts = await getAllPublishedPosts()
+  const latest = [...posts]
     .sort(
       (a, b) =>
         (b.publishedAt?.getTime() ?? 0) - (a.publishedAt?.getTime() ?? 0)
@@ -23,7 +23,7 @@ export function LatestPosts() {
       className="border-t border-border bg-card/30 scroll-mt-20"
     >
       <div className="container mx-auto max-w-6xl px-6 py-32">
-        <div className="mb-12 flex items-end justify-between gap-4">
+        <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
           <div>
             <ScrollReveal>
               <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">

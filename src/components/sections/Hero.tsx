@@ -47,7 +47,20 @@ export function Hero() {
   const heroTextRef = React.useRef<HTMLDivElement>(null)
   const scrollHintRef = React.useRef<HTMLDivElement>(null)
 
+  // Vídeo + scroll-scrubbing só no desktop. No mobile o Hero é uma tela
+  // estática (não baixa o mp4, sem listeners de scroll/rAF — poupa bateria).
+  const [isDesktop, setIsDesktop] = React.useState(false)
+
   React.useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)")
+    const update = () => setIsDesktop(mq.matches)
+    update()
+    mq.addEventListener("change", update)
+    return () => mq.removeEventListener("change", update)
+  }, [])
+
+  React.useEffect(() => {
+    if (!isDesktop) return
     const video: HTMLVideoElement | null = videoRef.current
     if (!video) return
     const v = video // TS narrowing closure-safe
@@ -150,34 +163,36 @@ export function Hero() {
       window.removeEventListener("scroll", onScroll)
       cancelAnimationFrame(rafId)
     }
-  }, [])
+  }, [isDesktop])
 
   return (
     <section
       ref={sectionRef}
       id="hero"
-      className="relative isolate"
-      style={{ height: "200vh" }}
+      className="relative isolate min-h-[100dvh]"
+      style={{ height: isDesktop ? "200vh" : undefined }}
     >
       <div
         className="sticky top-0 flex h-[100dvh] w-full items-end overflow-hidden bg-background"
         style={{ willChange: "transform", transform: "translateZ(0)" }}
       >
-        {/* 1. Vídeo de fundo — z-0 (deep) */}
-        <video
-          ref={videoRef}
-          src="/hero-video/hero.mp4"
-          muted
-          playsInline
-          preload="auto"
-          aria-hidden
-          className="absolute inset-0 z-0 h-full w-full object-cover"
-          style={{
-            willChange: "contents",
-            transform: "translateZ(0)",
-            filter: "brightness(0.55) saturate(0.85)",
-          }}
-        />
+        {/* 1. Vídeo de fundo (scroll-scrub) — só desktop, z-0 (deep) */}
+        {isDesktop && (
+          <video
+            ref={videoRef}
+            src="/hero-video/hero.mp4"
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden
+            className="absolute inset-0 z-0 h-full w-full object-cover"
+            style={{
+              willChange: "contents",
+              transform: "translateZ(0)",
+              filter: "brightness(0.55) saturate(0.85)",
+            }}
+          />
+        )}
 
         {/* 2a. Overlay escuro sólido — sobe contraste */}
         <div
@@ -230,14 +245,14 @@ export function Hero() {
                   aria-hidden
                   className="inline-block size-1.5 rounded-full bg-brand"
                 />
-                Olá, eu sou
+                João Marcos
               </p>
             </FadeIn>
 
-            <h1 className="mb-6 font-display text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl lg:text-[7.5rem]">
+            <h1 className="mb-6 font-display text-4xl font-bold leading-[1] tracking-tight sm:text-6xl sm:leading-[0.95] md:text-8xl lg:text-[7.5rem]">
               <span className="block text-foreground">
                 <TextReveal
-                  text="João Marcos"
+                  text="Desenvolvedor"
                   by="letter"
                   delay={0.3}
                   staggerDelay={0.04}
@@ -254,7 +269,7 @@ export function Hero() {
                 }}
               >
                 <TextReveal
-                  text="frontend & ui/ux"
+                  text="Frontend & UI/UX"
                   by="word"
                   delay={1.05}
                   staggerDelay={0.08}
@@ -264,18 +279,19 @@ export function Hero() {
 
             <SlideIn direction="up" delay={1.55} duration={0.7}>
               <p className="mb-3 max-w-2xl text-xl leading-relaxed text-muted-foreground md:text-2xl">
-                Construo interfaces modernas em{" "}
+                Construo interfaces em{" "}
                 <span className="text-foreground">React</span>,{" "}
                 <span className="text-foreground">Next.js</span> e{" "}
-                <span className="text-foreground">Tailwind</span> —
-                combinando design refinado com código performático.
+                <span className="text-foreground">TypeScript</span>. Trabalho
+                na construção de interfaces UI/UX interativas, combinando o
+                visual agradável com o funcional.
               </p>
             </SlideIn>
 
             <SlideIn direction="up" delay={1.7}>
               <p className="mb-10 max-w-xl text-base text-muted-foreground/80">
-                Atualmente cursando o 8º semestre de Sistemas de Informação
-                (UNIRIOS), baseado em Paulo Afonso, BA.
+                Bacharel em Sistemas de Informação pela UNIRIOS (2025).
+                Paulo Afonso, BA.
               </p>
             </SlideIn>
 

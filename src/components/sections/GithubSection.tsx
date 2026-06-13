@@ -1,33 +1,33 @@
-import { ArrowUpRight, Star, GitFork, Calendar } from "lucide-react"
+import { ArrowUpRight, Star, GitFork, Calendar } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { ScrollReveal } from "@/components/animations"
-import { GithubIcon } from "@/components/icons/brand-icons"
-import { GithubContributions } from "@/components/sections/GithubContributions"
+import { Button } from "@/components/ui/button";
+import { ScrollReveal } from "@/components/animations";
+import { GithubIcon } from "@/components/icons/brand-icons";
+import { GithubContributions } from "@/components/sections/GithubContributions";
 import {
   fetchGithubProfile,
   fetchGithubRepos,
   getLanguageColor,
   type GithubRepo,
-} from "@/lib/github"
+} from "@/lib/github";
 
-const PROFILE_URL = "https://github.com/Joaommsp"
+const PROFILE_URL = "https://github.com/Joaommsp";
 
 export async function GithubSection() {
   const [profile, repos] = await Promise.all([
     fetchGithubProfile(),
     fetchGithubRepos(6),
-  ])
+  ]);
 
   // Se a API falhar, não renderiza a seção (graceful degradation)
-  if (!profile && repos.length === 0) return null
+  if (!profile && repos.length === 0) return null;
 
   const yearsActive = profile
     ? Math.max(
         1,
-        new Date().getFullYear() - new Date(profile.created_at).getFullYear()
+        new Date().getFullYear() - new Date(profile.created_at).getFullYear(),
       )
-    : 0
+    : 0;
 
   return (
     <section
@@ -35,7 +35,7 @@ export async function GithubSection() {
       className="border-y border-border bg-card/30 scroll-mt-20"
     >
       <div className="container mx-auto max-w-6xl px-6 py-32">
-        <div className="mb-12 flex items-end justify-between gap-4">
+        <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
           <div>
             <ScrollReveal>
               <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
@@ -49,8 +49,7 @@ export async function GithubSection() {
             </ScrollReveal>
             <ScrollReveal delay={0.1}>
               <p className="mt-4 max-w-xl text-muted-foreground">
-                Onde experimento, aprendo e compartilho código. Repos
-                atualizam automaticamente toda hora.
+                Onde experimento, aprendo e compartilho código.
               </p>
             </ScrollReveal>
           </div>
@@ -58,7 +57,11 @@ export async function GithubSection() {
             <Button
               variant="outline"
               render={
-                <a href={PROFILE_URL} target="_blank" rel="noopener noreferrer" />
+                <a
+                  href={PROFILE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
               }
             >
               <GithubIcon className="size-4" />
@@ -103,7 +106,7 @@ export async function GithubSection() {
         )}
       </div>
     </section>
-  )
+  );
 }
 
 /* ─────────────────────────────────────────────────────────── */
@@ -113,9 +116,9 @@ function Stat({
   value,
   suffix,
 }: {
-  label: string
-  value: number
-  suffix?: string
+  label: string;
+  value: number;
+  suffix?: string;
 }) {
   return (
     <div className="rounded-xl border border-border bg-card p-5">
@@ -131,16 +134,16 @@ function Stat({
         )}
       </p>
     </div>
-  )
+  );
 }
 
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
   month: "short",
   year: "numeric",
-})
+});
 
 function RepoCard({ repo }: { repo: GithubRepo }) {
-  const langColor = getLanguageColor(repo.language)
+  const langColor = getLanguageColor(repo.language);
 
   return (
     <a
@@ -194,5 +197,5 @@ function RepoCard({ repo }: { repo: GithubRepo }) {
         </span>
       </div>
     </a>
-  )
+  );
 }

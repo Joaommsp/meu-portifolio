@@ -130,8 +130,8 @@ export default function BlogPage() {
           <SlideIn direction="up" delay={0.2}>
             <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
               {publishedPosts.length} post{publishedPosts.length === 1 ? "" : "s"}{" "}
-              sobre desenvolvimento, design e o caminho entre eles. Use os
-              filtros pra refinar.
+              que escrevi quando quis. Sobre dev, design e o que aparece no
+              meio.
             </p>
           </SlideIn>
         </div>
@@ -236,7 +236,7 @@ export default function BlogPage() {
 
         {/* Grid */}
         {filtered.length > 0 ? (
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((post, idx) => (
               <ScrollReveal key={post.id} delay={Math.min(idx, 5) * 0.05}>
                 <PostCard post={post} />

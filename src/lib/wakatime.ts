@@ -88,6 +88,85 @@ export async function fetchWakatimeToday(): Promise<WakatimeToday | null> {
   }
 }
 
+export type WakatimeYearAggregate = {
+  total_seconds: number
+  total_hours: number
+  human_readable_total: string
+  days_coded: number
+  languages: Array<{ name: string; total_seconds: number; percent: number }>
+}
+
+/**
+ * Agrega tempo total de código pra um intervalo (ex: ano inteiro).
+ * Exige WAKATIME_API_KEY. Faz uma única chamada ao endpoint summaries.
+ * Retorna null se sem auth ou falha.
+ */
+export async function fetchWakatimeRange(
+  start: string,
+  end: string
+): Promise<WakatimeYearAggregate | null> {
+  const apiKey = process.env.WAKATIME_API_KEY
+  if (!apiKey) return null
+
+  try {
+    const basic = Buffer.from(apiKey).toString("base64")
+    const res = await fetch(
+      `${API}/users/current/summaries?start=${start}&end=${end}`,
+      {
+        headers: { Authorization: `Basic ${basic}` },
+        next: { revalidate: 86400 }, // 24h — dados históricos não mudam
+      }
+    )
+    if (!res.ok) return null
+
+    type DaySummary = {
+      grand_total: { total_seconds: number }
+      languages: Array<{ name: string; total_seconds: number }>
+      range: { date: string }
+    }
+    const json = (await res.json()) as { data: DaySummary[] }
+    const days = json.data ?? []
+
+    let totalSeconds = 0
+    const langTotals = new Map<string, number>()
+    let daysCoded = 0
+
+    for (const day of days) {
+      const dayTotal = day.grand_total.total_seconds
+      totalSeconds += dayTotal
+      if (dayTotal > 0) daysCoded++
+      for (const lang of day.languages ?? []) {
+        langTotals.set(
+          lang.name,
+          (langTotals.get(lang.name) ?? 0) + lang.total_seconds
+        )
+      }
+    }
+
+    const languages = Array.from(langTotals.entries())
+      .map(([name, secs]) => ({
+        name,
+        total_seconds: secs,
+        percent: totalSeconds > 0 ? (secs / totalSeconds) * 100 : 0,
+      }))
+      .sort((a, b) => b.total_seconds - a.total_seconds)
+      .slice(0, 8)
+
+    const hours = Math.floor(totalSeconds / 3600)
+    const mins = Math.floor((totalSeconds % 3600) / 60)
+
+    return {
+      total_seconds: totalSeconds,
+      total_hours: hours,
+      human_readable_total: `${hours} hrs ${mins} mins`,
+      days_coded: daysCoded,
+      languages,
+    }
+  } catch {
+    return null
+  }
+}
+
 export async function fetchWakatimeStats(
   range: WakatimeRange = "last_7_days"
 ): Promise<WakatimeStats | null> {

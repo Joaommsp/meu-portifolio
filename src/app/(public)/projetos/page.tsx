@@ -124,7 +124,7 @@ export default function ProjetosPage() {
       </section>
 
       {/* Filtros + lista */}
-      <section className="container mx-auto max-w-6xl px-6 pb-24">
+      <section className="container mx-auto max-w-6xl px-6 pt-12 pb-24">
         <div className="space-y-6 rounded-2xl border border-border bg-card/50 p-6">
           {/* Search */}
           <div className="relative">
@@ -215,13 +215,13 @@ export default function ProjetosPage() {
 
         {/* Grid */}
         {!projects ? (
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[0, 1, 2, 3, 4, 5].map((i) => (
               <ProjectCardSkeleton key={i} />
             ))}
           </div>
         ) : filtered.length > 0 ? (
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((project, idx) => (
               <ScrollReveal key={project.id} delay={Math.min(idx, 5) * 0.05}>
                 <ProjectCard project={project} />

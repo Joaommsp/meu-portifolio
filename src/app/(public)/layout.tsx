@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
+import { LinkPreview } from "@/components/layout/LinkPreview"
 import { SocialFloater } from "@/components/sections/SocialFloater"
 import { PageTransition } from "@/components/animations/PageTransition"
 import { CommandPaletteProvider } from "@/components/command/CommandPaletteProvider"
@@ -22,6 +23,7 @@ export default function PublicLayout({
       <KonamiEasterEgg />
       <Header />
       <SocialFloater />
+      <LinkPreview />
       <main id="main-content" className="flex-1">
         <PageTransition>{children}</PageTransition>
       </main>

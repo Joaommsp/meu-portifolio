@@ -35,11 +35,12 @@ export function estimateReadingTime(content: string): number {
   return Math.max(1, Math.ceil(words / 200))
 }
 
-/** Converte PostDoc (Firestore) → Post (UI). */
+/** Converte PostDoc (Firestore) → Post (UI). Normaliza arrays ausentes. */
 function toPost(id: string, data: Omit<PostDoc, "id">): Post {
   return {
     ...data,
     id,
+    tags: Array.isArray(data.tags) ? data.tags : [],
     createdAt: data.createdAt.toDate(),
     updatedAt: data.updatedAt.toDate(),
     publishedAt: data.publishedAt?.toDate() ?? null,

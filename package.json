@@ -29,6 +29,7 @@
     "react-github-calendar": "^5.0.6",
     "react-hook-form": "^7.74.0",
     "react-markdown": "^10.1.0",
+    "recharts": "^3.8.1",
     "remark-gfm": "^4.0.1",
     "shadcn": "^4.6.0",
     "shiki": "^4.0.2",
