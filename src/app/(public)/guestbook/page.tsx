@@ -28,7 +28,7 @@ import {
   GradientOrbs,
   NoiseTexture,
 } from "@/components/backgrounds"
-import { requireAuth } from "@/lib/firebase/config"
+import { requireAuth, firebaseConfigured } from "@/lib/firebase/config"
 import {
   signInWithGitHub,
   signInWithGoogle,
@@ -75,17 +75,32 @@ export default function GuestbookPage() {
     null
   )
 
-  // Watch auth state
+  // Watch auth state — degrada com elegância quando o Firebase não está
+  // configurado (env ausente) ou indisponível, em vez de derrubar a página.
   React.useEffect(() => {
-    const auth = requireAuth()
-    const unsub = onAuthStateChanged(auth, (u) => {
-      setUser(u)
+    if (!firebaseConfigured) {
       setAuthLoading(false)
-    })
+      return
+    }
+    let unsub = () => {}
+    try {
+      const auth = requireAuth()
+      unsub = onAuthStateChanged(auth, (u) => {
+        setUser(u)
+        setAuthLoading(false)
+      })
+    } catch (err) {
+      console.error("[guestbook] auth indisponível:", err)
+      setAuthLoading(false)
+    }
     return () => unsub()
   }, [])
 
   const reload = React.useCallback(async () => {
+    if (!firebaseConfigured) {
+      setEntries([])
+      return
+    }
     try {
       const data = await listGuestbookEntries()
       setEntries(data)
@@ -213,7 +228,18 @@ export default function GuestbookPage() {
         <ScrollReveal>
           <Card className="border-brand/20 bg-card/70 backdrop-blur">
             <CardContent className="p-6">
-              {authLoading ? (
+              {!firebaseConfigured ? (
+                <div className="flex flex-col items-center gap-3 py-8 text-center">
+                  <MessageCircle className="size-6 text-muted-foreground" />
+                  <p className="text-sm font-medium">
+                    Guestbook temporariamente indisponível
+                  </p>
+                  <p className="max-w-sm text-sm text-muted-foreground">
+                    Não foi possível conectar agora. Tenta de novo daqui a
+                    pouco.
+                  </p>
+                </div>
+              ) : authLoading ? (
                 <div className="flex h-32 items-center justify-center gap-2 text-sm text-muted-foreground">
                   <Loader2 className="size-4 animate-spin" />
                   Carregando…
@@ -363,7 +389,9 @@ export default function GuestbookPage() {
         ) : entries.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-card/30 p-12 text-center">
             <p className="text-muted-foreground">
-              Ainda sem mensagens. Seja o primeiro!
+              {firebaseConfigured
+                ? "Ainda sem mensagens. Seja o primeiro!"
+                : "As mensagens não puderam ser carregadas agora."}
             </p>
           </div>
         ) : (
