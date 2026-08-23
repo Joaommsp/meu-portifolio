@@ -174,7 +174,7 @@ export default async function ProjectDetailPage({ params }: Props) {
         />
         <NoiseTexture opacity={0.05} />
 
-        <div className="container relative mx-auto max-w-4xl px-6 py-20 md:py-28">
+        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-20 md:py-28">
           <FadeIn>
             <Button
               variant="ghost"
@@ -263,7 +263,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       </section>
 
       {/* Cover */}
-      <section className="container mx-auto max-w-5xl px-6">
+      <section className="container mx-auto max-w-5xl px-5 sm:px-6">
         <ScrollReveal>
           <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-border">
             {project.coverImage ? (
@@ -283,7 +283,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       </section>
 
       {/* Stack + Conteúdo */}
-      <section className="container mx-auto max-w-4xl px-6 py-20">
+      <section className="container mx-auto max-w-4xl px-5 sm:px-6 py-20">
         <div className="grid gap-12 md:grid-cols-[200px_1fr] md:items-start">
           <ScrollReveal direction="left">
             <aside className="md:sticky md:top-24">
@@ -367,7 +367,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
       {suggestions.length > 0 && (
         <section className="border-t border-border bg-card/30 py-24">
-          <div className="container mx-auto max-w-6xl px-6">
+          <div className="container mx-auto max-w-6xl px-5 sm:px-6">
             <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
               <div>
                 <ScrollReveal>

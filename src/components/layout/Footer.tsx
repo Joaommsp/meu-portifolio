@@ -8,7 +8,7 @@ export function Footer() {
 
   return (
     <footer className="mt-32 border-t border-border">
-      <div className="container mx-auto max-w-6xl px-6 py-12">
+      <div className="container mx-auto max-w-6xl px-5 sm:px-6 py-12">
         <div className="grid gap-10 md:grid-cols-3 mb-10">
           {/* Brand + tagline */}
           <div className="space-y-3">

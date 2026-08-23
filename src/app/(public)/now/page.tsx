@@ -58,7 +58,7 @@ export default async function NowPage() {
         <GradientOrbs />
         <NoiseTexture opacity={0.04} />
 
-        <div className="container relative mx-auto max-w-4xl px-6 py-24 md:py-28">
+        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-28">
           <FadeIn>
             <p className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
               <Sparkles className="size-3.5" />
@@ -103,7 +103,7 @@ export default async function NowPage() {
       </section>
 
       {/* Live snapshot — auto-puxado dos dados */}
-      <section className="container mx-auto max-w-4xl px-6 pt-12 pb-8">
+      <section className="container mx-auto max-w-4xl px-5 sm:px-6 pt-12 pb-8">
         <ScrollReveal>
           <p className="mb-4 font-mono text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground">
             Em tempo real
@@ -205,7 +205,7 @@ export default async function NowPage() {
       </section>
 
       {/* Footer hint */}
-      <section className="container mx-auto max-w-3xl px-6 pt-16 pb-24">
+      <section className="container mx-auto max-w-3xl px-5 sm:px-6 pt-16 pb-24">
         <ScrollReveal>
           <div className="flex justify-center">
             <Badge

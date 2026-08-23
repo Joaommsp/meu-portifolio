@@ -52,6 +52,8 @@ export function ThemeColorSwitcher({ align = "end" }: Props) {
             variant="ghost"
             size="icon-sm"
             aria-label={triggerLabel}
+            // 44px no toque (mínimo tocável); compacto a partir de sm.
+            className="size-11 sm:size-7"
           />
         }
       >
@@ -75,7 +77,7 @@ export function ThemeColorSwitcher({ align = "end" }: Props) {
                   aria-pressed={active}
                   data-active={active}
                   className={cn(
-                    "group relative flex size-9 items-center justify-center rounded-full",
+                    "group relative flex size-11 items-center justify-center rounded-full sm:size-9",
                     "ring-2 ring-transparent ring-offset-2 ring-offset-popover transition-transform",
                     "hover:scale-110 focus-visible:outline-none focus-visible:ring-foreground/40",
                     "data-[active=true]:ring-foreground"

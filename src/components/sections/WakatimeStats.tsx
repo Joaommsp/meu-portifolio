@@ -24,7 +24,7 @@ export async function WakatimeStats() {
   return (
     <section
       id="wakatime"
-      className="container mx-auto max-w-6xl scroll-mt-20 px-6 py-32"
+      className="container mx-auto max-w-6xl scroll-mt-20 px-5 sm:px-6 py-32"
     >
       <div className="mb-12 flex items-end justify-between gap-4">
         <div>

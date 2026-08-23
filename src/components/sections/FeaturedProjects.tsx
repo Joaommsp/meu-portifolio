@@ -19,7 +19,7 @@ export async function FeaturedProjects() {
   return (
     <section
       id="featured-projects"
-      className="container mx-auto max-w-6xl scroll-mt-20 px-6 py-32"
+      className="container mx-auto max-w-6xl scroll-mt-20 px-5 sm:px-6 py-32"
     >
       <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
         <div>

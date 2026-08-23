@@ -117,7 +117,7 @@ export default async function RecapPage({ params }: Props) {
         <GradientOrbs />
         <NoiseTexture opacity={0.05} />
 
-        <div className="container relative mx-auto max-w-5xl px-6 py-24 md:py-28">
+        <div className="container relative mx-auto max-w-5xl px-5 sm:px-6 py-24 md:py-28">
           <FadeIn>
             <Button
               variant="ghost"
@@ -158,7 +158,7 @@ export default async function RecapPage({ params }: Props) {
       {/* Big numbers grid */}
       {hasAnyData ? (
         <>
-          <section className="container mx-auto max-w-5xl px-6 pt-12 pb-12">
+          <section className="container mx-auto max-w-5xl px-5 sm:px-6 pt-12 pb-12">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
               <BigNumber
                 icon={<FileText className="size-4" />}
@@ -195,7 +195,7 @@ export default async function RecapPage({ params }: Props) {
 
           {/* Top linguagens (Wakatime) */}
           {wakatime && wakatime.languages.length > 0 && (
-            <section className="container mx-auto max-w-5xl px-6 pb-16">
+            <section className="container mx-auto max-w-5xl px-5 sm:px-6 pb-16">
               <ScrollReveal>
                 <h2 className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
                   <TrendingUp className="size-3.5 text-brand" />
@@ -247,7 +247,7 @@ export default async function RecapPage({ params }: Props) {
 
           {/* Highlights */}
           {(topGame || topBook || featuredPost) && (
-            <section className="container mx-auto max-w-5xl px-6 pb-16">
+            <section className="container mx-auto max-w-5xl px-5 sm:px-6 pb-16">
               <ScrollReveal>
                 <h2 className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
                   <Award className="size-3.5 text-brand" />
@@ -297,7 +297,7 @@ export default async function RecapPage({ params }: Props) {
 
           {/* Top gêneros (jogos) */}
           {topGenres.length > 0 && (
-            <section className="container mx-auto max-w-5xl px-6 pb-16">
+            <section className="container mx-auto max-w-5xl px-5 sm:px-6 pb-16">
               <ScrollReveal>
                 <h2 className="mb-6 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
                   Gêneros que dominaram
@@ -320,7 +320,7 @@ export default async function RecapPage({ params }: Props) {
         </>
       ) : (
         // Empty state — ano ainda sem dados
-        <section className="container mx-auto max-w-2xl px-6 pb-24">
+        <section className="container mx-auto max-w-2xl px-5 sm:px-6 pb-24">
           <div className="rounded-2xl border border-dashed border-border bg-card/40 p-12 text-center">
             <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
               Vazio
@@ -451,7 +451,7 @@ function YearNav({ currentYear }: { currentYear: number }) {
 
   return (
     <section className="border-t border-border bg-card/30 py-12">
-      <div className="container mx-auto max-w-5xl px-6">
+      <div className="container mx-auto max-w-5xl px-5 sm:px-6">
         <p className="mb-4 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
           Outros anos
         </p>

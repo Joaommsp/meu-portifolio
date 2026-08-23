@@ -4,6 +4,7 @@ import * as React from "react"
 import { motion } from "motion/react"
 
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
+import { cn } from "@/lib/utils"
 
 type Direction = "up" | "down" | "left" | "right" | "none"
 
@@ -50,13 +51,13 @@ export function ScrollReveal({
   children,
 }: ScrollRevealProps) {
   const reduced = usePrefersReducedMotion()
-  if (reduced) return <div className={className}>{children}</div>
+  if (reduced) return <div className={cn("min-w-0", className)}>{children}</div>
 
   const offset = offsetFor(direction, distance)
 
   return (
     <motion.div
-      className={className}
+      className={cn("min-w-0", className)}
       initial={{ opacity: 0, ...offset }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once, amount }}

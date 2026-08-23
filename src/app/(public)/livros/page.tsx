@@ -103,7 +103,7 @@ export default function BooksPage() {
         <GridBackground />
         <GradientOrbs />
 
-        <div className="container relative mx-auto max-w-4xl px-6 py-24 md:py-28">
+        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-28">
           <FadeIn>
             <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
               Livros
@@ -126,7 +126,7 @@ export default function BooksPage() {
       </section>
 
       {/* Filtros + grid */}
-      <section className="container mx-auto max-w-6xl px-6 pt-12 pb-24">
+      <section className="container mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-24">
         <div className="space-y-5 rounded-2xl border border-border bg-card/50 p-6">
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />

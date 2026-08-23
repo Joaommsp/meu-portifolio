@@ -185,7 +185,7 @@ export default async function GameDetailPage({ params }: Props) {
         />
         <NoiseTexture opacity={0.04} />
 
-        <div className="container relative mx-auto max-w-6xl px-6 py-20 md:py-24">
+        <div className="container relative mx-auto max-w-6xl px-5 sm:px-6 py-20 md:py-24">
           <FadeIn>
             <Button
               variant="ghost"
@@ -305,7 +305,7 @@ export default async function GameDetailPage({ params }: Props) {
 
       {/* Por que eu gosto */}
       {game.whyILikeIt && (
-        <section className="container mx-auto max-w-3xl px-6 py-16">
+        <section className="container mx-auto max-w-3xl px-5 sm:px-6 py-16">
           <ScrollReveal>
             <div className="rounded-2xl border border-brand/30 bg-brand/[0.04] p-8 md:p-10">
               <div className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
@@ -320,7 +320,7 @@ export default async function GameDetailPage({ params }: Props) {
 
       {/* História */}
       {game.history && (
-        <section className="container mx-auto max-w-3xl px-6 pb-16">
+        <section className="container mx-auto max-w-3xl px-5 sm:px-6 pb-16">
           <ScrollReveal>
             <div className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
               <BookOpen className="size-3.5" />
@@ -335,7 +335,7 @@ export default async function GameDetailPage({ params }: Props) {
 
       {/* Galeria */}
       {game.gallery.length > 0 && (
-        <section className="container mx-auto max-w-5xl px-6 pb-16">
+        <section className="container mx-auto max-w-5xl px-5 sm:px-6 pb-16">
           <ScrollReveal>
             <p className="mb-6 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
               Galeria
@@ -362,7 +362,7 @@ export default async function GameDetailPage({ params }: Props) {
       {/* Relacionados */}
       {related.length > 0 && (
         <section className="border-t border-border bg-card/30 py-24">
-          <div className="container mx-auto max-w-6xl px-6">
+          <div className="container mx-auto max-w-6xl px-5 sm:px-6">
             <div className="mb-12 flex items-end justify-between gap-4">
               <div>
                 <ScrollReveal>

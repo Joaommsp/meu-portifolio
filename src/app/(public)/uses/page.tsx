@@ -238,7 +238,7 @@ export default function UsesPage() {
         />
         <NoiseTexture opacity={0.04} />
 
-        <div className="container relative mx-auto max-w-4xl px-6 py-24 md:py-32">
+        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-32">
           <FadeIn>
             <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
               Uses
@@ -269,7 +269,7 @@ export default function UsesPage() {
       </section>
 
       {/* Categories */}
-      <section className="container mx-auto max-w-5xl space-y-16 px-6 py-16">
+      <section className="container mx-auto max-w-5xl space-y-16 px-5 sm:px-6 py-16">
         {CATEGORIES.map((cat, idx) => (
           <ScrollReveal key={cat.title} delay={idx * 0.05}>
             <div>
@@ -293,7 +293,7 @@ export default function UsesPage() {
       </section>
 
       {/* Footer note */}
-      <section className="container mx-auto max-w-4xl px-6 pb-20">
+      <section className="container mx-auto max-w-4xl px-5 sm:px-6 pb-20">
         <ScrollReveal>
           <div className="rounded-xl border border-dashed border-border bg-card/30 p-6 text-sm text-muted-foreground">
             <p className="font-medium text-foreground">

@@ -30,7 +30,8 @@ export function MobileNav() {
             variant="ghost"
             size="icon-sm"
             aria-label="Abrir menu"
-            className="lg:hidden"
+            // 44px no toque (mínimo tocável); volta ao tamanho compacto no desktop.
+            className="size-11 lg:hidden"
           />
         }
       >

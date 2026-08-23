@@ -22,7 +22,7 @@ export async function LatestPosts() {
       id="latest-posts"
       className="border-t border-border bg-card/30 scroll-mt-20"
     >
-      <div className="container mx-auto max-w-6xl px-6 py-32">
+      <div className="container mx-auto max-w-6xl px-5 sm:px-6 py-32">
         <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
           <div>
             <ScrollReveal>

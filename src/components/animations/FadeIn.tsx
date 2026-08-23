@@ -4,6 +4,7 @@ import * as React from "react"
 import { motion } from "motion/react"
 
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
+import { cn } from "@/lib/utils"
 
 type FadeInProps = {
   delay?: number
@@ -25,12 +26,12 @@ export function FadeIn({
   const reduced = usePrefersReducedMotion()
 
   if (reduced) {
-    return <div className={className}>{children}</div>
+    return <div className={cn("min-w-0", className)}>{children}</div>
   }
 
   return (
     <motion.div
-      className={className}
+      className={cn("min-w-0", className)}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay, duration, ease: "easeOut" }}

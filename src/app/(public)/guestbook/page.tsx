@@ -199,7 +199,7 @@ export default function GuestbookPage() {
         <GradientOrbs />
         <NoiseTexture opacity={0.04} />
 
-        <div className="container relative mx-auto max-w-4xl px-6 py-24 md:py-28">
+        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-28">
           <FadeIn>
             <p className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
               <MessageCircle className="size-3.5" />
@@ -224,7 +224,7 @@ export default function GuestbookPage() {
       </section>
 
       {/* Form ou Sign-in */}
-      <section className="container mx-auto max-w-2xl px-6 pt-12 pb-12">
+      <section className="container mx-auto max-w-2xl px-5 sm:px-6 pt-12 pb-12">
         <ScrollReveal>
           <Card className="border-brand/20 bg-card/70 backdrop-blur">
             <CardContent className="p-6">
@@ -368,7 +368,7 @@ export default function GuestbookPage() {
       </section>
 
       {/* Lista */}
-      <section className="container mx-auto max-w-3xl px-6 pb-24">
+      <section className="container mx-auto max-w-3xl px-5 sm:px-6 pb-24">
         <ScrollReveal>
           <p className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
             <MessageCircle className="size-3.5 text-brand" />

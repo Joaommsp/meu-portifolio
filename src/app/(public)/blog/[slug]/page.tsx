@@ -181,7 +181,7 @@ export default async function BlogPostPage({ params }: Props) {
         />
         <NoiseTexture opacity={0.04} />
 
-        <div className="container relative mx-auto max-w-3xl px-6 py-20 md:py-24">
+        <div className="container relative mx-auto max-w-3xl px-5 sm:px-6 py-20 md:py-24">
           <FadeIn>
             <Button
               variant="ghost"
@@ -241,7 +241,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* Cover image */}
       {post.coverImage && (
-        <section className="container mx-auto max-w-4xl px-6">
+        <section className="container mx-auto max-w-4xl px-5 sm:px-6">
           <ScrollReveal>
             <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-border">
               <Image
@@ -258,7 +258,7 @@ export default async function BlogPostPage({ params }: Props) {
       )}
 
       {/* Conteúdo markdown */}
-      <article className="container mx-auto max-w-3xl px-6 py-12">
+      <article className="container mx-auto max-w-3xl px-5 sm:px-6 py-12">
         {post.content ? (
           <MarkdownContent>{post.content}</MarkdownContent>
         ) : (
@@ -275,7 +275,7 @@ export default async function BlogPostPage({ params }: Props) {
       {/* Posts relacionados */}
       {related.length > 0 && (
         <section className="border-t border-border bg-card/30 py-24">
-          <div className="container mx-auto max-w-6xl px-6">
+          <div className="container mx-auto max-w-6xl px-5 sm:px-6">
             <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
               <div>
                 <ScrollReveal>

@@ -4,6 +4,7 @@ import * as React from "react"
 import { motion } from "motion/react"
 
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
+import { cn } from "@/lib/utils"
 
 type Direction = "up" | "down" | "left" | "right"
 
@@ -42,13 +43,13 @@ export function SlideIn({
   children,
 }: SlideInProps) {
   const reduced = usePrefersReducedMotion()
-  if (reduced) return <div className={className}>{children}</div>
+  if (reduced) return <div className={cn("min-w-0", className)}>{children}</div>
 
   const offset = offsetFor(direction, distance)
 
   return (
     <motion.div
-      className={className}
+      className={cn("min-w-0", className)}
       initial={{ opacity: 0, ...offset }}
       animate={{ opacity: 1, x: 0, y: 0 }}
       transition={{ delay, duration, ease: [0.25, 0.4, 0.25, 1] }}

@@ -36,7 +36,7 @@ export function Header() {
         "data-[scrolled=true]:border-b data-[scrolled=true]:border-border"
       )}
     >
-      <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-6 max-w-6xl">
+      <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-5 max-w-6xl sm:px-6">
         {/* Logo / brand mark */}
         <motion.div
           initial={{ opacity: 0, x: -8 }}
@@ -45,7 +45,8 @@ export function Header() {
         >
           <Link
             href="/"
-            className="inline-flex items-center transition-opacity hover:opacity-80"
+            // -ml-1 compensa o padding extra pra logo não parecer deslocada da margem.
+            className="-ml-1 inline-flex size-11 items-center justify-center transition-opacity hover:opacity-80 sm:ml-0 sm:size-auto"
             aria-label="João Marcos · página inicial"
           >
             <Image

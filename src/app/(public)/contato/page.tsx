@@ -83,7 +83,7 @@ export default function ContatoPage() {
         />
         <NoiseTexture opacity={0.04} />
 
-        <div className="container relative mx-auto max-w-4xl px-6 py-24 md:py-32">
+        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-32">
           <FadeIn>
             <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
               Contato
@@ -123,7 +123,7 @@ export default function ContatoPage() {
       </section>
 
       {/* Form + canais diretos */}
-      <section className="container mx-auto max-w-6xl px-6 py-24">
+      <section className="container mx-auto max-w-6xl px-5 sm:px-6 py-24">
         <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
           {/* Form */}
           <ScrollReveal direction="left">

@@ -102,7 +102,7 @@ export default function ProjetosPage() {
         <GridBackground />
         <GradientOrbs />
 
-        <div className="container relative mx-auto max-w-5xl px-6 py-24 md:py-28">
+        <div className="container relative mx-auto max-w-5xl px-5 sm:px-6 py-24 md:py-28">
           <FadeIn>
             <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
               Projetos
@@ -124,7 +124,7 @@ export default function ProjetosPage() {
       </section>
 
       {/* Filtros + lista */}
-      <section className="container mx-auto max-w-6xl px-6 pt-12 pb-24">
+      <section className="container mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-24">
         <div className="space-y-6 rounded-2xl border border-border bg-card/50 p-6">
           {/* Search */}
           <div className="relative">

@@ -229,7 +229,7 @@ export function Hero() {
         {/* 5. Conteúdo (texto + CTAs) — z-10 */}
         <div
           ref={heroTextRef}
-          className="relative z-10 w-full px-6 pb-20 md:pb-28"
+          className="relative z-10 w-full px-5 pb-20 sm:px-6 md:pb-28"
           style={{
             // SEM CSS transition — rAF lerp do tick já cuida da suavidade.
             // Transition aqui CONFLITA com lerp (CSS tenta animar enquanto
@@ -278,7 +278,7 @@ export function Hero() {
             </h1>
 
             <SlideIn direction="up" delay={1.55} duration={0.7}>
-              <p className="mb-3 max-w-2xl text-xl leading-relaxed text-muted-foreground md:text-2xl">
+              <p className="mb-3 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl md:text-2xl">
                 Construo interfaces em{" "}
                 <span className="text-foreground">React</span>,{" "}
                 <span className="text-foreground">Next.js</span> e{" "}
@@ -296,17 +296,24 @@ export function Hero() {
             </SlideIn>
 
             <SlideIn direction="up" delay={1.85}>
-              <div className="flex flex-wrap gap-3">
-                <MagneticButton strength={0.3}>
-                  <Button size="lg" render={<Link href="/projetos" />}>
+              {/* No toque os CTAs empilham em 48px de altura e largura cheia;
+                  a partir de sm voltam a ficar lado a lado no tamanho compacto. */}
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <MagneticButton strength={0.3} className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    className="h-12 w-full sm:h-9 sm:w-auto"
+                    render={<Link href="/projetos" />}
+                  >
                     Ver projetos
                     <ArrowRight className="size-4" data-icon="inline-end" />
                   </Button>
                 </MagneticButton>
-                <MagneticButton strength={0.3}>
+                <MagneticButton strength={0.3} className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     variant="outline"
+                    className="h-12 w-full sm:h-9 sm:w-auto"
                     render={<a href={`mailto:${CONTACT_EMAIL}`} />}
                   >
                     <Mail className="size-4" data-icon="inline-start" />
