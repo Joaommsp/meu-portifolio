@@ -2,7 +2,12 @@
  * Upload helper para Cloudinary via unsigned preset.
  * Sem backend: o browser faz POST direto pra API do Cloudinary.
  * Requer NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME + NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET.
+ *
+ * A imagem é comprimida no client antes de subir — poupa cota do plano free
+ * (armazenamento + banda) sem perda visível nas dimensões que o site usa.
  */
+
+import imageCompression from "browser-image-compression"
 
 const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? ""
 const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ?? ""
@@ -36,6 +41,15 @@ type UploadOptions = {
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"]
 const MAX_SIZE_BYTES = 10 * 1024 * 1024 // 10 MB no client (Cloudinary aceita até 10MB no plano free)
 
+const COMPRESSION_MAX_SIZE_MB = 1
+const COMPRESSION_MAX_DIMENSION = 1920
+
+/**
+ * A lib de compressão redesenha o arquivo num canvas, o que achata GIF
+ * animado num quadro único. Esses sobem no original.
+ */
+const SKIP_COMPRESSION_TYPES = ["image/gif"]
+
 export class CloudinaryError extends Error {
   constructor(message: string) {
     super(message)
@@ -58,30 +72,51 @@ export function validateImageFile(file: File): void {
 }
 
 /**
- * Upload via XHR (necessário pra rastrear progresso — fetch não expõe).
- * Cloudinary aceita unsigned upload via POST multipart pra essa URL.
+ * Reduz peso e dimensões antes do upload. A compressão é otimização, não
+ * requisito: se falhar, o original sobe do mesmo jeito.
  */
-export function uploadToCloudinary(
+async function compressIfPossible(file: File): Promise<File> {
+  if (SKIP_COMPRESSION_TYPES.includes(file.type)) return file
+  try {
+    return await imageCompression(file, {
+      maxSizeMB: COMPRESSION_MAX_SIZE_MB,
+      maxWidthOrHeight: COMPRESSION_MAX_DIMENSION,
+      useWebWorker: true,
+    })
+  } catch {
+    return file
+  }
+}
+
+export async function uploadToCloudinary(
   file: File,
   options: UploadOptions = {}
 ): Promise<CloudinaryUploadResult> {
+  if (!cloudinaryConfigured) {
+    throw new CloudinaryError(
+      "Cloudinary não configurado. Preencha NEXT_PUBLIC_CLOUDINARY_* em .env.local."
+    )
+  }
+
+  validateImageFile(file)
+
+  const compressed = await compressIfPossible(file)
+  if (options.signal?.aborted) {
+    throw new CloudinaryError("Upload cancelado")
+  }
+
+  return sendToCloudinary(compressed, options)
+}
+
+/**
+ * Upload via XHR (necessário pra rastrear progresso — fetch não expõe).
+ * Cloudinary aceita unsigned upload via POST multipart pra essa URL.
+ */
+function sendToCloudinary(
+  file: File,
+  options: UploadOptions
+): Promise<CloudinaryUploadResult> {
   return new Promise((resolve, reject) => {
-    if (!cloudinaryConfigured) {
-      reject(
-        new CloudinaryError(
-          "Cloudinary não configurado. Preencha NEXT_PUBLIC_CLOUDINARY_* em .env.local."
-        )
-      )
-      return
-    }
-
-    try {
-      validateImageFile(file)
-    } catch (err) {
-      reject(err)
-      return
-    }
-
     const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
     const folder = options.folder ?? DEFAULT_FOLDER
 

@@ -5,7 +5,6 @@ import {
   initializeFirestore,
   type Firestore,
 } from "firebase/firestore"
-import { getStorage, type FirebaseStorage } from "firebase/storage"
 
 const rawConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -29,7 +28,6 @@ export const ADMIN_UID: string = process.env.NEXT_PUBLIC_ADMIN_UID ?? ""
 let app: FirebaseApp | null = null
 let authInstance: Auth | null = null
 let dbInstance: Firestore | null = null
-let storageInstance: FirebaseStorage | null = null
 
 if (firebaseConfigured) {
   const existing = getApps()[0]
@@ -57,12 +55,10 @@ if (firebaseConfigured) {
       experimentalForceLongPolling: true,
     })
   }
-  storageInstance = getStorage(app)
 }
 
 export const auth = authInstance
 export const db = dbInstance
-export const storage = storageInstance
 export const firebaseApp = app
 
 /**
@@ -81,13 +77,6 @@ export function requireDb(): Firestore {
     throw new FirebaseNotConfiguredError("Firestore")
   }
   return dbInstance
-}
-
-export function requireStorage(): FirebaseStorage {
-  if (!storageInstance) {
-    throw new FirebaseNotConfiguredError("Storage")
-  }
-  return storageInstance
 }
 
 export class FirebaseNotConfiguredError extends Error {

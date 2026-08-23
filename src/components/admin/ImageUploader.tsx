@@ -176,7 +176,8 @@ export function ImageUploader({
                       Clica ou arrasta uma imagem
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      JPG, PNG, WebP ou GIF · até 10MB
+                      JPG, PNG, WebP ou GIF · até 10MB · comprimida antes de
+                      subir
                     </p>
                   </div>
                 </>
