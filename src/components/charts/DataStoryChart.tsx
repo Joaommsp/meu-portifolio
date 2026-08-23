@@ -73,7 +73,8 @@ function ChartTooltip(props: {
 }
 
 const AXIS_TICK = { fill: "var(--muted-foreground)", fontSize: 11 }
-const MARGIN = { top: 8, right: 8, bottom: 0, left: -16 }
+// Margens enxutas: o gráfico é o conteúdo do card, não um elemento dentro dele.
+const MARGIN = { top: 4, right: 2, bottom: 0, left: -22 }
 
 export function DataStoryChart() {
   const reduced = usePrefersReducedMotion()
@@ -117,7 +118,8 @@ export function DataStoryChart() {
               aria-selected={type === t.id}
               onClick={() => setType(t.id)}
               className={cn(
-                "rounded-md px-2.5 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-colors",
+                // min-h-11 dá o alvo tocável no mobile sem inchar o controle no desktop.
+                "min-h-11 rounded-md px-3 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-colors sm:min-h-0 sm:px-2.5",
                 type === t.id
                   ? "bg-brand text-brand-foreground"
                   : "text-muted-foreground hover:text-foreground"
@@ -129,7 +131,9 @@ export function DataStoryChart() {
         </div>
       </div>
 
-      <div className="h-[180px] w-full sm:h-[220px]">
+      {/* -mx-2/-mb-2 devolvem o padding do card pro gráfico; a altura sobe
+          porque aqui o gráfico É o conteúdo. */}
+      <div className="-mx-2 -mb-2 h-[230px] w-full sm:h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           {type === "bar" ? (
             <BarChart data={DATA} margin={MARGIN}>

@@ -333,36 +333,98 @@ html[data-loaded="true"] {
 }
 
 /* =============================================================
-   CUSTOM CURSOR — esconde cursor nativo quando o custom está ativo.
-   A classe é toggle pelo CustomCursor.tsx no mount/unmount.
+   CUSTOM CURSOR — anel que persegue o mouse e cresce no clicável.
+   A classe `cursor-none-root` é ligada pelo CustomCursor.tsx só depois
+   que o anel já está posicionado, para não existir instante sem cursor.
    ============================================================= */
 html.cursor-none-root,
 html.cursor-none-root * {
   cursor: none !important;
 }
 
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  /* repouso: ponto pequeno e sólido — some do caminho e não atrapalha a mira */
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border: 1.5px solid var(--brand);
+  background-color: var(--brand);
+  border-radius: 999px;
+  pointer-events: none;
+  will-change: transform;
+  /* halo na cor do accent: dá presença ao ponto sobre qualquer fundo */
+  box-shadow:
+    0 0 10px -1px oklch(from var(--brand) l c h / 0.7),
+    0 0 22px -4px oklch(from var(--brand) l c h / 0.45);
+  transition:
+    width 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    height 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    margin 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 220ms ease,
+    box-shadow 220ms ease,
+    opacity 200ms ease;
+}
+
+/* clicável: o ponto sólido abre em anel translúcido */
+.custom-cursor[data-estado="hot"] {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  background-color: oklch(from var(--brand) l c h / 0.18);
+  box-shadow:
+    0 0 16px -2px oklch(from var(--brand) l c h / 0.5),
+    0 0 40px -8px oklch(from var(--brand) l c h / 0.35);
+}
+
+/* trilho de carousel: abre mais que o clicável, sinalizando o arrastar */
+.custom-cursor[data-estado="drag"] {
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  background-color: oklch(from var(--brand) l c h / 0.12);
+  box-shadow:
+    0 0 18px -2px oklch(from var(--brand) l c h / 0.45),
+    0 0 48px -10px oklch(from var(--brand) l c h / 0.3);
+}
+
+/* Invisível até o primeiro movimento posicionar o anel, e quando o
+   mouse sai da janela. Regras separadas de propósito: comentário no meio
+   de uma lista de seletores faz o processador descartar o anterior. */
+.custom-cursor[data-pronto="false"] {
+  opacity: 0;
+}
+
+.custom-cursor[data-fora="true"] {
+  opacity: 0;
+}
+
+/* sem cursor customizado onde não há mouse de verdade */
+@media (hover: none), (pointer: coarse) {
+  .custom-cursor {
+    display: none;
+  }
+}
+
+/* reduced-motion: o anel continua, mas sem perseguir nem inflar */
+@media (prefers-reduced-motion: reduce) {
+  .custom-cursor {
+    transition: opacity 200ms ease;
+  }
+}
+
 /* =============================================================
-   MARQUEE — esteira infinita pra Skills section
+   GITHUB CALENDAR — a lib aplica `max-width: 100%` no article, o que
+   comprime/corta o gráfico no mobile em vez de deixá-lo rolar. Liberando
+   a largura natural, o container com overflow-x-auto rola como deveria.
    ============================================================= */
-.marquee {
-  /* clip horizontal (esconde a faixa longa) mas mantém vertical visible
-     pra ícones escalados no hover não serem cortados nas bordas */
-  overflow-x: clip;
-  overflow-y: visible;
-  width: 100%;
-  position: relative;
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 40s linear infinite;
-}
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+.github-calendar-wrap .react-activity-calendar {
+  /* !important é necessário: a lib põe `max-width: 100%` no style inline
+     do elemento, e inline vence qualquer regra de folha externa. */
+  max-width: none !important;
 }
 
 /* Equalizador animado pro SpotifyNowPlaying */
@@ -383,15 +445,6 @@ html.cursor-none-root * {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  /* Re-afirma marquee depois do reset universal — esteira é informacional,
-     pausá-la quebra a leitura da seção. Specificity (.marquee-track) +
-     !important vencem o reset. */
-  .marquee-track {
-    animation-name: marquee !important;
-    animation-duration: 40s !important;
-    animation-iteration-count: infinite !important;
-    animation-timing-function: linear !important;
   }
 }
 

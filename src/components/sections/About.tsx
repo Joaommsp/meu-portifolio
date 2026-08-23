@@ -386,7 +386,7 @@ export function About() {
   return (
     <section
       id="about"
-      className="container mx-auto max-w-6xl scroll-mt-20 px-6 py-32"
+      className="container mx-auto max-w-6xl scroll-mt-20 px-5 sm:px-6 py-32"
     >
       <ScrollReveal>
         <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
@@ -395,7 +395,7 @@ export function About() {
       </ScrollReveal>
 
       {/* Título + eyebrow do slide ativo (anima junto) */}
-      <div className="mt-3 min-h-[3.5rem] md:min-h-[4rem]">
+      <div className="mt-3 min-h-[3.5rem] select-none md:min-h-[4rem]">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={`head-${index}`}
@@ -439,7 +439,10 @@ export function About() {
             role="group"
             aria-roledescription="slide"
             aria-label={`${index + 1} de ${SLIDE_COUNT}: ${SLIDE_TITLES[index]}`}
-            className={cn(!reduced && "cursor-grab active:cursor-grabbing")}
+            className={cn(
+              "select-none",
+              !reduced && "cursor-grab active:cursor-grabbing"
+            )}
           >
             <ActiveSlide />
           </motion.div>
@@ -447,8 +450,8 @@ export function About() {
       </div>
 
       {/* Controles: dots + setas */}
-      <div className="mt-10 flex items-center justify-between">
-        <div className="flex items-center gap-2.5" role="tablist" aria-label="Selecionar slide">
+      <div className="mt-10 flex select-none items-center justify-between">
+        <div className="flex items-center" role="tablist" aria-label="Selecionar slide">
           {SLIDE_TITLES.map((title, i) => (
             <button
               key={title}
@@ -457,25 +460,49 @@ export function About() {
               aria-selected={i === index}
               aria-label={`Ir para: ${title}`}
               onClick={() => goTo(i)}
-              className={cn(
-                "h-1.5 rounded-full transition-all duration-300",
-                i === index
-                  ? "w-8 bg-brand"
-                  : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60"
-              )}
-            />
+              // Alvo de 44px (mínimo tocável) com o ponto visual pequeno por dentro:
+              // o dedo acerta, o indicador continua discreto.
+              className="group/dot grid h-11 w-9 place-items-center rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
+            >
+              <span
+                className={cn(
+                  "h-2 rounded-full transition-all duration-300",
+                  i === index
+                    ? "w-7 bg-brand"
+                    : "w-2 bg-muted-foreground/30 group-hover/dot:bg-muted-foreground/60"
+                )}
+              />
+            </button>
           ))}
           <span className="ml-3 font-mono text-xs tabular-nums text-muted-foreground">
             {String(index + 1).padStart(2, "0")} / {String(SLIDE_COUNT).padStart(2, "0")}
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Dica do gesto: só no toque e só até o primeiro slide ser trocado. */}
+        {!reduced && index === 0 && (
+          <span
+            aria-hidden="true"
+            className="flex items-center gap-1 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground sm:hidden"
+          >
+            Arrasta
+            <ChevronRight className="size-3" />
+          </span>
+        )}
+
+        {/* Setas escondidas no toque porque o arrasto já navega. Com
+            reduced-motion o arrasto está desligado, então elas ficam. */}
+        <div
+          className={cn(
+            "items-center gap-2",
+            reduced ? "flex" : "hidden sm:flex"
+          )}
+        >
           <button
             type="button"
             onClick={() => paginate(-1)}
             aria-label="Slide anterior"
-            className="inline-flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand/60 hover:text-brand"
+            className="inline-flex size-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand/60 hover:text-brand"
           >
             <ChevronLeft className="size-4" />
           </button>
@@ -483,7 +510,7 @@ export function About() {
             type="button"
             onClick={() => paginate(1)}
             aria-label="Próximo slide"
-            className="inline-flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand/60 hover:text-brand"
+            className="inline-flex size-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand/60 hover:text-brand"
           >
             <ChevronRight className="size-4" />
           </button>

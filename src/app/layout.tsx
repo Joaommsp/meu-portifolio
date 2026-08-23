@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider } from "@/contexts/AuthContext"
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider"
 import { StructuredData } from "@/components/seo/StructuredData"
+import { CustomCursor } from "@/components/misc/CustomCursor"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -155,6 +156,7 @@ export default function RootLayout({
               <TooltipProvider delay={150}>
                 {children}
                 <Toaster closeButton />
+                <CustomCursor />
               </TooltipProvider>
             </SmoothScrollProvider>
           </AuthProvider>
