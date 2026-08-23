@@ -59,6 +59,17 @@ service cloud.firestore {
     }
 
     // ─────────────────────────────────────────────────────────
+    // SITE — documentos de conteúdo editável no /admin
+    //   (hoje: `currently`, os cards "O que tá rolando" da /sobre)
+    //   Leitura pública: é conteúdo do site.
+    //   Escrita: só admin.
+    // ─────────────────────────────────────────────────────────
+    match /site/{docId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
     // GUESTBOOK
     //   Leitura pública: qualquer um vê todas mensagens.
     //   Escrita: user autenticado pode criar/editar/deletar SÓ a própria

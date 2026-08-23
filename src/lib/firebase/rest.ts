@@ -17,6 +17,12 @@ import type {
 } from "@/types/project"
 import type { Game, GameStatus } from "@/types/game"
 import type { Book, BookStatus } from "@/types/book"
+import {
+  CURRENTLY_SLOTS,
+  EMPTY_CURRENTLY,
+  type Currently,
+  type CurrentlyItem,
+} from "@/types/currently"
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? ""
 const BASE = PROJECT_ID
@@ -545,4 +551,45 @@ export async function restGetBookBySlug(slug: string): Promise<Book | null> {
     limit: 1,
   })
   return docs[0] ? toBook(docs[0]) : null
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* Currently — documento único, não coleção                    */
+/* ─────────────────────────────────────────────────────────── */
+
+/** Busca um documento por caminho. `null` quando não existe ou falha. */
+async function getDocument(path: string): Promise<RestDocument | null> {
+  if (!firestoreRestAvailable) return null
+  try {
+    const res = await fetch(`${BASE}/${path}`, { cache: "no-store" })
+    if (!res.ok) return null
+    return (await res.json()) as RestDocument
+  } catch {
+    return null
+  }
+}
+
+function toCurrentlyItem(v: unknown): CurrentlyItem {
+  const o = (v ?? {}) as Partial<CurrentlyItem>
+  return {
+    title: typeof o.title === "string" ? o.title : "",
+    subtitle: typeof o.subtitle === "string" ? o.subtitle : "",
+    link: typeof o.link === "string" ? o.link : "",
+    visible: Boolean(o.visible),
+  }
+}
+
+export async function restGetCurrently(): Promise<Currently> {
+  const doc = await getDocument("site/currently")
+  // documento ausente (ou leitura barrada) — quem chama decide o fallback
+  if (!doc) return { ...EMPTY_CURRENTLY, exists: false }
+
+  const campos = unwrapDoc<Record<string, unknown>>(doc)
+  const out = { ...EMPTY_CURRENTLY, exists: true } as Currently
+  for (const slot of CURRENTLY_SLOTS) {
+    out[slot] = toCurrentlyItem(campos[slot])
+  }
+  const ts = campos.updatedAt
+  out.updatedAt = ts instanceof Date ? ts : null
+  return out
 }
