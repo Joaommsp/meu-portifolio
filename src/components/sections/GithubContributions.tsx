@@ -85,6 +85,13 @@ const ACCENT_RAMPS: Record<Accent, Ramp> = {
   ],
 }
 
+/* Medidas do calendário usadas pra dimensionar os blocos. */
+const COLUNAS = 53 // semanas do ano
+const MARGEM = 3 // espaço entre blocos
+const LARGURA_ROTULOS = 34 // coluna dos dias da semana
+const BLOCO_MIN = 11 // padrão da lib — piso, pra não encolher no mobile
+const BLOCO_MAX = 20 // acima disso o gráfico vira mancha, não dado
+
 export function GithubContributions({
   username = "Joaommsp",
 }: {
@@ -93,15 +100,40 @@ export function GithubContributions({
   const { accent } = useThemeColor()
   const theme = ACCENT_RAMPS[accent]
 
+  // O tamanho do bloco vem da largura real disponível: assim o calendário
+  // preenche o card em vez de sobrar espaço à direita. No mobile o cálculo
+  // cai no piso e o container continua rolando na horizontal.
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const [blockSize, setBlockSize] = React.useState(BLOCO_MIN)
+
+  React.useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const medir = () => {
+      const util = el.clientWidth - LARGURA_ROTULOS - COLUNAS * MARGEM
+      const ideal = Math.floor(util / COLUNAS)
+      setBlockSize(Math.max(BLOCO_MIN, Math.min(ideal, BLOCO_MAX)))
+    }
+    medir()
+    const obs = new ResizeObserver(medir)
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
   return (
-    <GitHubCalendar
+    <>
+      {/* Sentinela de medição: envolver o calendário faria ele se comprimir
+          contra o wrapper (a lib usa max-width: 100%) em vez de rolar
+          dentro do card no mobile. */}
+      <div ref={containerRef} aria-hidden className="h-0 w-full" />
+      <GitHubCalendar
       username={username}
       colorScheme="dark"
       theme={{ dark: theme }}
-      blockSize={11}
-      blockMargin={3}
+      blockSize={blockSize}
+      blockMargin={MARGEM}
       blockRadius={2}
-      fontSize={11}
+      fontSize={blockSize >= 15 ? 12 : 11}
       labels={{
         totalCount: "{{count}} contribuições em {{year}}",
         legend: {
@@ -113,7 +145,8 @@ export function GithubContributions({
           "Jul", "Ago", "Set", "Out", "Nov", "Dez",
         ],
         weekdays: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-      }}
-    />
+        }}
+      />
+    </>
   )
 }
