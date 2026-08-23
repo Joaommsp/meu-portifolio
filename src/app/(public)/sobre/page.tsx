@@ -18,44 +18,23 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
 import { ScrollReveal, FadeIn, SlideIn } from "@/components/animations"
+import { Education } from "@/components/sections/Education"
+import { SkillGroups } from "@/components/sections/SkillGroups"
+import { getCurrently } from "@/lib/data/currently"
+import { cn } from "@/lib/utils"
+import {
+  CURRENTLY_SLOTS,
+  CURRENTLY_LABELS,
+  CURRENTLY_EMPTY_TEXT,
+} from "@/types/currently"
 import { GridBackground, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
-import { TECH_ICONS, type TechName } from "@/components/icons/tech-icons"
 
 export const metadata: Metadata = {
   title: "Sobre",
   description:
     "Conheça João Marcos — desenvolvedor frontend e designer UI/UX em Paulo Afonso, BA. Trajetória, skills, soft skills e CV.",
 }
-
-type SkillCategory = {
-  label: string
-  techs: readonly TechName[]
-  extras?: readonly string[]
-}
-
-const SKILL_CATEGORIES: SkillCategory[] = [
-  {
-    label: "Frontend",
-    techs: ["TypeScript", "JavaScript", "React", "Next.js", "Tailwind", "HTML5", "CSS3", "Vite"],
-  },
-  {
-    label: "Backend",
-    techs: ["Node.js", "Firebase"],
-    extras: ["Java", "MySQL", "REST APIs"],
-  },
-  {
-    label: "Design",
-    techs: ["Figma"],
-    extras: ["Photoshop", "Design Systems", "UI/UX"],
-  },
-  {
-    label: "Ferramentas",
-    techs: ["Git"],
-    extras: ["GitHub", "VS Code", "IntelliJ", "Vercel", "Notion"],
-  },
-]
 
 type TimelineItem = {
   year: string
@@ -68,10 +47,18 @@ type TimelineItem = {
 const TIMELINE: TimelineItem[] = [
   {
     year: "2025 — agora",
-    title: "Frontend Developer",
+    title: "Desenvolvedor Frontend & UI/UX Designer",
     org: "GFI · Consultoria Especializada",
     description:
-      "Plataforma de gestão financeira em React, Next.js e Tailwind. Multi-tenant, dashboards comparativos, foco em produto.",
+      "No principal produto da empresa — plataforma de gestão financeira — atuo só no frontend: projeto a UX/UI e construo a interface em React, Next.js e React Native, com foco em data storytelling — KPIs, dashboards e relatórios. Nos projetos que toco sozinho, sou full stack: vou do backend em Node.js e NestJS até a camada visual.",
+    type: "work",
+  },
+  {
+    year: "2024 — 2025",
+    title: "Estagiário em Tecnologia da Informação",
+    org: "Laboratório Estrela",
+    description:
+      "Responsável pela infraestrutura e pelos equipamentos de TI das unidades em Paulo Afonso e Alagoas — manutenção, ações preventivas e melhorias. Também administrava o sistema Pixeon SMART: gestão de usuários, controle de acesso, cadastro de exames e resolução de erros no sistema e no banco de dados. Foi onde aprendi servidores, redes e o lado de infra que sustenta o software.",
     type: "work",
   },
   {
@@ -108,18 +95,28 @@ const TIMELINE: TimelineItem[] = [
   },
 ]
 
+/** Ícone de cada categoria — fixo, porque a categoria também é. */
+const CURRENTLY_ICONS = {
+  lendo: BookOpen,
+  ouvindo: Headphones,
+  estudando: Lightbulb,
+} as const
+
 function CurrentlyCard({
   icon: Icon,
   label,
   title,
   subtitle,
   link,
+  vazio = false,
 }: {
   icon: React.ComponentType<{ className?: string }>
   label: string
   title: string
   subtitle: string
   link?: string
+  /** Sem conteúdo: o card declara o vazio, em vez de sumir ou mentir. */
+  vazio?: boolean
 }) {
   const inner = (
     <>
@@ -131,17 +128,29 @@ function CurrentlyCard({
           {label}
         </p>
       </div>
-      <p className="mt-3 font-display text-base font-semibold leading-tight tracking-tight">
+      <p
+        className={cn(
+          "mt-3 font-display text-base leading-tight tracking-tight",
+          vazio
+            ? "font-normal text-muted-foreground/70"
+            : "font-semibold"
+        )}
+      >
         {title}
       </p>
-      <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p>
+      {subtitle && (
+        <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p>
+      )}
       {link && (
         <ExternalLink className="absolute right-4 top-4 size-3 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
       )}
     </>
   )
-  const baseClass =
-    "group relative block h-full rounded-xl border border-border bg-card p-5 transition-colors hover:border-brand/40"
+  const baseClass = cn(
+    "group relative block h-full rounded-xl border border-border bg-card p-5 transition-colors",
+    !vazio && "hover:border-brand/40",
+    vazio && "border-dashed"
+  )
   return link ? (
     <a href={link} target="_blank" rel="noopener noreferrer" className={baseClass}>
       {inner}
@@ -196,7 +205,8 @@ const SOFT_SKILLS: SoftSkill[] = [
   },
 ]
 
-export default function SobrePage() {
+export default async function SobrePage() {
+  const currently = await getCurrently()
   return (
     <>
       {/* Hero da página */}
@@ -226,7 +236,7 @@ export default function SobrePage() {
         />
         <NoiseTexture opacity={0.04} />
 
-        <div className="container relative mx-auto max-w-4xl px-6 py-24 md:py-32">
+        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-32">
           <FadeIn>
             <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
               Sobre mim
@@ -259,7 +269,7 @@ export default function SobrePage() {
       </section>
 
       {/* Bio extendida */}
-      <section className="container mx-auto max-w-4xl px-6 py-24">
+      <section className="container mx-auto max-w-4xl px-5 sm:px-6 py-24">
         <div className="grid gap-12 md:grid-cols-[280px_1fr] md:items-start">
           <div className="self-start md:sticky md:top-24">
             <ScrollReveal direction="left">
@@ -289,59 +299,56 @@ export default function SobrePage() {
           <div className="space-y-5 text-lg leading-relaxed text-muted-foreground">
             <ScrollReveal direction="right">
               <p>
-                <span className="text-foreground">Comecei programando</span>{" "}
-                aos 17 mexendo em CSS. Foi quando descobri que escrever
-                código pra mudar o jeito que algo aparecia era a coisa
-                mais legal do mundo. Daí pra{" "}
-                <code className="font-mono text-sm">git push</code> no
-                primeiro repo público foi questão de tempo.
+                Sou{" "}
+                <span className="text-foreground">
+                  Desenvolvedor Front-End e UI/UX Designer
+                </span>
+                . Trabalho na construção de sistemas e aplicativos de gestão —
+                principalmente financeira e organizacional — onde a interface
+                precisa dar conta de muito dado sem virar ruído.
               </p>
             </ScrollReveal>
             <ScrollReveal direction="right" delay={0.05}>
               <p>
-                Hoje trabalho com{" "}
+                No principal produto da empresa atuo{" "}
+                <span className="text-foreground">só no frontend</span>: projeto
+                a experiência e construo a interface em{" "}
                 <span className="text-foreground">
-                  desenvolvimento de dashboards interativos
-                </span>{" "}
-                — interfaces que precisam mostrar muito dado sem virar
-                ruído. Stack do dia-a-dia: Next.js, TypeScript, Tailwind,
-                com atenção a performance, acessibilidade e UX.
+                  React, Next.js e React Native
+                </span>
+                . É onde aplico{" "}
+                <span className="text-foreground">data storytelling</span> —
+                transformar KPIs, dashboards e relatórios em algo que a pessoa
+                usa para decidir, não apenas para consultar.
               </p>
             </ScrollReveal>
             <ScrollReveal direction="right" delay={0.1}>
               <p>
-                Na ponta de design, uso{" "}
-                <span className="text-foreground">Figma</span> pra
-                prototipar e desenhar componentes antes de codar — entrego
-                mais rápido e com menos retrabalho. Acho que o melhor
-                frontend dev é meio designer, e o melhor designer é meio
-                dev.
+                Nos projetos que desenvolvo sozinho, sou{" "}
+                <span className="text-foreground">full stack</span>: vou do
+                backend em <span className="text-foreground">Node.js e NestJS</span>,
+                passando pela modelagem do banco, até a camada visual.
               </p>
             </ScrollReveal>
             <ScrollReveal direction="right" delay={0.15}>
               <p>
-                Uso <span className="text-foreground">IA</span> no dia-a-dia
-                pra acelerar e prototipar ideias rápido — mas o que conta pra
-                mim é a{" "}
+                Meu objetivo é{" "}
                 <span className="text-foreground">
-                  criatividade e a gestão de ideias
-                </span>
-                , não a ferramenta.
-              </p>
-            </ScrollReveal>
-            <ScrollReveal direction="right" delay={0.2}>
-              <p>
-                Fora do trabalho, gosto de testar ferramentas novas,
-                escrever sobre o que aprendi (ver o blog) e jogar uns
-                games quando o cérebro pede pausa.
+                  entregar valor real ao cliente
+                </span>{" "}
+                por meio de interfaces bem projetadas, intuitivas e alinhadas a
+                um propósito — principalmente na melhoria e otimização de
+                análises e processos.
               </p>
             </ScrollReveal>
           </div>
         </div>
       </section>
 
-      {/* Atualmente — o que tô lendo, ouvindo, estudando */}
-      <section className="container mx-auto max-w-4xl px-6 pb-12">
+      {/* Atualmente — conteúdo vem do Firestore, editável no /admin.
+          Categoria sem conteúdo declara "nada no momento": a grade fica
+          completa sem inventar informação. */}
+      <section className="container mx-auto max-w-4xl px-5 sm:px-6 pb-12">
         <ScrollReveal>
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
             Atualmente
@@ -354,94 +361,32 @@ export default function SobrePage() {
         </ScrollReveal>
 
         <div className="mt-8 grid gap-3 md:grid-cols-3">
-          <ScrollReveal delay={0.1}>
-            <CurrentlyCard
-              icon={BookOpen}
-              label="Lendo"
-              title="Refactoring UI"
-              subtitle="Adam Wathan & Steve Schoger"
-              link="https://www.refactoringui.com"
-            />
-          </ScrollReveal>
-          <ScrollReveal delay={0.15}>
-            <CurrentlyCard
-              icon={Headphones}
-              label="Ouvindo"
-              title="Lo-fi Hip Hop Radio"
-              subtitle="Lofi Girl"
-              link="https://www.youtube.com/@LofiGirl"
-            />
-          </ScrollReveal>
-          <ScrollReveal delay={0.2}>
-            <CurrentlyCard
-              icon={Lightbulb}
-              label="Estudando"
-              title="Three.js + WebGL"
-              subtitle="Pra animações 3D em hero sections"
-            />
-          </ScrollReveal>
+          {CURRENTLY_SLOTS.map((slot, idx) => {
+            const item = currently[slot]
+            const preenchido = item.visible && item.title.trim().length > 0
+            return (
+              <ScrollReveal key={slot} delay={0.1 + idx * 0.05}>
+                <CurrentlyCard
+                  icon={CURRENTLY_ICONS[slot]}
+                  label={CURRENTLY_LABELS[slot]}
+                  title={preenchido ? item.title : CURRENTLY_EMPTY_TEXT}
+                  subtitle={preenchido ? item.subtitle : ""}
+                  link={preenchido ? item.link || undefined : undefined}
+                  vazio={!preenchido}
+                />
+              </ScrollReveal>
+            )
+          })}
         </div>
       </section>
 
-      {/* Skills categorizadas */}
+      {/* Skills — trilhos por categoria */}
       <section className="border-t border-border bg-card/30 py-24">
-        <div className="container mx-auto max-w-4xl px-6">
-          <ScrollReveal>
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              Skills
-            </p>
-          </ScrollReveal>
-          <ScrollReveal delay={0.05}>
-            <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Stack categorizada
-            </h2>
-          </ScrollReveal>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {SKILL_CATEGORIES.map((cat, idx) => (
-              <ScrollReveal key={cat.label} delay={idx * 0.05}>
-                <Card className="h-full">
-                  <CardContent className="space-y-4 p-6">
-                    <div className="flex items-baseline justify-between">
-                      <h3 className="font-display text-xl font-semibold tracking-tight">
-                        {cat.label}
-                      </h3>
-                      <span className="font-mono text-[0.7rem] uppercase tracking-widest text-muted-foreground">
-                        0{idx + 1}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {cat.techs.map((tech) => {
-                        const Icon = TECH_ICONS[tech]
-                        return (
-                          <span
-                            key={tech}
-                            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1 text-sm"
-                          >
-                            <Icon colored className="size-3.5" />
-                            {tech}
-                          </span>
-                        )
-                      })}
-                      {cat.extras?.map((extra) => (
-                        <span
-                          key={extra}
-                          className="inline-flex items-center rounded-md border border-border bg-background px-2.5 py-1 text-sm text-muted-foreground"
-                        >
-                          {extra}
-                        </span>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
+        <SkillGroups />
       </section>
 
       {/* Timeline */}
-      <section className="container mx-auto max-w-4xl px-6 py-24">
+      <section className="container mx-auto max-w-4xl px-5 sm:px-6 py-24">
         <ScrollReveal>
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
             Trajetória
@@ -480,9 +425,12 @@ export default function SobrePage() {
         </ol>
       </section>
 
+      {/* Formação — diploma + trilha de certificações */}
+      <Education />
+
       {/* Soft skills */}
       <section className="border-t border-border bg-card/30 py-24">
-        <div className="container mx-auto max-w-5xl px-6">
+        <div className="container mx-auto max-w-5xl px-5 sm:px-6">
           <ScrollReveal>
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
               Soft skills
@@ -518,7 +466,7 @@ export default function SobrePage() {
       </section>
 
       {/* CTA pra contato */}
-      <section className="container mx-auto max-w-3xl px-6 py-24 text-center">
+      <section className="container mx-auto max-w-3xl px-5 sm:px-6 py-24 text-center">
         <ScrollReveal>
           <Badge variant="outline" className="mb-6 font-mono text-[0.7rem] uppercase">
             Próximo passo

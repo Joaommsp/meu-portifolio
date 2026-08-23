@@ -104,10 +104,72 @@ export const ViteIcon = makeIcon(
   "#646CFF"
 )
 
+
+export const VSCodeIcon = makeIcon(
+  "VSCodeIcon",
+  "M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z",
+  "#007ACC"
+)
+
+export const AppleIcon = makeIcon(
+  "AppleIcon",
+  "M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.035 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701",
+  "#E6EDE6"
+)
+
+export const WindowsIcon = makeIcon(
+  "WindowsIcon",
+  "M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801",
+  "#0078D4"
+)
+
+export const SlackIcon = makeIcon(
+  "SlackIcon",
+  "M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z",
+  "#E01E5A"
+)
+
+export const LinearIcon = makeIcon(
+  "LinearIcon",
+  "M2.886 4.18A11.982 11.982 0 0 1 11.99 0C18.624 0 24 5.376 24 12.01c0 3.64-1.62 6.903-4.18 9.104L2.887 4.18ZM1.817 5.626l16.556 16.556c-.524.33-1.075.62-1.65.866L.951 7.276c.247-.575.537-1.126.866-1.65ZM.322 9.163l14.515 14.515c-.71.172-1.443.283-2.195.322L0 11.358a12.05 12.05 0 0 1 .322-2.195Zm-.17 4.862 9.823 9.824a12.02 12.02 0 0 1-9.824-9.824Z",
+  "#5E6AD2"
+)
+
+/**
+ * Banco de dados genérico (cilindro). Os logos oficiais de MySQL (golfinho) e
+ * PostgreSQL (elefante) são desenhos complexos demais para reproduzir fielmente
+ * — um símbolo honesto de banco, na cor da marca, lê melhor que um logo torto.
+ */
+export const DatabaseIcon = makeIcon(
+  "DatabaseIcon",
+  "M12 1.5c-4.42 0-8 1.4-8 3.13v14.74C4 21.1 7.58 22.5 12 22.5s8-1.4 8-3.13V4.63c0-1.73-3.58-3.13-8-3.13zm0 1.6c3.7 0 6.4 1.1 6.4 1.53S15.7 6.16 12 6.16 5.6 5.06 5.6 4.63 8.3 3.1 12 3.1zM5.6 7.02c1.46.7 3.78 1.14 6.4 1.14s4.94-.44 6.4-1.14v3.5c0 .43-2.7 1.53-6.4 1.53s-6.4-1.1-6.4-1.53v-3.5zm0 5.5c1.46.7 3.78 1.14 6.4 1.14s4.94-.44 6.4-1.14v3.5c0 .43-2.7 1.53-6.4 1.53s-6.4-1.1-6.4-1.53v-3.5zm0 5.5c1.46.7 3.78 1.14 6.4 1.14s4.94-.44 6.4-1.14v1.85c0 .43-2.7 1.53-6.4 1.53s-6.4-1.1-6.4-1.53v-1.85z",
+  "#4479A1"
+)
+
+
+/**
+ * Canva: disco com o "C" vazado. Precisa de `fillRule="evenodd"` para o furo
+ * aparecer, então não passa pelo `makeIcon` de path único.
+ */
+export function CanvaIcon({ colored, fill, ...rest }: IconProps) {
+  return (
+    <svg {...baseProps} fill={fill ?? (colored ? "#00C4CC" : "currentColor")} {...rest}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 5.1c2.28 0 4.23 1.17 5.22 2.94l-2.61 1.62c-.54-.99-1.53-1.65-2.61-1.65-1.95 0-3.57 1.74-3.57 4.02s1.62 4.02 3.57 4.02c1.17 0 2.19-.72 2.7-1.77l2.61 1.53c-.99 1.86-2.94 3.15-5.31 3.15-3.81 0-6.84-3.15-6.84-6.93S8.19 5.1 12 5.1z"
+      />
+    </svg>
+  )
+}
+
 export const TECH_ICONS = {
   TypeScript: TypeScriptIcon,
   JavaScript: JavaScriptIcon,
   React: ReactIcon,
+  // React Native usa oficialmente o mesmo átomo do React — o nome e a
+  // categoria "Mobile" é que separam os dois na interface.
+  "React Native": ReactIcon,
   "Next.js": NextjsIcon,
   Tailwind: TailwindIcon,
   HTML5: HtmlIcon,
@@ -117,6 +179,43 @@ export const TECH_ICONS = {
   Git: GitIcon,
   Figma: FigmaIcon,
   Vite: ViteIcon,
+  "VS Code": VSCodeIcon,
+  macOS: AppleIcon,
+  Windows: WindowsIcon,
+  Slack: SlackIcon,
+  Linear: LinearIcon,
+  MySQL: DatabaseIcon,
+  PostgreSQL: DatabaseIcon,
+  Canva: CanvaIcon,
 } as const
 
 export type TechName = keyof typeof TECH_ICONS
+
+/**
+ * Cor oficial de cada marca, exposta fora do SVG para quem precisa dela
+ * no layout (glow do card, wash de fundo, swatch). Mesma fonte de verdade
+ * usada pelo `colored` dos ícones.
+ */
+export const TECH_COLORS: Record<TechName, string> = {
+  TypeScript: "#3178C6",
+  JavaScript: "#F7DF1E",
+  React: "#61DAFB",
+  "React Native": "#61DAFB",
+  "Next.js": "#FFFFFF",
+  Tailwind: "#06B6D4",
+  HTML5: "#E34F26",
+  CSS3: "#1572B6",
+  Firebase: "#FFCA28",
+  "Node.js": "#5FA04E",
+  Git: "#F05032",
+  Figma: "#F24E1E",
+  Vite: "#646CFF",
+  "VS Code": "#007ACC",
+  macOS: "#E6EDE6",
+  Windows: "#0078D4",
+  Slack: "#E01E5A",
+  Linear: "#5E6AD2",
+  MySQL: "#4479A1",
+  PostgreSQL: "#4169E1",
+  Canva: "#00C4CC",
+}
