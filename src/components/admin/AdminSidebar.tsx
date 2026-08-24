@@ -8,6 +8,7 @@ import {
   FileText,
   Briefcase,
   Gamepad2,
+  Joystick,
   BookMarked,
   Radio,
   LogOut,
@@ -57,6 +58,11 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     href: "/admin/atualmente",
     label: "Atualmente",
     icon: Radio,
+  },
+  {
+    href: "/admin/jogando",
+    label: "Jogando agora",
+    icon: Joystick,
   },
 ] as const
 

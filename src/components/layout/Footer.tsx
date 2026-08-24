@@ -84,7 +84,9 @@ export function Footer() {
 
         {/* Spotify widget */}
         <div className="mb-6">
-          <SpotifyNowPlaying />
+          {/* fallbackContent={null}: sem Spotify ao vivo o widget some, em vez
+              de anunciar uma faixa fictícia como se estivesse tocando. */}
+          <SpotifyNowPlaying fallbackContent={null} />
         </div>
 
         {/* Bottom bar */}

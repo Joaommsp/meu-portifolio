@@ -21,12 +21,66 @@ import { SpotifyNowPlaying } from "@/components/sections/SpotifyNowPlaying"
 import { getAllPublishedBooks } from "@/lib/data/books"
 import { getAllPublishedGames } from "@/lib/data/games"
 import { NOW_LAST_UPDATED, NOW_LOCATION } from "@/lib/now-content"
+import { getCurrently } from "@/lib/data/currently"
+import { getPlaying } from "@/lib/data/playing"
+import { PlayingNow } from "@/components/sections/PlayingNow"
+import { CURRENTLY_EMPTY_TEXT } from "@/types/currently"
 
 export const metadata: Metadata = {
   title: "Agora",
   description:
     "O que João Marcos está fazendo agora — trabalho, estudos, jogos, livros e metas do mês.",
   alternates: { canonical: "/now" },
+}
+
+
+/** Linha compacta dos cards "em tempo real": capa opcional + título + detalhe. */
+function CardLinha({
+  titulo,
+  detalhe,
+  href,
+  imagem,
+}: {
+  titulo: string
+  detalhe?: string
+  href?: string
+  imagem?: string | null
+}) {
+  const conteudo = (
+    <>
+      {imagem && (
+        <div className="relative size-12 shrink-0 overflow-hidden rounded">
+          <Image src={imagem} alt="" fill sizes="48px" className="object-cover" />
+        </div>
+      )}
+      <div className="min-w-0">
+        <p className="truncate text-sm font-medium transition-colors group-hover:text-brand">
+          {titulo}
+        </p>
+        {detalhe && (
+          <p className="truncate font-mono text-[0.7rem] text-muted-foreground">
+            {detalhe}
+          </p>
+        )}
+      </div>
+    </>
+  )
+  if (!href) return <div className="flex items-center gap-3">{conteudo}</div>
+  const externo = href.startsWith("http")
+  return externo ? (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex items-center gap-3"
+    >
+      {conteudo}
+    </a>
+  ) : (
+    <Link href={href} className="group flex items-center gap-3">
+      {conteudo}
+    </Link>
+  )
 }
 
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
@@ -36,9 +90,11 @@ const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
 })
 
 export default async function NowPage() {
-  const [books, games] = await Promise.all([
+  const [books, games, currently, jogando] = await Promise.all([
     getAllPublishedBooks(),
     getAllPublishedGames(),
+    getCurrently(),
+    getPlaying(),
   ])
 
   const currentBook = books.find(
@@ -47,6 +103,9 @@ export default async function NowPage() {
   const currentGame = games.find(
     (g) => g.status === "jogando" || g.status === "rejogando"
   )
+  // O "jogando agora" manda no card compacto: é o que foi marcado à mão como
+  // atual. O catálogo de games só entra se não houver nada cadastrado lá.
+  const jogoAtivo = jogando[0]
 
   const lastUpdatedDate = new Date(NOW_LAST_UPDATED)
 
@@ -118,7 +177,25 @@ export default async function NowPage() {
                 <Music className="size-3 text-brand" />
                 Tocando
               </div>
-              <SpotifyNowPlaying className="!flex !max-w-none !border-0 !p-0" />
+              {/* Sem Spotify ao vivo, cai no que você declarou no admin —
+                  nunca na faixa fictícia do fallback. */}
+              <SpotifyNowPlaying
+                className="!flex !max-w-none !border-0 !p-0"
+                fallbackContent={
+                  currently.ouvindo.visible &&
+                  currently.ouvindo.title.trim() ? (
+                    <CardLinha
+                      titulo={currently.ouvindo.title}
+                      detalhe={currently.ouvindo.subtitle}
+                      href={currently.ouvindo.link || undefined}
+                    />
+                  ) : (
+                    <p className="text-xs text-muted-foreground/70">
+                      {CURRENTLY_EMPTY_TEXT}
+                    </p>
+                  )
+                }
+              />
             </div>
           </ScrollReveal>
 
@@ -129,34 +206,23 @@ export default async function NowPage() {
                 <BookMarked className="size-3 text-brand" />
                 Lendo
               </div>
-              {currentBook ? (
-                <Link
+              {currently.lendo.visible && currently.lendo.title.trim() ? (
+                <CardLinha
+                  titulo={currently.lendo.title}
+                  detalhe={currently.lendo.subtitle}
+                  href={currently.lendo.link || undefined}
+                  imagem={null}
+                />
+              ) : currentBook ? (
+                <CardLinha
+                  titulo={currentBook.title}
+                  detalhe={currentBook.author}
                   href={`/livros/${currentBook.slug}`}
-                  className="group flex items-center gap-3"
-                >
-                  {currentBook.coverImage && (
-                    <div className="relative size-12 shrink-0 overflow-hidden rounded">
-                      <Image
-                        src={currentBook.coverImage}
-                        alt={currentBook.title}
-                        fill
-                        sizes="48px"
-                        className="object-cover"
-                      />
-                    </div>
-                  )}
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium transition-colors group-hover:text-brand">
-                      {currentBook.title}
-                    </p>
-                    <p className="truncate font-mono text-[0.7rem] text-muted-foreground">
-                      {currentBook.author}
-                    </p>
-                  </div>
-                </Link>
+                  imagem={currentBook.coverImage}
+                />
               ) : (
-                <p className="text-xs text-muted-foreground">
-                  Entre livros.
+                <p className="text-xs text-muted-foreground/70">
+                  {CURRENTLY_EMPTY_TEXT}
                 </p>
               )}
             </div>
@@ -169,40 +235,31 @@ export default async function NowPage() {
                 <Gamepad2 className="size-3 text-brand" />
                 Jogando
               </div>
-              {currentGame ? (
-                <Link
+              {jogoAtivo ? (
+                <CardLinha
+                  titulo={jogoAtivo.title}
+                  detalhe={jogoAtivo.platform}
+                  imagem={jogoAtivo.coverImage || null}
+                />
+              ) : currentGame ? (
+                <CardLinha
+                  titulo={currentGame.title}
+                  detalhe={currentGame.platforms[0] ?? ""}
                   href={`/games/${currentGame.slug}`}
-                  className="group flex items-center gap-3"
-                >
-                  {currentGame.coverImage && (
-                    <div className="relative size-12 shrink-0 overflow-hidden rounded">
-                      <Image
-                        src={currentGame.coverImage}
-                        alt={currentGame.title}
-                        fill
-                        sizes="48px"
-                        className="object-cover"
-                      />
-                    </div>
-                  )}
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium transition-colors group-hover:text-brand">
-                      {currentGame.title}
-                    </p>
-                    <p className="truncate font-mono text-[0.7rem] text-muted-foreground">
-                      {currentGame.platforms[0] ?? ""}
-                    </p>
-                  </div>
-                </Link>
+                  imagem={currentGame.coverImage}
+                />
               ) : (
-                <p className="text-xs text-muted-foreground">
-                  Sem jogo ativo.
+                <p className="text-xs text-muted-foreground/70">
+                  {CURRENTLY_EMPTY_TEXT}
                 </p>
               )}
             </div>
           </ScrollReveal>
         </div>
       </section>
+
+      {/* Jogando agora — cards grandes com a capa ao fundo */}
+      <PlayingNow jogos={jogando} />
 
       {/* Footer hint */}
       <section className="container mx-auto max-w-3xl px-5 sm:px-6 pt-16 pb-24">

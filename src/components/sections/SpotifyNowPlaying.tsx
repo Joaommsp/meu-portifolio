@@ -28,7 +28,18 @@ const SOURCE_LABEL: Record<Source, string> = {
   fallback: "Da playlist",
 }
 
-export function SpotifyNowPlaying({ className }: { className?: string }) {
+export function SpotifyNowPlaying({
+  className,
+  fallbackContent,
+}: {
+  className?: string
+  /**
+   * O que renderizar quando não há faixa real: sem Spotify configurado, a API
+   * devolve uma música fictícia — que em contexto informativo seria lida como
+   * fato. Passe aqui o conteúdo verdadeiro (ou nada, para não exibir).
+   */
+  fallbackContent?: React.ReactNode
+}) {
   const [data, setData] = React.useState<Response | null>(null)
 
   React.useEffect(() => {
@@ -74,6 +85,11 @@ export function SpotifyNowPlaying({ className }: { className?: string }) {
 
   const { source, track } = data
   const isLive = source === "now-playing"
+
+  // Faixa fictícia: quem chamou decide o que colocar no lugar.
+  if (source === "fallback" && fallbackContent !== undefined) {
+    return <>{fallbackContent}</>
+  }
 
   return (
     <a

@@ -17,6 +17,7 @@ import type {
 } from "@/types/project"
 import type { Game, GameStatus } from "@/types/game"
 import type { Book, BookStatus } from "@/types/book"
+import type { Playing, PlayingStatus } from "@/types/playing"
 import {
   CURRENTLY_SLOTS,
   EMPTY_CURRENTLY,
@@ -592,4 +593,59 @@ export async function restGetCurrently(): Promise<Currently> {
   const ts = campos.updatedAt
   out.updatedAt = ts instanceof Date ? ts : null
   return out
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* Jogando agora                                               */
+/* ─────────────────────────────────────────────────────────── */
+
+type PlayingRest = {
+  id: string
+  title: string
+  coverImage: string
+  synopsis: string
+  genres: string[]
+  platform: string
+  status: PlayingStatus
+  order: number
+  visible: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
+function toPlaying(doc: RestDocument): Playing {
+  const u = unwrapDoc<PlayingRest>(doc)
+  return {
+    id: u.id,
+    title: u.title ?? "",
+    coverImage: u.coverImage ?? "",
+    synopsis: u.synopsis ?? "",
+    genres: Array.isArray(u.genres) ? u.genres : [],
+    platform: u.platform ?? "",
+    status: (u.status as PlayingStatus) ?? "jogando",
+    order: typeof u.order === "number" ? u.order : 0,
+    visible: Boolean(u.visible),
+    createdAt: u.createdAt ?? new Date(),
+    updatedAt: u.updatedAt ?? new Date(),
+  }
+}
+
+/** Lista o que está sendo jogado agora, já ordenado e só o visível. */
+export async function restListPlaying(): Promise<Playing[]> {
+  // Sem orderBy na query: evita exigir índice composto no Firestore.
+  // São poucos itens — ordena em memória.
+  const docs = await runQuery({
+    from: [{ collectionId: "playing" }],
+    where: {
+      fieldFilter: {
+        field: { fieldPath: "visible" },
+        op: "EQUAL",
+        value: { booleanValue: true },
+      },
+    },
+    limit: 20,
+  })
+  return docs
+    .map(toPlaying)
+    .sort((a, b) => a.order - b.order)
 }
