@@ -4,7 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu } from "lucide-react"
+import { ChevronDown, Menu } from "lucide-react"
 
 import {
   Sheet,
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { ThemeColorSwitcher } from "./ThemeColorSwitcher"
-import { NAV_ITEMS, SOCIAL_LINKS } from "@/lib/nav"
+import { NAV_GROUPS, SOCIAL_LINKS } from "@/lib/nav"
 import { cn } from "@/lib/utils"
 
 export function MobileNav() {
@@ -64,30 +64,80 @@ export function MobileNav() {
           </Link>
         </div>
 
-        {/* Nav items — large tap targets */}
+        {/* Nav — grupos abrem em acordeão; alvos grandes pro toque */}
         <nav
           className="flex flex-col gap-0.5"
           aria-label="Principal (mobile)"
         >
-          {NAV_ITEMS.map((item) => {
-            const active =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href)
+          {NAV_GROUPS.map((entrada) => {
+            if (entrada.kind === "link") {
+              const ativo =
+                entrada.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(entrada.href)
+              return (
+                <Link
+                  key={entrada.href}
+                  href={entrada.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "rounded-md px-3 py-3 font-display text-2xl font-semibold tracking-tight transition-colors",
+                    ativo ? "text-brand" : "text-foreground hover:text-brand"
+                  )}
+                >
+                  {entrada.label}
+                </Link>
+              )
+            }
+
+            const algumAtivo = entrada.items.some((i) =>
+              pathname.startsWith(i.href)
+            )
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "rounded-md px-3 py-3 font-display text-2xl font-semibold tracking-tight transition-colors",
-                  active
-                    ? "text-brand"
-                    : "text-foreground hover:text-brand"
-                )}
+              <details
+                key={entrada.label}
+                // Abre já expandido o grupo da página atual: quem entrou pelo
+                // menu vê onde está sem ter que caçar.
+                open={algumAtivo}
+                className="group/nav"
               >
-                {item.label}
-              </Link>
+                <summary
+                  className={cn(
+                    "flex cursor-pointer list-none items-center justify-between",
+                    "rounded-md px-3 py-3 font-display text-2xl font-semibold tracking-tight transition-colors",
+                    "[&::-webkit-details-marker]:hidden",
+                    algumAtivo ? "text-brand" : "text-foreground"
+                  )}
+                >
+                  {entrada.label}
+                  <ChevronDown
+                    aria-hidden
+                    className="size-5 text-muted-foreground transition-transform duration-200 group-open/nav:rotate-180"
+                  />
+                </summary>
+                <div className="mb-1 flex flex-col gap-0.5 pb-1 pl-3">
+                  {entrada.items.map((item) => {
+                    const ativo = pathname.startsWith(item.href)
+                    const Icone = item.icon
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        className={cn(
+                          "flex items-center gap-3 rounded-md px-3 py-3 text-base transition-colors",
+                          ativo
+                            ? "bg-brand/10 text-brand"
+                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        )}
+                      >
+                        <Icone className="size-4 shrink-0" />
+                        {item.label}
+                      </Link>
+                    )
+                  })}
+                </div>
+              </details>
             )
           })}
         </nav>

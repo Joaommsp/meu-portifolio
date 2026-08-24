@@ -3,18 +3,16 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
-import { motion, AnimatePresence } from "motion/react"
+import { motion } from "motion/react"
 
 import { GithubIcon } from "@/components/icons/brand-icons"
-import { NAV_ITEMS } from "@/lib/nav"
 import { ThemeColorSwitcher } from "./ThemeColorSwitcher"
 import { MobileNav } from "./MobileNav"
+import { NavMenu } from "./NavMenu"
 import { CommandPaletteTrigger } from "@/components/command/CommandPaletteTrigger"
 import { cn } from "@/lib/utils"
 
 export function Header() {
-  const pathname = usePathname()
   const [scrolled, setScrolled] = React.useState(false)
 
   React.useEffect(() => {
@@ -60,60 +58,7 @@ export function Header() {
           </Link>
         </motion.div>
 
-        {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-1" aria-label="Principal">
-          {NAV_ITEMS.map((item, idx) => {
-            const active =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href)
-            return (
-              <motion.div
-                key={item.href}
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.35,
-                  ease: "easeOut",
-                  delay: 0.05 * idx,
-                }}
-              >
-                <Link
-                  href={item.href}
-                  data-active={active}
-                  className={cn(
-                    "group relative inline-flex items-center px-3 py-1.5 text-sm font-medium",
-                    "text-muted-foreground transition-colors hover:text-foreground",
-                    "data-[active=true]:text-foreground"
-                  )}
-                >
-                  {item.label}
-                  <AnimatePresence>
-                    {active && (
-                      <motion.span
-                        layoutId="nav-active-indicator"
-                        className="absolute inset-0 -z-10 rounded-md bg-brand/10"
-                        transition={{
-                          type: "spring",
-                          stiffness: 400,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                  </AnimatePresence>
-                  <span
-                    aria-hidden
-                    className={cn(
-                      "absolute -bottom-0.5 left-3 right-3 h-px scale-x-0 origin-center bg-brand transition-transform duration-300",
-                      "group-hover:scale-x-100",
-                      "data-[active=true]:scale-x-100"
-                    )}
-                  />
-                </Link>
-              </motion.div>
-            )
-          })}
-        </nav>
+        <NavMenu />
 
         {/* Right side: socials + theme + mobile nav */}
         <motion.div
