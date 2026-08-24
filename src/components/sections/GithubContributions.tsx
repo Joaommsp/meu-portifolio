@@ -91,6 +91,14 @@ const MARGEM = 3 // espaço entre blocos
 const LARGURA_ROTULOS = 34 // coluna dos dias da semana
 const BLOCO_MIN = 11 // padrão da lib — piso, pra não encolher no mobile
 const BLOCO_MAX = 20 // acima disso o gráfico vira mancha, não dado
+/* Altura do que não são os blocos: rótulos de mês (18) + gap (8) + legenda (17). */
+const ALTURA_FIXA = 43
+
+/* Detecta hidratação sem setState em efeito (que causaria render em cascata):
+   o snapshot do servidor é false, o do cliente é true. */
+const SEM_INSCRICAO = () => () => {}
+const NO_CLIENTE = () => true
+const NO_SERVIDOR = () => false
 
 export function GithubContributions({
   username = "Joaommsp",
@@ -105,6 +113,11 @@ export function GithubContributions({
   // cai no piso e o container continua rolando na horizontal.
   const containerRef = React.useRef<HTMLDivElement>(null)
   const [blockSize, setBlockSize] = React.useState(BLOCO_MIN)
+
+  // A lib busca as contribuições no cliente: no servidor não existe
+  // <article> nenhum, e o React acusava hydration mismatch. Só montamos o
+  // calendário depois do primeiro render, quando os dois lados já concordam.
+  const montado = React.useSyncExternalStore(SEM_INSCRICAO, NO_CLIENTE, NO_SERVIDOR)
 
   React.useEffect(() => {
     const el = containerRef.current
@@ -126,6 +139,11 @@ export function GithubContributions({
           contra o wrapper (a lib usa max-width: 100%) em vez de rolar
           dentro do card no mobile. */}
       <div ref={containerRef} aria-hidden className="h-0 w-full" />
+      {!montado ? (
+        // Reserva a altura medida do calendário (rótulos de mês + 7 linhas +
+        // legenda) pra troca não empurrar a página.
+        <div aria-hidden style={{ height: ALTURA_FIXA + 7 * (blockSize + MARGEM) }} />
+      ) : (
       <GitHubCalendar
       username={username}
       colorScheme="dark"
@@ -147,6 +165,7 @@ export function GithubContributions({
         weekdays: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
         }}
       />
+      )}
     </>
   )
 }
