@@ -178,7 +178,7 @@ function GroupRail({ group, index }: { group: SkillGroup; index: number }) {
         aria-label={`Tecnologias de ${group.label}`}
         tabIndex={0}
         className={cn(
-          "mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 select-none",
+          "mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-2 select-none",
           "outline-none focus-visible:ring-2 focus-visible:ring-brand/50",
           "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         )}

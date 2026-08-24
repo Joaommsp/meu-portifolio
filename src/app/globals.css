@@ -276,6 +276,16 @@ html[data-loaded="true"] {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
   }
+  /* A página nunca desloca na horizontal.
+     `clip` e não `hidden`: `hidden` transforma o elemento em container de
+     scroll (rolável por script e capaz de quebrar position: sticky dos
+     descendentes); `clip` só corta, sem criar viewport de rolagem.
+     Combina com o `overscroll-x-contain` dos trilhos: lá o gesto para de
+     ser repassado ao documento, aqui o documento não tem para onde ir. */
+  html,
+  body {
+    overflow-x: clip;
+  }
   ::selection {
     background: var(--brand);
     color: var(--brand-foreground);

@@ -89,7 +89,7 @@ export async function GithubSection() {
 
         {/* Contribution graph */}
         <ScrollReveal delay={0.1}>
-          <div className="github-calendar-wrap mb-12 overflow-x-auto rounded-xl border border-border bg-card p-5">
+          <div className="github-calendar-wrap mb-12 overflow-x-auto overscroll-x-contain rounded-xl border border-border bg-card p-5">
             <GithubContributions username="Joaommsp" />
           </div>
         </ScrollReveal>

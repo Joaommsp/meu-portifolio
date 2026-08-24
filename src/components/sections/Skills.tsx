@@ -113,7 +113,7 @@ export function Skills() {
           aria-label="Tecnologias que eu uso"
           tabIndex={0}
           className={cn(
-            "mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 select-none",
+            "mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-4 select-none",
             "px-[calc(50%-75px)] sm:px-[calc(50%-85px)]",
             "outline-none focus-visible:ring-2 focus-visible:ring-brand/50",
             "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
