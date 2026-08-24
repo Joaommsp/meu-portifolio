@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
       // Capas de álbum do Spotify
       { protocol: "https", hostname: "i.scdn.co" },
+      // Capas dos projetos do Behance
+      { protocol: "https", hostname: "mir-s3-cdn-cf.behance.net" },
       // Capas de jogos — PlayStation Store + IGDB (banco de dados de games)
       { protocol: "https", hostname: "image.api.playstation.com" },
       { protocol: "https", hostname: "images.igdb.com" },
