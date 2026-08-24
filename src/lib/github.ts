@@ -51,18 +51,27 @@ export async function fetchGithubProfile(): Promise<GithubProfile | null> {
   }
 }
 
-export async function fetchGithubRepos(limit = 6): Promise<GithubRepo[]> {
+export async function fetchGithubRepos(
+  limit = 6,
+  ordenarPor: "recentes" | "estrelas" = "recentes"
+): Promise<GithubRepo[]> {
   try {
+    // per_page=100 (o teto da API) pra ordenação por estrelas enxergar todos
+    // os repositórios, não só a primeira página dos mais recentes.
     const res = await fetch(
-      `${API}/users/${USERNAME}/repos?sort=updated&per_page=30`,
+      `${API}/users/${USERNAME}/repos?sort=updated&per_page=100`,
       FETCH_OPTS
     )
     if (!res.ok) return []
     const repos = (await res.json()) as GithubRepo[]
     // Filtra forks/arquivados, próprio repo de perfil, e descrições vazias
-    return repos
-      .filter((r) => !r.fork && !r.archived && r.name !== USERNAME)
-      .slice(0, limit)
+    const proprios = repos.filter(
+      (r) => !r.fork && !r.archived && r.name !== USERNAME
+    )
+    if (ordenarPor === "estrelas") {
+      proprios.sort((a, b) => b.stargazers_count - a.stargazers_count)
+    }
+    return proprios.slice(0, limit)
   } catch {
     return []
   }
@@ -93,4 +102,61 @@ export const LANGUAGE_COLORS: Record<string, string> = {
 export function getLanguageColor(lang: string | null): string {
   if (!lang) return "var(--muted-foreground)"
   return LANGUAGE_COLORS[lang] ?? "var(--muted-foreground)"
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* README do perfil                                            */
+/* ─────────────────────────────────────────────────────────── */
+
+/** Repositório especial cujo README aparece no perfil do GitHub. */
+const PERFIL_REPO = USERNAME
+const RAW = `https://raw.githubusercontent.com/${USERNAME}/${PERFIL_REPO}`
+
+/**
+ * O README do perfil é HTML puro (`<h2 align>`, `<img align>`, `<div align>`),
+ * não markdown, e as imagens usam caminho relativo — que só resolve dentro do
+ * GitHub. Aqui elas viram URL absoluta e os `align` legados caem fora, senão
+ * brigam com o layout do site.
+ */
+function prepararReadme(bruto: string): string {
+  return (
+    bruto
+      // ./arquivo.gif e arquivo.gif → raw.githubusercontent
+      .replace(
+        /(<img[^>]*\ssrc=")(?!https?:|data:)\.?\/?([^"]+)(")/gi,
+        (_m, antes, caminho, depois) => `${antes}${RAW}/main/${caminho}${depois}`
+      )
+      // align="left|right|center" é do HTML4 e desalinha tudo aqui
+      .replace(/\salign="[^"]*"/gi, "")
+      // <img width="12" /> sem src é espaçador do GitHub: fora de lá não
+      // espaça nada e ainda rende ícone de imagem quebrada.
+      .replace(/<img(?![^>]*\ssrc=)[^>]*>/gi, "")
+  )
+}
+
+/**
+ * Busca o README do perfil já pronto pra renderizar.
+ * `null` quando o repositório ou o arquivo não existir — a página some a seção
+ * em vez de mostrar bloco vazio.
+ */
+export async function fetchGithubReadme(): Promise<string | null> {
+  for (const branch of ["main", "master"]) {
+    try {
+      const res = await fetch(`${RAW}/${branch}/README.md`, {
+        next: { revalidate: REVALIDATE_SECONDS },
+      })
+      if (!res.ok) continue
+      const texto = await res.text()
+      if (!texto.trim()) continue
+      return prepararReadme(texto)
+    } catch {
+      // tenta a próxima branch
+    }
+  }
+  return null
+}
+
+/** Soma das estrelas dos repositórios próprios — o perfil não expõe isso. */
+export function contarEstrelas(repos: readonly GithubRepo[]): number {
+  return repos.reduce((total, r) => total + r.stargazers_count, 0)
 }
