@@ -80,6 +80,17 @@ service cloud.firestore {
     }
 
     // ─────────────────────────────────────────────────────────
+    // FIGMA — arquivos da Community mostrados em /figma
+    //   Cadastro manual: o Figma não expõe API de perfil da Community.
+    //   Leitura pública: só itens com `visible == true`.
+    //   Admin: leitura total + escrita.
+    // ─────────────────────────────────────────────────────────
+    match /figma/{docId} {
+      allow read: if resource.data.visible == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
     // GUESTBOOK
     //   Leitura pública: qualquer um vê todas mensagens.
     //   Escrita: user autenticado pode criar/editar/deletar SÓ a própria

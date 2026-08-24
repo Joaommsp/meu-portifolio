@@ -18,6 +18,7 @@ import type {
 import type { Game, GameStatus } from "@/types/game"
 import type { Book, BookStatus } from "@/types/book"
 import type { Playing, PlayingStatus } from "@/types/playing"
+import type { FigmaFile } from "@/types/figma"
 import {
   CURRENTLY_SLOTS,
   EMPTY_CURRENTLY,
@@ -648,4 +649,54 @@ export async function restListPlaying(): Promise<Playing[]> {
   return docs
     .map(toPlaying)
     .sort((a, b) => a.order - b.order)
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* Figma Community                                             */
+/* ─────────────────────────────────────────────────────────── */
+
+type FigmaRest = {
+  id: string
+  title: string
+  coverImage: string
+  url: string
+  likes: number
+  users: number
+  order: number
+  visible: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
+function toFigmaFile(doc: RestDocument): FigmaFile {
+  const u = unwrapDoc<FigmaRest>(doc)
+  return {
+    id: u.id,
+    title: u.title ?? "",
+    coverImage: u.coverImage ?? "",
+    url: u.url ?? "",
+    likes: typeof u.likes === "number" ? u.likes : 0,
+    users: typeof u.users === "number" ? u.users : 0,
+    order: typeof u.order === "number" ? u.order : 0,
+    visible: Boolean(u.visible),
+    createdAt: u.createdAt ?? new Date(),
+    updatedAt: u.updatedAt ?? new Date(),
+  }
+}
+
+/** Lista os arquivos visíveis da Community, já ordenados. */
+export async function restListFigmaFiles(): Promise<FigmaFile[]> {
+  // Sem orderBy na query: evita exigir índice composto no Firestore.
+  const docs = await runQuery({
+    from: [{ collectionId: "figma" }],
+    where: {
+      fieldFilter: {
+        field: { fieldPath: "visible" },
+        op: "EQUAL",
+        value: { booleanValue: true },
+      },
+    },
+    limit: 20,
+  })
+  return docs.map(toFigmaFile).sort((a, b) => a.order - b.order)
 }

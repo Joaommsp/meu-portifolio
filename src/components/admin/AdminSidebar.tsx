@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
+import { FigmaIcon } from "@/components/icons/brand-icons"
 import { useAuth } from "@/hooks/useAuth"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -63,6 +64,11 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     href: "/admin/jogando",
     label: "Jogando agora",
     icon: Joystick,
+  },
+  {
+    href: "/admin/figma",
+    label: "Figma",
+    icon: FigmaIcon,
   },
 ] as const
 
