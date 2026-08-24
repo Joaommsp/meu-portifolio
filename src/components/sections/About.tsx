@@ -12,6 +12,7 @@ import {
   TrendingUp,
   ChevronLeft,
   ChevronRight,
+  Hand,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -49,15 +50,8 @@ const AI_TOOLS = [
   { name: "Gemini", src: "/icons/google-gemini-icon.svg" },
 ] as const
 
-/** Moldura quadrada com glow brand — compartilhada pelos slides.
- *  `overlay` renderiza FORA do clip da moldura (ex.: badge que vaza embaixo). */
-function VisualFrame({
-  children,
-  overlay,
-}: {
-  children: React.ReactNode
-  overlay?: React.ReactNode
-}) {
+/** Moldura quadrada com glow brand — compartilhada pelos slides. */
+function VisualFrame({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative mx-auto w-64 md:mx-0">
       <div
@@ -71,7 +65,6 @@ function VisualFrame({
       <div className="relative aspect-square w-64 overflow-hidden rounded-xl border-2 border-brand/30 bg-card">
         {children}
       </div>
-      {overlay}
     </div>
   )
 }
@@ -175,14 +168,7 @@ function TechPills({ items }: { items: readonly string[] }) {
 function SlideSobre() {
   return (
     <div className="grid gap-12 md:grid-cols-[280px_1fr] md:items-start">
-      <VisualFrame
-        overlay={
-          <div className="absolute -bottom-3 left-1/2 flex -translate-x-1/2 items-center whitespace-nowrap rounded-full border border-border bg-card px-3 py-1 font-mono text-[0.65rem] uppercase tracking-widest">
-            <span className="inline-block size-1.5 rounded-full bg-success" />
-            <span className="ml-1.5">disponível pra projetos</span>
-          </div>
-        }
-      >
+      <VisualFrame>
         <Image
           src="https://github.com/Joaommsp.png"
           alt="João Marcos"
@@ -338,21 +324,24 @@ export function About() {
   const [index, setIndex] = React.useState(0)
   const [direction, setDirection] = React.useState(0)
 
+  // A dica some no primeiro uso e não volta: quem já descobriu o gesto não
+  // precisa ser lembrado toda vez que voltar ao primeiro slide.
+  const [dicaVista, setDicaVista] = React.useState(false)
+
   const paginate = React.useCallback((dir: number) => {
+    setDicaVista(true)
     setDirection(dir)
     setIndex((prev) => (prev + dir + SLIDE_COUNT) % SLIDE_COUNT)
   }, [])
 
-  const goTo = React.useCallback(
-    (target: number) => {
-      setIndex((prev) => {
-        if (target === prev) return prev
-        setDirection(target > prev ? 1 : -1)
-        return target
-      })
-    },
-    []
-  )
+  const goTo = React.useCallback((target: number) => {
+    setDicaVista(true)
+    setIndex((prev) => {
+      if (target === prev) return prev
+      setDirection(target > prev ? 1 : -1)
+      return target
+    })
+  }, [])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === "ArrowLeft") {
@@ -365,6 +354,7 @@ export function About() {
   }
 
   function handleDragEnd(_e: unknown, info: PanInfo) {
+    setDicaVista(true)
     if (info.offset.x < -SWIPE_THRESHOLD) paginate(1)
     else if (info.offset.x > SWIPE_THRESHOLD) paginate(-1)
   }
@@ -418,6 +408,43 @@ export function About() {
         onKeyDown={handleKeyDown}
         className="relative mt-10 grid rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
       >
+        {/* Dica do gesto: flutua por cima do slide porque é ali que o olho
+            está — embaixo dos controles ninguém via. `pointer-events-none`
+            pra não roubar o próprio arrasto que ela está ensinando. */}
+        <AnimatePresence>
+          {!dicaVista && (
+            <motion.div
+              aria-hidden="true"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, scale: 0.85 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="pointer-events-none absolute inset-x-0 top-24 z-10 col-start-1 row-start-1 flex justify-center sm:hidden"
+            >
+              <motion.span
+                animate={
+                  reduced
+                    ? undefined
+                    : { x: [0, -34, 0, 34, 0], rotate: [0, -10, 0, 10, 0] }
+                }
+                transition={
+                  reduced
+                    ? undefined
+                    : {
+                        duration: 2.8,
+                        ease: "easeInOut",
+                        repeat: Infinity,
+                        repeatDelay: 0.6,
+                      }
+                }
+                className="flex size-14 items-center justify-center rounded-full border border-brand/30 bg-background/70 text-brand shadow-lg backdrop-blur-md"
+              >
+                <Hand className="size-6" />
+              </motion.span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {SLIDES.map((Slide, i) => {
           const ativo = i === index
           return (
@@ -485,17 +512,6 @@ export function About() {
             {String(index + 1).padStart(2, "0")} / {String(SLIDE_COUNT).padStart(2, "0")}
           </span>
         </div>
-
-        {/* Dica do gesto: só no toque e só até o primeiro slide ser trocado. */}
-        {!reduced && index === 0 && (
-          <span
-            aria-hidden="true"
-            className="flex items-center gap-1 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground sm:hidden"
-          >
-            Arrasta
-            <ChevronRight className="size-3" />
-          </span>
-        )}
 
         {/* Setas escondidas no toque porque o arrasto já navega. Com
             reduced-motion o arrasto está desligado, então elas ficam. */}
