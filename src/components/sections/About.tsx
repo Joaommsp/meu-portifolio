@@ -369,20 +369,6 @@ export function About() {
     else if (info.offset.x > SWIPE_THRESHOLD) paginate(-1)
   }
 
-  const ActiveSlide = SLIDES[index]!
-
-  const variants = reduced
-    ? {
-        enter: { opacity: 0 },
-        center: { opacity: 1 },
-        exit: { opacity: 0 },
-      }
-    : {
-        enter: (dir: number) => ({ opacity: 0, x: dir >= 0 ? 56 : -56 }),
-        center: { opacity: 1, x: 0 },
-        exit: (dir: number) => ({ opacity: 0, x: dir >= 0 ? -56 : 56 }),
-      }
-
   return (
     <section
       id="about"
@@ -395,7 +381,10 @@ export function About() {
       </ScrollReveal>
 
       {/* Título + eyebrow do slide ativo (anima junto) */}
-      <div className="mt-3 min-h-[3.5rem] select-none md:min-h-[4rem]">
+      {/* Reserva a altura de duas linhas: no mobile alguns títulos quebram
+          e outros não, e a diferença de 40px empurrava a página a cada
+          troca de slide. */}
+      <div className="mt-3 min-h-[6.5rem] select-none sm:min-h-[4.5rem] md:min-h-[4rem]">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={`head-${index}`}
@@ -414,39 +403,57 @@ export function About() {
         </AnimatePresence>
       </div>
 
-      {/* Trilho do carousel */}
+      {/* Trilho do carousel.
+          Os quatro slides ficam empilhados na mesma célula do grid: o
+          container passa a ter sempre a altura do maior, em vez de encolher
+          e crescer a cada troca. Sem isso a página variava ~210px no mobile,
+          empurrando o conteúdo de baixo e fazendo o header piscar entre os
+          estados de scroll. Altura vem do conteúdo — nada de valor fixo que
+          quebra quando um texto muda. */}
       <div
         role="group"
         aria-roledescription="carrossel"
         aria-label="Sobre João Marcos"
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        className="relative mt-10 min-h-[520px] rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-brand/50 sm:min-h-[440px]"
+        className="relative mt-10 grid rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
       >
-        <AnimatePresence mode="wait" initial={false} custom={direction}>
-          <motion.div
-            key={index}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.4, ease: [0.25, 0.4, 0.25, 1] }}
-            drag={reduced ? false : "x"}
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.12}
-            onDragEnd={reduced ? undefined : handleDragEnd}
-            role="group"
-            aria-roledescription="slide"
-            aria-label={`${index + 1} de ${SLIDE_COUNT}: ${SLIDE_TITLES[index]}`}
-            className={cn(
-              "select-none",
-              !reduced && "cursor-grab active:cursor-grabbing"
-            )}
-          >
-            <ActiveSlide />
-          </motion.div>
-        </AnimatePresence>
+        {SLIDES.map((Slide, i) => {
+          const ativo = i === index
+          return (
+            <motion.div
+              key={SLIDE_TITLES[i]}
+              // mesma célula: todos ocupam espaço, só o ativo é visível
+              className={cn(
+                "col-start-1 row-start-1 select-none",
+                !ativo && "pointer-events-none",
+                ativo && !reduced && "cursor-grab active:cursor-grabbing"
+              )}
+              animate={
+                reduced
+                  ? { opacity: ativo ? 1 : 0 }
+                  : {
+                      opacity: ativo ? 1 : 0,
+                      x: ativo ? 0 : direction >= 0 ? -56 : 56,
+                    }
+              }
+              initial={false}
+              transition={{ duration: 0.4, ease: [0.25, 0.4, 0.25, 1] }}
+              drag={ativo && !reduced ? "x" : false}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.12}
+              onDragEnd={ativo && !reduced ? handleDragEnd : undefined}
+              role="group"
+              aria-roledescription="slide"
+              aria-hidden={!ativo}
+              // inertes fora de tela também para leitor e teclado
+              inert={!ativo}
+              aria-label={`${i + 1} de ${SLIDE_COUNT}: ${SLIDE_TITLES[i]}`}
+            >
+              <Slide />
+            </motion.div>
+          )
+        })}
       </div>
 
       {/* Controles: dots + setas */}
