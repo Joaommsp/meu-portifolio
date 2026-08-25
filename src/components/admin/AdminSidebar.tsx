@@ -9,6 +9,7 @@ import {
   Briefcase,
   Gamepad2,
   Joystick,
+  Monitor,
   BookMarked,
   Radio,
   LogOut,
@@ -70,6 +71,11 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     label: "Figma",
     icon: FigmaIcon,
   },
+  {
+    href: "/admin/uses",
+    label: "Uses",
+    icon: Monitor,
+  },
 ] as const
 
 export function AdminSidebar() {
@@ -88,7 +94,11 @@ export function AdminSidebar() {
   }
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r border-border bg-card">
+    // `sticky top-0`: quem rola é o documento, então a barra com `h-screen`
+    // saía de vista junto com o conteúdo. Presa no topo, ela acompanha.
+    // Funciona porque o `overflow-x: clip` global (globals.css) não cria
+    // container de rolagem — `hidden` criaria e quebraria o sticky.
+    <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card">
       {/* Brand */}
       <div className="border-b border-border px-5 py-4">
         <Link
