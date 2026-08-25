@@ -64,9 +64,13 @@ export function MobileNav() {
           </Link>
         </div>
 
-        {/* Nav — grupos abrem em acordeão; alvos grandes pro toque */}
+        {/* Nav — grupos abrem em acordeão; alvos grandes pro toque.
+            `flex-1 min-h-0 overflow-y-auto`: com os grupos expandidos a lista
+            passa da altura da tela, e sem isso o excedente ficava inalcançável
+            (um filho de flex não encolhe abaixo do conteúdo sem `min-h-0`).
+            `overscroll-contain` evita que a rolagem vaze pra página atrás. */}
         <nav
-          className="flex flex-col gap-0.5"
+          className="-mx-2 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain px-2"
           aria-label="Principal (mobile)"
         >
           {NAV_GROUPS.map((entrada) => {
