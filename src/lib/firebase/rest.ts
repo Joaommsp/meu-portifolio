@@ -19,6 +19,7 @@ import type { Game, GameStatus } from "@/types/game"
 import type { Book, BookStatus } from "@/types/book"
 import type { Playing, PlayingStatus } from "@/types/playing"
 import type { FigmaFile } from "@/types/figma"
+import { normalizarItens, type UsesCategory } from "@/types/uses"
 import {
   CURRENTLY_SLOTS,
   EMPTY_CURRENTLY,
@@ -699,4 +700,51 @@ export async function restListFigmaFiles(): Promise<FigmaFile[]> {
     limit: 20,
   })
   return docs.map(toFigmaFile).sort((a, b) => a.order - b.order)
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* Uses — o setup mostrado em /uses                            */
+/* ─────────────────────────────────────────────────────────── */
+
+type UsesRest = {
+  id: string
+  title: string
+  description: string
+  items: unknown
+  order: number
+  visible: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
+function toUsesCategory(doc: RestDocument): UsesCategory {
+  const u = unwrapDoc<UsesRest>(doc)
+  return {
+    id: u.id,
+    title: u.title ?? "",
+    description: u.description ?? "",
+    // `unwrap` já resolve arrayValue/mapValue aninhados; aqui só validamos.
+    items: normalizarItens(u.items),
+    order: typeof u.order === "number" ? u.order : 0,
+    visible: Boolean(u.visible),
+    createdAt: u.createdAt ?? new Date(),
+    updatedAt: u.updatedAt ?? new Date(),
+  }
+}
+
+/** Lista as categorias visíveis da /uses, já ordenadas. */
+export async function restListUses(): Promise<UsesCategory[]> {
+  // Sem orderBy na query: evita exigir índice composto no Firestore.
+  const docs = await runQuery({
+    from: [{ collectionId: "uses" }],
+    where: {
+      fieldFilter: {
+        field: { fieldPath: "visible" },
+        op: "EQUAL",
+        value: { booleanValue: true },
+      },
+    },
+    limit: 30,
+  })
+  return docs.map(toUsesCategory).sort((a, b) => a.order - b.order)
 }

@@ -91,6 +91,16 @@ service cloud.firestore {
     }
 
     // ─────────────────────────────────────────────────────────
+    // USES — categorias do setup mostradas em /uses
+    //   Leitura pública: só categorias com `visible == true`.
+    //   Admin: leitura total + escrita.
+    // ─────────────────────────────────────────────────────────
+    match /uses/{docId} {
+      allow read: if resource.data.visible == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
     // GUESTBOOK
     //   Leitura pública: qualquer um vê todas mensagens.
     //   Escrita: user autenticado pode criar/editar/deletar SÓ a própria
