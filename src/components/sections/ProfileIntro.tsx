@@ -124,8 +124,11 @@ export function ProfileIntro() {
               sizes="(max-width: 768px) 100vw, 54vw"
               /* object-bottom-right encosta na borda direita do card;
                  translate-y empurra a base pra fora, onde o overflow-hidden
-                 do card corta o que sobra. */
-              className="translate-y-8 object-contain object-bottom-right grayscale-[0.65] md:translate-y-12"
+                 do card corta o que sobra.
+                 drop-shadow (e não box-shadow) porque a arte tem fundo
+                 transparente: box-shadow desenharia a sombra do retângulo da
+                 caixa; drop-shadow segue o contorno da figura. */
+              className="translate-y-8 object-contain object-bottom-right grayscale-[0.65] drop-shadow-[0_18px_24px_var(--sombra-arte)] md:translate-y-12"
             />
           </div>
 
