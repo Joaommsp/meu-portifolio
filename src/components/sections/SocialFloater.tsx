@@ -11,14 +11,23 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
  */
 export function SocialFloater() {
   const reduced = usePrefersReducedMotion()
+  /* Com redução de movimento vira <aside> puro. Passar alvos undefined a um
+     motion deixa o elemento preso no estado inicial (opacity 0), porque o
+     hook só reporta a preferência DEPOIS do mount — quando o Motion já
+     aplicou o initial e não tem mais para onde animar. */
+  const Envoltorio = reduced ? "aside" : motion.aside
 
   return (
-    <motion.aside
+    <Envoltorio
       aria-label="Redes sociais"
       className="fixed bottom-0 left-6 z-30 hidden flex-col items-center gap-5 lg:flex"
-      initial={reduced ? undefined : { opacity: 0, y: 20 }}
-      animate={reduced ? undefined : { opacity: 1, y: 0 }}
-      transition={{ delay: 1.4, duration: 0.6 }}
+      {...(reduced
+        ? {}
+        : {
+            initial: { opacity: 0, y: 20 },
+            animate: { opacity: 1, y: 0 },
+            transition: { delay: 1.4, duration: 0.6 },
+          })}
     >
       <ul className="flex flex-col gap-3 list-none">
         {SOCIAL_LINKS.map((s) => (
@@ -40,6 +49,6 @@ export function SocialFloater() {
         aria-hidden
         className="h-24 w-px bg-gradient-to-b from-border to-transparent"
       />
-    </motion.aside>
+    </Envoltorio>
   )
 }

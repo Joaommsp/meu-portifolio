@@ -49,6 +49,7 @@ const LUZES = [
  */
 export function Hero() {
   const reduced = usePrefersReducedMotion()
+  const Envoltorio = reduced ? "span" : motion.span
 
   return (
     <section
@@ -115,15 +116,28 @@ export function Hero() {
                     staggerDelay={0.04}
                   />
                 </span>
-                <motion.span
+                {/* Com redução de movimento, um <span> puro — não um motion
+                    com alvos undefined.
+
+                    `usePrefersReducedMotion` começa em false e só vira true
+                    depois do mount. No primeiro render o Motion aplicava
+                    opacity: 0; no segundo, `initial` e `animate` viravam
+                    undefined e ele ficava SEM alvo, deixando o elemento parado
+                    em opacity 0 — a linha nunca aparecia para quem desliga
+                    animações no navegador. */}
+                <Envoltorio
                   className="mt-1 block text-gradient-brand-claro"
-                  initial={reduced ? undefined : { opacity: 0, y: 30 }}
-                  animate={reduced ? undefined : { opacity: 1, y: 0 }}
-                  transition={{
-                    delay: 1.0,
-                    duration: 0.7,
-                    ease: [0.25, 0.4, 0.25, 1],
-                  }}
+                  {...(reduced
+                    ? {}
+                    : {
+                        initial: { opacity: 0, y: 30 },
+                        animate: { opacity: 1, y: 0 },
+                        transition: {
+                          delay: 1.0,
+                          duration: 0.7,
+                          ease: [0.25, 0.4, 0.25, 1] as const,
+                        },
+                      })}
                 >
                   {/* deslocar={false}: este span carrega o gradiente de texto,
                       e uma parte com transform sai do recorte e some. */}
@@ -134,7 +148,7 @@ export function Hero() {
                     staggerDelay={0.08}
                     deslocar={false}
                   />
-                </motion.span>
+                </Envoltorio>
               </h1>
 
               <SlideIn direction="up" delay={1.55} duration={0.7}>
