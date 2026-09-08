@@ -8,23 +8,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
-import {
-  useThemeColor,
-  ACCENTS,
-  type Accent,
-} from "@/contexts/ThemeColorContext"
+import { useThemeColor, ACCENTS } from "@/contexts/ThemeColorContext"
+import { ACCENT_ESCALAS } from "@/lib/accent-colors"
 import { cn } from "@/lib/utils"
-
-const ACCENT_DATA: Record<Accent, { label: string; oklch: string }> = {
-  green: { label: "Verde", oklch: "oklch(0.78 0.22 145)" },
-  blue: { label: "Azul", oklch: "oklch(0.70 0.20 250)" },
-  purple: { label: "Roxo", oklch: "oklch(0.70 0.22 290)" },
-  red: { label: "Vermelho", oklch: "oklch(0.70 0.22 25)" },
-  orange: { label: "Laranja", oklch: "oklch(0.78 0.19 60)" },
-  cyan: { label: "Ciano", oklch: "oklch(0.82 0.16 195)" },
-  pink: { label: "Rosa", oklch: "oklch(0.75 0.22 340)" },
-  yellow: { label: "Amarelo", oklch: "oklch(0.90 0.18 95)" },
-}
 
 type Props = {
   align?: "start" | "center" | "end"
@@ -39,7 +25,7 @@ export function ThemeColorSwitcher({ align = "end" }: Props) {
     setMounted(true)
   }, [])
 
-  const currentLabel = ACCENT_DATA[accent].label
+  const currentLabel = ACCENT_ESCALAS[accent].label
   const triggerLabel = mounted
     ? `Trocar cor de destaque · atual: ${currentLabel}`
     : "Trocar cor de destaque"
@@ -66,7 +52,7 @@ export function ThemeColorSwitcher({ align = "end" }: Props) {
           </p>
           <div className="grid grid-cols-4 gap-2">
             {ACCENTS.map((c) => {
-              const { label, oklch } = ACCENT_DATA[c]
+              const { label, base } = ACCENT_ESCALAS[c]
               const active = accent === c
               return (
                 <button
@@ -82,7 +68,7 @@ export function ThemeColorSwitcher({ align = "end" }: Props) {
                     "hover:scale-110 focus-visible:outline-none focus-visible:ring-foreground/40",
                     "data-[active=true]:ring-foreground"
                   )}
-                  style={{ background: oklch }}
+                  style={{ background: base }}
                 >
                   <span className="sr-only">{label}</span>
                 </button>

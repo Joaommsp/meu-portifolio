@@ -15,14 +15,14 @@ export function DotPattern({
   className,
   size = 22,
   dotSize = 1,
-  opacity = 0.12,
+  opacity = 0.14,
 }: Props) {
   return (
     <div
       aria-hidden
       className={cn("absolute inset-0 -z-10 overflow-hidden", className)}
       style={{
-        backgroundImage: `radial-gradient(oklch(1 0 0 / ${opacity}) ${dotSize}px, transparent ${dotSize}px)`,
+        backgroundImage: `radial-gradient(oklch(from var(--pattern-line) l c h / ${opacity}) ${dotSize}px, transparent ${dotSize}px)`,
         backgroundSize: `${size}px ${size}px`,
         maskImage:
           "radial-gradient(ellipse 70% 60% at center, black 40%, transparent 90%)",

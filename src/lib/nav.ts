@@ -220,4 +220,11 @@ export const SOCIAL_LINKS: readonly SocialLink[] = [
   },
 ] as const
 
+/**
+ * Marca do site. A logo é uma peça de cor sólida com fundo transparente:
+ * `logo-dark` é a versão em tinta escura (tema creme) e `logo-light` a
+ * clara, que ficou sem uso quando o site deixou de ser escuro.
+ */
+export const LOGO_SRC = "/logo-dark.png"
+
 export const CONTACT_EMAIL = "jmmsp2003@hotmail.com"

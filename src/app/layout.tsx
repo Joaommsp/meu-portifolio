@@ -24,6 +24,14 @@ const geistMono = Geist_Mono({
   display: "swap",
 })
 
+/**
+ * Espelha `--background` do globals.css (oklch(0.972 0.014 78)) em hex.
+ * A meta `theme-color` é lida pelo navegador antes do CSS carregar, então
+ * não dá pra apontar pra CSS var. Ao mudar o creme, mudar em três lugares:
+ * aqui, no globals.css e em public/site.webmanifest (splash do PWA).
+ */
+const CREME_FUNDO = "#fbf5ec"
+
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://joaomarcos.dev"
 const SITE_NAME = "João Marcos"
@@ -83,8 +91,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a14",
-  colorScheme: "dark",
+  themeColor: CREME_FUNDO,
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
 }
@@ -98,7 +106,7 @@ export default function RootLayout({
     <html
       lang="pt-BR"
       data-accent={DEFAULT_ACCENT}
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">

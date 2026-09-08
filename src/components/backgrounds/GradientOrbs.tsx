@@ -19,7 +19,7 @@ const DEFAULT_ORBS: Orb[] = [
     size: 480,
     x: "5%",
     y: "10%",
-    color: "var(--brand)",
+    color: "var(--orb-1)",
     duration: 18,
     delay: 0,
     opacity: 0.35,
@@ -28,7 +28,7 @@ const DEFAULT_ORBS: Orb[] = [
     size: 360,
     x: "75%",
     y: "55%",
-    color: "var(--brand-glow)",
+    color: "var(--orb-2)",
     duration: 22,
     delay: 2,
     opacity: 0.3,
@@ -37,7 +37,7 @@ const DEFAULT_ORBS: Orb[] = [
     size: 420,
     x: "35%",
     y: "85%",
-    color: "var(--brand-hover)",
+    color: "var(--orb-3)",
     duration: 26,
     delay: 4,
     opacity: 0.25,
@@ -50,8 +50,11 @@ type Props = {
 }
 
 /**
- * 3 orbs blurrados se movendo lentamente em loop. Cor segue o brand.
- * Combina bem por baixo de hero/seções com texto grande.
+ * 3 orbs blurrados se movendo lentamente em loop.
+ *
+ * A cor NÃO segue o accent: orb é atmosfera de fundo, e o fundo do site é
+ * constante (creme + rosa) por regra. Usa os tokens --orb-*; quem precisar
+ * de outra cor passa `orbs` explicitamente.
  */
 export function GradientOrbs({ className, orbs = DEFAULT_ORBS }: Props) {
   const reduced = usePrefersReducedMotion()

@@ -156,7 +156,7 @@ export default async function ProjectDetailPage({ params }: Props) {
               size: 500,
               x: "20%",
               y: "30%",
-              color: "var(--brand)",
+              color: "var(--orb-1)",
               duration: 20,
               delay: 0,
               opacity: 0.3,
@@ -165,7 +165,7 @@ export default async function ProjectDetailPage({ params }: Props) {
               size: 400,
               x: "70%",
               y: "60%",
-              color: "var(--brand-glow)",
+              color: "var(--orb-2)",
               duration: 24,
               delay: 2,
               opacity: 0.25,
@@ -422,7 +422,7 @@ function PlaceholderCover({ seed = 0 }: { seed?: number }) {
         aria-hidden
         className="absolute inset-0 opacity-25"
         style={{
-          backgroundImage: `linear-gradient(to right, oklch(1 0 0 / 0.04) 1px, transparent 1px), linear-gradient(to bottom, oklch(1 0 0 / 0.04) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(to right, oklch(from var(--pattern-line) l c h / 0.05) 1px, transparent 1px), linear-gradient(to bottom, oklch(from var(--pattern-line) l c h / 0.05) 1px, transparent 1px)`,
           backgroundSize: "32px 32px",
         }}
       />

@@ -85,7 +85,7 @@ function IconPanel({
         className="absolute inset-0 opacity-40"
         style={{
           backgroundImage:
-            "linear-gradient(to right, oklch(1 0 0 / 0.04) 1px, transparent 1px), linear-gradient(to bottom, oklch(1 0 0 / 0.04) 1px, transparent 1px)",
+            "linear-gradient(to right, oklch(from var(--pattern-line) l c h / 0.05) 1px, transparent 1px), linear-gradient(to bottom, oklch(from var(--pattern-line) l c h / 0.05) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />

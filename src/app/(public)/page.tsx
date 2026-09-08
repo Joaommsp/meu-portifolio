@@ -1,4 +1,5 @@
 import { Hero } from "@/components/sections/Hero"
+import { ProfileIntro } from "@/components/sections/ProfileIntro"
 import { About } from "@/components/sections/About"
 import { Skills } from "@/components/sections/Skills"
 import { GithubSection } from "@/components/sections/GithubSection"
@@ -12,6 +13,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <ProfileIntro />
       <About />
       <Skills />
       <GithubSection />

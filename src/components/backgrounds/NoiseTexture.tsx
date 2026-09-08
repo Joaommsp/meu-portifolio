@@ -17,7 +17,7 @@ export function NoiseTexture({ className, opacity = 0.04 }: Props) {
     <div
       aria-hidden
       className={cn(
-        "pointer-events-none absolute inset-0 mix-blend-overlay",
+        "pointer-events-none absolute inset-0 mix-blend-multiply",
         className
       )}
       style={{

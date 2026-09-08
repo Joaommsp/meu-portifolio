@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { ThemeColorSwitcher } from "./ThemeColorSwitcher"
-import { NAV_GROUPS, SOCIAL_LINKS } from "@/lib/nav"
+import { NAV_GROUPS, SOCIAL_LINKS, LOGO_SRC } from "@/lib/nav"
 import { cn } from "@/lib/utils"
 
 export function MobileNav() {
@@ -55,7 +55,7 @@ export function MobileNav() {
             aria-label="João Marcos · página inicial"
           >
             <Image
-              src="/logo-light.png"
+              src={LOGO_SRC}
               alt="João Marcos"
               width={36}
               height={36}

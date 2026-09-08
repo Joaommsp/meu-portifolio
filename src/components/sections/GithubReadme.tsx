@@ -87,7 +87,7 @@ export function GithubReadme({ conteudo }: { conteudo: string }) {
   return (
     <div
       className={cn(
-        "prose prose-invert max-w-none",
+        "prose max-w-none",
         "prose-headings:font-display prose-headings:tracking-tight",
         "prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg",
         "prose-p:text-muted-foreground prose-p:leading-relaxed",

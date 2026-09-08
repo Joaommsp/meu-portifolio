@@ -167,7 +167,7 @@ export default async function GameDetailPage({ params }: Props) {
               size: 480,
               x: "10%",
               y: "20%",
-              color: "var(--brand)",
+              color: "var(--orb-1)",
               duration: 22,
               delay: 0,
               opacity: 0.22,
@@ -176,7 +176,7 @@ export default async function GameDetailPage({ params }: Props) {
               size: 380,
               x: "80%",
               y: "60%",
-              color: "var(--brand-glow)",
+              color: "var(--orb-2)",
               duration: 26,
               delay: 2,
               opacity: 0.18,
@@ -201,7 +201,7 @@ export default async function GameDetailPage({ params }: Props) {
           <div className="grid gap-10 md:grid-cols-[280px_1fr] lg:grid-cols-[340px_1fr]">
             {/* Cover */}
             <ScrollReveal>
-              <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-border shadow-[0_24px_60px_-20px_rgba(0,0,0,0.6),0_0_60px_-30px_var(--brand-glow)]">
+              <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-border shadow-[0_24px_60px_-20px_var(--shadow-elevated),0_0_60px_-30px_var(--brand-glow)]">
                 {game.coverImage && (
                   <Image
                     src={game.coverImage}

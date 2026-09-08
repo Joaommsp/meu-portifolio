@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { NAV_ITEMS, SOCIAL_LINKS, CONTACT_EMAIL } from "@/lib/nav"
+import { NAV_ITEMS, SOCIAL_LINKS, CONTACT_EMAIL, LOGO_SRC } from "@/lib/nav"
 import { SpotifyNowPlaying } from "@/components/sections/SpotifyNowPlaying"
 
 export function Footer() {
@@ -18,7 +18,7 @@ export function Footer() {
               aria-label="João Marcos"
             >
               <Image
-                src="/logo-light.png"
+                src={LOGO_SRC}
                 alt="João Marcos"
                 width={32}
                 height={32}

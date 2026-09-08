@@ -113,12 +113,12 @@ export function CommandPalette({ open, onOpenChange }: Props) {
       description="Use o teclado pra navegar — pressione Esc pra fechar"
       className={[
         // Glass effect
-        "border-0 bg-background/40 p-0 backdrop-blur-2xl backdrop-saturate-150",
+        "border-0 bg-background/75 p-0 backdrop-blur-2xl backdrop-saturate-150",
         // Tamanho + posição
         "top-[20%] max-w-[640px]! sm:max-w-[640px]!",
         // Brand-tinted ring + glow sutil
-        "shadow-[0_24px_60px_-12px_rgba(0,0,0,0.6),0_0_0_1px_var(--brand)/15,0_0_60px_-20px_var(--brand-glow)]",
-        "ring-1 ring-white/[0.08]",
+        "shadow-[0_24px_60px_-12px_var(--shadow-elevated),0_0_0_1px_oklch(from_var(--brand)_l_c_h/0.15),0_0_60px_-20px_var(--brand-glow)]",
+        "ring-1 ring-border",
       ].join(" ")}
     >
       {/* Top decorative gradient — glow brand sutil no topo */}

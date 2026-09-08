@@ -15,7 +15,7 @@ type Props = {
 export function GridBackground({
   className,
   size = 48,
-  opacity = 0.06,
+  opacity = 0.08,
 }: Props) {
   return (
     <div
@@ -23,8 +23,8 @@ export function GridBackground({
       className={cn("absolute inset-0 -z-10 overflow-hidden", className)}
       style={{
         backgroundImage: `
-          linear-gradient(to right, oklch(1 0 0 / ${opacity}) 1px, transparent 1px),
-          linear-gradient(to bottom, oklch(1 0 0 / ${opacity}) 1px, transparent 1px)
+          linear-gradient(to right, oklch(from var(--pattern-line) l c h / ${opacity}) 1px, transparent 1px),
+          linear-gradient(to bottom, oklch(from var(--pattern-line) l c h / ${opacity}) 1px, transparent 1px)
         `,
         backgroundSize: `${size}px ${size}px`,
         maskImage:

@@ -7,33 +7,42 @@ import { useCommandPalette } from "./CommandPaletteProvider"
 import { cn } from "@/lib/utils"
 
 /**
- * Botão compacto que abre o Command Palette. Mostra o atalho ⌘K
- * em desktop, só ícone em mobile.
+ * Botão de ícone que abre o Command Palette.
+ *
+ * Mesma caixa dos outros ícones do header (GitHub, cor do tema) pra os três
+ * ficarem alinhados. O atalho não aparece mais na tela: vive no `title` e no
+ * rótulo acessível, já que a pílula "Buscar… Ctrl K" pesava demais no topo.
  */
+/* Detecta a plataforma sem setState em efeito (que dispara render em
+   cascata): o snapshot do servidor assume Ctrl e o do cliente corrige.
+   Mesmo padrão de GithubContributions. */
+const SEM_INSCRICAO = () => () => {}
+const NO_CLIENTE = () => /Mac|iPod|iPhone|iPad/.test(navigator.platform)
+const NO_SERVIDOR = () => false
+
 export function CommandPaletteTrigger({ className }: { className?: string }) {
   const { setOpen } = useCommandPalette()
-  const [isMac, setIsMac] = React.useState(false)
+  const isMac = React.useSyncExternalStore(
+    SEM_INSCRICAO,
+    NO_CLIENTE,
+    NO_SERVIDOR
+  )
 
-  React.useEffect(() => {
-    setIsMac(/Mac|iPod|iPhone|iPad/.test(navigator.platform))
-  }, [])
+  const atalho = isMac ? "⌘K" : "Ctrl+K"
 
   return (
     <button
       type="button"
       onClick={() => setOpen(true)}
-      aria-label="Abrir busca"
+      aria-label={`Abrir busca (${atalho})`}
+      title={`Buscar (${atalho})`}
       className={cn(
-        "inline-flex items-center gap-2 rounded-md border border-border/60 bg-muted/30 px-2 py-1 text-xs text-muted-foreground transition-colors",
-        "hover:border-border hover:bg-muted/50 hover:text-foreground",
+        "inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors",
+        "hover:bg-muted hover:text-foreground",
         className
       )}
     >
-      <Search className="size-3.5" />
-      <span className="hidden md:inline">Buscar…</span>
-      <kbd className="ml-2 hidden rounded border border-border/60 bg-background px-1.5 py-0.5 font-mono text-[0.65rem] md:inline">
-        {isMac ? "⌘" : "Ctrl"}K
-      </kbd>
+      <Search className="size-4" />
     </button>
   )
 }

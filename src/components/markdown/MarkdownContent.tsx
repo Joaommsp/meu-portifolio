@@ -10,14 +10,15 @@ type Props = {
 
 /**
  * Renderiza Markdown com GFM (tabelas, checkboxes, autolinks).
- * Usa @tailwindcss/typography (`prose prose-invert`) pra estilo base.
+ * Usa @tailwindcss/typography (`prose`) pra estilo base. Sem `prose-invert`:
+ * ele força heading e tabela em branco, ilegíveis sobre o creme.
  * Estilos customizados aplicados via theme overrides nas classes prose-*.
  */
 export function MarkdownContent({ children, className }: Props) {
   return (
     <div
       className={cn(
-        "prose prose-invert max-w-none",
+        "prose max-w-none",
         "prose-headings:font-display prose-headings:tracking-tight",
         "prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-4",
         "prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3",

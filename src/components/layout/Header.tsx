@@ -10,6 +10,7 @@ import { ThemeColorSwitcher } from "./ThemeColorSwitcher"
 import { MobileNav } from "./MobileNav"
 import { NavMenu } from "./NavMenu"
 import { CommandPaletteTrigger } from "@/components/command/CommandPaletteTrigger"
+import { LOGO_SRC } from "@/lib/nav"
 import { cn } from "@/lib/utils"
 
 export function Header() {
@@ -30,7 +31,10 @@ export function Header() {
         // não empurra hero/conteúdo pra baixo. Hero pode começar no top 0
         // absoluto do viewport e o header sobrepõe os primeiros 64px.
         "fixed top-0 z-40 w-full",
-        "data-[scrolled=true]:bg-background/70 data-[scrolled=true]:backdrop-blur-xl",
+        // Fundo desde o topo, não só depois do scroll. Os links são tinta
+        // escura; transparentes sobre o vídeo do hero eles ficam ilegíveis.
+        // A borda continua só no scroll, pra não riscar a tela em repouso.
+        "bg-background/70 backdrop-blur-xl",
         "data-[scrolled=true]:border-b data-[scrolled=true]:border-border"
       )}
     >
@@ -48,7 +52,7 @@ export function Header() {
             aria-label="João Marcos · página inicial"
           >
             <Image
-              src="/logo-light.png"
+              src={LOGO_SRC}
               alt="João Marcos"
               width={36}
               height={36}

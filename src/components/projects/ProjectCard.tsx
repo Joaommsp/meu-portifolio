@@ -99,7 +99,7 @@ export function ProjectCard({ project }: Props) {
           aria-hidden
           className="absolute inset-0 opacity-30"
           style={{
-            backgroundImage: `linear-gradient(to right, oklch(1 0 0 / 0.04) 1px, transparent 1px), linear-gradient(to bottom, oklch(1 0 0 / 0.04) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(to right, oklch(from var(--pattern-line) l c h / 0.05) 1px, transparent 1px), linear-gradient(to bottom, oklch(from var(--pattern-line) l c h / 0.05) 1px, transparent 1px)`,
             backgroundSize: "24px 24px",
           }}
         />
