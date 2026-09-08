@@ -166,6 +166,11 @@ html[data-loaded="true"] {
      quem consome aplica a alfa (ver defaults de GridBackground/DotPattern). */
   --pattern-line: var(--foreground);
 
+  /* Sombra projetada da ilustração. Alfa pré-cozido, como os véus: usada
+     dentro de drop-shadow(), que segue a silhueta do PNG em vez do retângulo
+     — por isso ela acompanha o recorte da arte e não vira uma caixa. */
+  --sombra-arte: oklch(0.245 0.022 330 / 0.55);
+
   /* Sombra de elevação. No creme, preto a 60% (valor do tema escuro) vira
      um borrão sujo — a sombra aqui é da própria tinta, bem diluída. */
   --shadow-elevated: oklch(from var(--foreground) l c h / 0.16);
@@ -407,6 +412,11 @@ html[data-loaded="true"] {
    LEGÍVEIS: --brand-glow (halo) tem contraste ~1.7–2.9 contra o creme e
    sumia o fim da frase. Aqui o gradiente varia só entre brand e brand-hover,
    que passam de 4.5:1. */
+/* ATENÇÃO: quem usa estas utilities pinta o texto pelo gradiente RECORTADO
+   do próprio elemento (background-clip: text + color: transparent). Um
+   descendente com `transform` passa a pintar em camada própria, fora desse
+   recorte, e simplesmente some. Se for animar texto aqui dentro, anime a
+   opacidade — ou anime este elemento, não os filhos. */
 @utility text-gradient-brand {
   background: linear-gradient(
     135deg,

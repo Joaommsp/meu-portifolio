@@ -48,7 +48,15 @@ export function ContactCTA() {
           </ScrollReveal>
           <ScrollReveal delay={0.05}>
             <span className="block text-gradient-brand">
-              <TextReveal text="conversar?" by="letter" inView staggerDelay={0.04} />
+              {/* deslocar={false}: dentro de text-gradient-brand, parte com
+                  transform sai do recorte do ancestral e some. */}
+              <TextReveal
+                text="conversar?"
+                by="letter"
+                inView
+                staggerDelay={0.04}
+                deslocar={false}
+              />
             </span>
           </ScrollReveal>
         </h2>

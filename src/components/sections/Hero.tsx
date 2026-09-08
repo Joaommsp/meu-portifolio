@@ -125,11 +125,14 @@ export function Hero() {
                     ease: [0.25, 0.4, 0.25, 1],
                   }}
                 >
+                  {/* deslocar={false}: este span carrega o gradiente de texto,
+                      e uma parte com transform sai do recorte e some. */}
                   <TextReveal
                     text="Frontend & UI/UX"
                     by="word"
                     delay={1.05}
                     staggerDelay={0.08}
+                    deslocar={false}
                   />
                 </motion.span>
               </h1>

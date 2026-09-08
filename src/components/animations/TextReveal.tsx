@@ -17,11 +17,26 @@ type TextRevealProps = {
   duration?: number
   /** Se true, anima quando entra no viewport. Padrão: anima no mount. */
   inView?: boolean
+  /**
+   * Desliga o slide, deixando só o fade.
+   *
+   * OBRIGATÓRIO quando o TextReveal está dentro de um elemento com
+   * `background-clip: text` (as utilities `text-gradient-brand*`): ali o texto
+   * é transparente e quem pinta é o gradiente recortado do ANCESTRAL. Um
+   * filho com `transform` passa a pintar em camada própria, onde o recorte do
+   * ancestral não alcança — e a parte transformada some da tela. Opacidade não
+   * tem esse efeito; só o transform.
+   */
+  deslocar?: boolean
   className?: string
 }
 
 /**
  * Revela texto palavra-a-palavra ou letra-a-letra com fade + slide-up.
+ *
+ * Dentro de um elemento com gradiente de texto, passar `deslocar={false}`
+ * (ver a prop) — senão as partes somem.
+ *
  * Acessibilidade: `aria-label` tem o texto completo, parts são
  * `aria-hidden`, então leitores de tela pegam o texto inteiro de uma vez.
  */
@@ -32,6 +47,7 @@ export function TextReveal({
   staggerDelay = 0.04,
   duration = 0.55,
   inView = false,
+  deslocar = true,
   className,
 }: TextRevealProps) {
   const reduced = usePrefersReducedMotion()
@@ -42,8 +58,8 @@ export function TextReveal({
 
   const parts = by === "letter" ? Array.from(text) : text.split(" ")
 
-  const initial = { opacity: 0, y: "0.5em" }
-  const animate = { opacity: 1, y: 0 }
+  const initial = deslocar ? { opacity: 0, y: "0.5em" } : { opacity: 0 }
+  const animate = deslocar ? { opacity: 1, y: 0 } : { opacity: 1 }
 
   return (
     <span
