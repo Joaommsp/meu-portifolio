@@ -20,9 +20,8 @@ import {
   getAllPublishedPosts,
 } from "@/lib/data/posts"
 import type { Post } from "@/types/post"
+import { SITE_URL } from "@/lib/site"
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://joaomarcos.dev"
 
 export async function generateStaticParams() {
   const slugs = await getAllPostSlugs()

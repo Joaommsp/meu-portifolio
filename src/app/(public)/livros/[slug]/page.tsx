@@ -31,9 +31,8 @@ import {
 import type { BookStatus } from "@/types/book"
 import { BookCard } from "@/components/books/BookCard"
 import { cn } from "@/lib/utils"
+import { SITE_URL } from "@/lib/site"
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://joaomarcos.dev"
 
 export async function generateStaticParams() {
   const slugs = await getAllBookSlugs()

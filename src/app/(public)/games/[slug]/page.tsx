@@ -24,9 +24,8 @@ import {
 import type { Game, GameStatus } from "@/types/game"
 import { GameCard } from "@/components/games/GameCard"
 import { cn } from "@/lib/utils"
+import { SITE_URL } from "@/lib/site"
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://joaomarcos.dev"
 
 export async function generateStaticParams() {
   const slugs = await getAllGameSlugs()

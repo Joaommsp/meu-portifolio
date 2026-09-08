@@ -2,6 +2,7 @@
 import { ImageResponse } from "next/og"
 
 import { findPostBySlug } from "@/lib/data/posts"
+import { SITE_HOST } from "@/lib/site"
 
 export const alt = "Post"
 export const size = { width: 1200, height: 630 }
@@ -97,7 +98,7 @@ export default async function PostOG({
                 boxShadow: "0 0 16px #34d399",
               }}
             />
-            <span>joaomarcos.dev/blog</span>
+            <span>{SITE_HOST}/blog</span>
           </div>
 
           <div

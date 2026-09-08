@@ -2,6 +2,7 @@
 import { ImageResponse } from "next/og"
 
 import { findProjectBySlug } from "@/lib/data/projects"
+import { SITE_HOST } from "@/lib/site"
 
 export const alt = "Projeto"
 export const size = { width: 1200, height: 630 }
@@ -96,7 +97,7 @@ export default async function ProjectOG({
                 boxShadow: "0 0 16px #34d399",
               }}
             />
-            <span>joaomarcos.dev/projetos</span>
+            <span>{SITE_HOST}/projetos</span>
           </div>
 
           <div style={{ display: "flex", gap: "10px" }}>

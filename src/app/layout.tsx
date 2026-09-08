@@ -11,6 +11,7 @@ import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvide
 import { StructuredData } from "@/components/seo/StructuredData"
 import { CustomCursor } from "@/components/misc/CustomCursor"
 import "./globals.css"
+import { SITE_URL } from "@/lib/site"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,8 +33,6 @@ const geistMono = Geist_Mono({
  */
 const CREME_FUNDO = "#fbf5ec"
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://joaomarcos.dev"
 const SITE_NAME = "João Marcos"
 const SITE_DESCRIPTION =
   "João Marcos — frontend dev e designer de UI/UX. Construo coisas com React, Next.js e Tailwind. Aqui ficam meus projetos, posts e o resto."

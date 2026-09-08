@@ -25,9 +25,8 @@ import {
 import { TECH_ICONS, type TechName } from "@/components/icons/tech-icons"
 import type { Project } from "@/types/project"
 import { cn } from "@/lib/utils"
+import { SITE_URL } from "@/lib/site"
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://joaomarcos.dev"
 
 export async function generateStaticParams() {
   const slugs = await getAllProjectSlugs()

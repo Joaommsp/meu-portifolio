@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og"
+import { SITE_HOST } from "@/lib/site"
 
 export const runtime = "edge"
 export const alt = "João Marcos — Frontend Developer & UI/UX Designer"
@@ -88,7 +89,7 @@ export default async function OG() {
             fontFamily: "monospace",
           }}
         >
-          <span>joaomarcos.dev</span>
+          <span>{SITE_HOST}</span>
           <span>Paulo Afonso · BA</span>
         </div>
       </div>

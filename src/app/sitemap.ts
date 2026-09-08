@@ -4,9 +4,8 @@ import { getAllPublishedPosts } from "@/lib/data/posts"
 import { getAllProjects } from "@/lib/data/projects"
 import { getAllPublishedGames } from "@/lib/data/games"
 import { getAllPublishedBooks } from "@/lib/data/books"
+import { SITE_URL } from "@/lib/site"
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://joaomarcos.dev"
 
 /**
  * sitemap.xml dinâmico — Next.js convention.

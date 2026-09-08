@@ -23,7 +23,7 @@ const ROTEIRO: readonly Linha[] = [
   { tipo: "cmd", txt: 'git commit -m "feat(hero): retrato em duotone"' },
   { tipo: "saida", txt: "[main 9f2c1ab] 4 arquivos alterados" },
   { tipo: "cmd", txt: "vercel --prod" },
-  { tipo: "ok", txt: "✓ https://joaomarcos.dev" },
+  { tipo: "ok", txt: "✓ https://softwaredeveloper-jmmsp.vercel.app" },
 ] as const
 
 /* Ritmo da digitação, em ms por caractere. Comando é lento (é alguém
