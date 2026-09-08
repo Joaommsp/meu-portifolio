@@ -58,6 +58,22 @@ function medida(valor: unknown): string | undefined {
 }
 
 /**
+ * O README serve a logo em duas versões via <picture>, escolhidas por
+ * `prefers-color-scheme` — o que faz sentido no GitHub, que segue o tema de
+ * quem lê. Aqui não: esta página é sempre creme. Sem isto, quem usa o sistema
+ * no escuro receberia a logo CLARA sobre fundo claro, e ela sumiria.
+ *
+ * Descartando a fonte de tema escuro, o <picture> cai no <img> de fallback,
+ * que é a versão escura — a correta para este fundo.
+ */
+function FonteDoReadme({ media, ...resto }: React.ComponentProps<"source">) {
+  if (typeof media === "string" && /prefers-color-scheme:\s*dark/.test(media)) {
+    return null
+  }
+  return <source media={media} {...resto} />
+}
+
+/**
  * O Preflight do Tailwind aplica `height: auto` em toda `img`, o que anula o
  * `height="42"` dos ícones de tecnologia — e SVG sem tamanho intrínseco passa
  * a esticar pra largura inteira do card. O sanitizador (com razão) descarta
@@ -106,7 +122,7 @@ export function GithubReadme({ conteudo }: { conteudo: string }) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw, [rehypeSanitize, schema]]}
-        components={{ img: ImagemDoReadme }}
+        components={{ img: ImagemDoReadme, source: FonteDoReadme }}
       >
         {conteudo}
       </ReactMarkdown>
