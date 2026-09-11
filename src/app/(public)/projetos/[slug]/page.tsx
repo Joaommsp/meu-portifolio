@@ -14,6 +14,10 @@ import { Badge } from "@/components/ui/badge"
 import { GridBackground, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { ScrollReveal, FadeIn, SlideIn } from "@/components/animations"
 import { ProjectCard } from "@/components/projects/ProjectCard"
+import {
+  ProjectGallery,
+  PROPORCAO_MOLDURA,
+} from "@/components/projects/ProjectGallery"
 import { MarkdownContent } from "@/components/markdown/MarkdownContent"
 import { GithubIcon } from "@/components/icons/brand-icons"
 import { StructuredData } from "@/components/seo/StructuredData"
@@ -335,45 +339,31 @@ export default async function ProjectDetailPage({ params }: Props) {
                 </div>
               )}
 
-              {project.gallery.length > 0 ? (
-                <div className="mt-12">
-                  <p className="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                    Galeria
-                  </p>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {project.gallery.map((url, i) => (
-                      <div
-                        key={url}
-                        className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border"
-                      >
-                        <Image
-                          src={url}
-                          alt={`${project.title} — galeria ${i + 1}`}
-                          fill
-                          className="object-cover"
-                          sizes="(min-width: 640px) 30rem, 100vw"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="mt-12">
-                  <p className="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                    Galeria
-                  </p>
+              <div className="mt-12">
+                <p className="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                  Galeria
+                </p>
+                {project.gallery.length > 0 ? (
+                  <ProjectGallery
+                    images={project.gallery}
+                    title={project.title}
+                  />
+                ) : (
                   <div className="grid gap-3 sm:grid-cols-2">
                     {[0, 1, 2, 3].map((i) => (
                       <div
                         key={i}
-                        className="aspect-[4/3] overflow-hidden rounded-xl border border-border"
+                        className={cn(
+                          PROPORCAO_MOLDURA,
+                          "overflow-hidden rounded-xl border border-border"
+                        )}
                       >
                         <PlaceholderCover seed={i} />
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </ScrollReveal>
         </div>
