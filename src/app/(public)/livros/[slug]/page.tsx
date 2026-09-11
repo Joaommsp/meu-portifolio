@@ -34,6 +34,21 @@ import { cn } from "@/lib/utils"
 import { SITE_URL } from "@/lib/site"
 
 
+/*
+  Renderiza sob demanda em vez de tentar congelar a página no build.
+
+  `generateStaticParams` abaixo só conhece os slugs que existiam no último
+  deploy. Conteúdo criado pelo admin depois disso cai no caminho sob demanda — e
+  ali a consulta ao Firestore usa `no-store`, o que torna a página dinâmica. Uma
+  rota marcada como estática não pode virar dinâmica em tempo de execução: o
+  Next responde 500, não 404. Foi o que derrubou /projetos/productive em
+  11/09/2026, logo depois de o projeto ser criado pelo admin.
+
+  Com `force-dynamic`, `generateStaticParams` deixa de pré-renderizar — fica
+  como registro dos slugs e volta a valer se um dia a estratégia mudar.
+*/
+export const dynamic = "force-dynamic"
+
 export async function generateStaticParams() {
   const slugs = await getAllBookSlugs()
   return slugs.map((slug) => ({ slug }))
