@@ -27,7 +27,7 @@ export async function FeaturedGames() {
           <ScrollReveal>
             <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
               <Gamepad2 className="size-3.5" />
-              05 · Games
+              08 · Games
             </p>
           </ScrollReveal>
           <ScrollReveal delay={0.05}>

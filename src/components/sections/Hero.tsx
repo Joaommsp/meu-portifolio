@@ -7,13 +7,14 @@ import { ArrowRight, ArrowDown, Mail } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
-  GridBackground,
+  DotPattern,
   GradientOrbs,
   NoiseTexture,
   ParticlesBackground,
   SpotlightGrid,
 } from "@/components/backgrounds"
 import { SlideIn, TextReveal, MagneticButton } from "@/components/animations"
+import { WindowFrame } from "@/components/misc/WindowFrame"
 import { TerminalOverlay } from "@/components/misc/TerminalOverlay"
 import { CONTACT_EMAIL } from "@/lib/nav"
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
@@ -28,13 +29,6 @@ const RETRATO = {
   src: "/images/retrato-v5.webp",
   alt: "João Marcos sentado, mãos entrelaçadas, de camisa branca",
 }
-
-/** Os três botões da barra de título, nas cores do macOS. */
-const LUZES = [
-  { cor: "#ff5f57", nome: "fechar" },
-  { cor: "#febc2e", nome: "minimizar" },
-  { cor: "#28c840", nome: "maximizar" },
-] as const
 
 /**
  * Hero como uma janela de sistema: barra de título com os três botões, texto à
@@ -64,29 +58,12 @@ export function Hero() {
         <ParticlesBackground count={20} />
       </div>
       <div className="pointer-events-none absolute inset-0 z-0">
-        <GridBackground opacity={0.04} />
+        <DotPattern opacity={0.06} />
         <NoiseTexture opacity={0.05} />
       </div>
 
       <div className="container relative z-10 mx-auto max-w-6xl px-5 sm:px-6">
-        <div className="overflow-hidden rounded-[15px] border border-[var(--painel-borda)] bg-[var(--painel)] shadow-[0_30px_70px_-28px_var(--shadow-elevated)]">
-          {/* Barra de título */}
-          <div className="flex h-9.5 items-center gap-2 border-b border-[var(--painel-borda)] bg-[var(--painel-2)] px-3.5">
-            <div className="flex gap-1.75">
-              {LUZES.map(({ cor, nome }) => (
-                <span
-                  key={nome}
-                  aria-hidden
-                  className="block size-2.75 rounded-full"
-                  style={{ background: cor }}
-                />
-              ))}
-            </div>
-            <span className="mx-auto font-mono text-[11.5px] text-[var(--painel-texto-2)]">
-              <span className="font-medium text-[var(--painel-texto)]">joao-marcos</span>
-              {" — zsh — 120×32"}
-            </span>
-          </div>
+        <WindowFrame>
 
           {/* Corpo: texto | retrato. `isolate` prende o z-index do holofote
               dentro do painel. */}
@@ -219,7 +196,7 @@ export function Hero() {
               />
             </div>
           </div>
-        </div>
+        </WindowFrame>
       </div>
 
       <div

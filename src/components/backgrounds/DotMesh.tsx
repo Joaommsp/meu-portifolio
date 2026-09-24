@@ -5,7 +5,13 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { useThemeColor } from "@/contexts/ThemeColorContext"
 import { ACCENT_ESCALAS, TINTA_PADRAO } from "@/lib/accent-colors"
-import { lerOklch, misturarOklch, oklchParaRgba } from "@/lib/color"
+import {
+  SENTINELA,
+  lerCorCss,
+  lerOklch,
+  misturarOklch,
+  oklchParaRgba,
+} from "@/lib/color"
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
 
 /* Defaults da malha — todos ajustáveis por prop. */
@@ -89,13 +95,31 @@ export function DotMesh({
     const area = pai
     const tela = canvas
 
-    // Cor de repouso vem de `--pattern-line`, o mesmo token que GridBackground
-    // e DotPattern usam. Não é registrada via @property, então não tem
-    // transição e getComputedStyle devolve o valor final — ao contrário de
-    // `--brand`, que por isso vem da escala em TS.
+    // Cor de repouso vem de `--pattern-line`, o mesmo token que o DotPattern
+    // usa. Ler o token, e não uma cor fixa, é o que deixa a malha funcionar em
+    // qualquer superfície: onde alguém reapontar o token, ela acompanha.
+    //
+    // A leitura passa pelo `lerCorCss` e não pelo `lerOklch`: o token é
+    // escrito em `oklch()`, mas o getComputedStyle devolve `lab()`, e o parse
+    // direto falhava CALADO — a malha inteira saía na cor do fallback. Hoje o
+    // fallback por acaso é igual à tinta do creme, então o bug voltaria
+    // invisível; é justamente por isso que o parse fica.
+    //
+    // O token não é registrado via @property, então não tem transição e o
+    // valor lido já é o final — ao contrário de `--brand`, que por isso vem
+    // da escala em TS.
     const tinta =
-      lerOklch(getComputedStyle(canvas).getPropertyValue("--pattern-line")) ??
-      lerOklch(TINTA_PADRAO)
+      lerCorCss(
+        getComputedStyle(canvas).getPropertyValue("--pattern-line"),
+        (cor) => {
+          // A sonda é o contrato do lerCorCss: diante de valor inválido o
+          // canvas mantém o fillStyle anterior em silêncio, e sem plantar um
+          // valor conhecido antes não dá pra saber se ele mudou.
+          pincel.fillStyle = SENTINELA
+          pincel.fillStyle = cor
+          return typeof pincel.fillStyle === "string" ? pincel.fillStyle : SENTINELA
+        }
+      ) ?? lerOklch(TINTA_PADRAO)
     const marca = lerOklch(ACCENT_ESCALAS[accent].base)
     if (!tinta || !marca) return
 

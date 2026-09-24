@@ -4,7 +4,7 @@ import Link from "next/link"
 import { ExternalLink, Heart, Users } from "lucide-react"
 
 import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
-import { GridBackground, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
+import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { FigmaIcon } from "@/components/icons/brand-icons"
 import { getFigmaFiles } from "@/lib/data/figma"
 import {
@@ -93,7 +93,7 @@ export default async function FigmaPage() {
     <>
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <GridBackground />
+        <DotMesh />
         <GradientOrbs
           orbs={[
             {

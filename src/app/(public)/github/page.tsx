@@ -3,7 +3,7 @@ import Image from "next/image"
 import { ExternalLink, MapPin, Building2, CalendarDays, Star, GitFork } from "lucide-react"
 
 import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
-import { GridBackground, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
+import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { GithubIcon } from "@/components/icons/brand-icons"
 import { GithubReadme } from "@/components/sections/GithubReadme"
 import { GithubContributions } from "@/components/sections/GithubContributions"
@@ -112,13 +112,18 @@ export default async function GithubPage() {
 
   return (
     <section className="relative isolate">
+      {/* A malha fica FORA do wrapper abaixo: ela escuta pointermove no
+          próprio pai, e um pai `pointer-events-none` nunca recebe evento —
+          a malha ficaria inerte. Pendurada na seção, que é ancestral do
+          conteúdo, o hover chega; a altura repete a do wrapper. */}
+      <DotMesh className="h-[80vh]" />
+
       {/* Os fundos ficam presos ao topo: soltos na seção inteira, os orbs se
           espalhariam por toda a página, que aqui é bem alta. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-[80vh] overflow-hidden"
       >
-        <GridBackground />
         <GradientOrbs
           orbs={[
             {

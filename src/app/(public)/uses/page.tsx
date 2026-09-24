@@ -2,12 +2,8 @@ import type { Metadata } from "next"
 import { ExternalLink } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
-import {
-  GridBackground,
-  GradientOrbs,
-  NoiseTexture,
-} from "@/components/backgrounds"
+import { ScrollReveal } from "@/components/animations"
+import { PageHero } from "@/components/sections/PageHero"
 import { getUsesCategories } from "@/lib/data/uses"
 import type { UsesItem } from "@/types/uses"
 import { cn } from "@/lib/utils"
@@ -86,62 +82,32 @@ export default async function UsesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden">
-        <GridBackground />
-        <GradientOrbs
-          orbs={[
-            {
-              size: 380,
-              x: "10%",
-              y: "20%",
-              color: "var(--orb-1)",
-              duration: 18,
-              delay: 0,
-              opacity: 0.25,
-            },
-            {
-              size: 320,
-              x: "75%",
-              y: "60%",
-              color: "var(--orb-2)",
-              duration: 22,
-              delay: 2,
-              opacity: 0.2,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.04} />
-
-        <div className="container relative mx-auto max-w-4xl px-5 py-24 sm:px-6 md:py-32">
-          <FadeIn>
-            <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              Uses
-            </p>
-          </FadeIn>
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="font-display text-5xl font-bold tracking-tight md:text-7xl">
-              Hardware, software e{" "}
-              <span className="text-gradient-brand">trampo diário</span>
-            </h1>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.2}>
-            <p className="mt-8 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              {totalItens > 0 ? `As ${totalItens} ferramentas` : "As ferramentas"}{" "}
-              que uso no dia-a-dia pra construir produtos digitais. Atualizada
-              quando algo muda. Inspirado por{" "}
-              <a
-                href="https://uses.tech"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-brand transition-opacity hover:underline hover:opacity-80"
-              >
-                uses.tech
-              </a>
-              .
-            </p>
-          </SlideIn>
-        </div>
-      </section>
+      <PageHero
+        rotulo="Uses"
+        janela="uses"
+        titulo={
+          <>
+            Hardware, software e{" "}
+            <span className="text-gradient-brand-claro">trampo diário</span>
+          </>
+        }
+        descricao={
+          <>
+            {totalItens > 0 ? `As ${totalItens} ferramentas` : "As ferramentas"}{" "}
+            que uso no dia-a-dia pra construir produtos digitais. Atualizada
+            quando algo muda. Inspirado por{" "}
+            <a
+              href="https://uses.tech"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand transition-opacity hover:underline hover:opacity-80"
+            >
+              uses.tech
+            </a>
+            .
+          </>
+        }
+      />
 
       {/* Categorias */}
       {categorias.length > 0 ? (

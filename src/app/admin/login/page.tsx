@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { useAuth } from "@/hooks/useAuth"
-import { GridBackground } from "@/components/backgrounds/GridBackground"
+import { DotMesh } from "@/components/backgrounds/DotMesh"
 import { GradientOrbs } from "@/components/backgrounds/GradientOrbs"
 
 type LoginForm = {
@@ -62,7 +62,7 @@ export default function AdminLoginPage() {
 
   return (
     <main className="relative isolate flex min-h-screen items-center justify-center px-6">
-      <GridBackground />
+      <DotMesh espacamento={36} />
       <GradientOrbs />
 
       <Card className="relative w-full max-w-sm">

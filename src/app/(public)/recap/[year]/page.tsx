@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
-  GridBackground,
+  DotMesh,
   GradientOrbs,
   NoiseTexture,
 } from "@/components/backgrounds"
@@ -113,7 +113,7 @@ export default async function RecapPage({ params }: Props) {
     <>
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <GridBackground />
+        <DotMesh />
         <GradientOrbs />
         <NoiseTexture opacity={0.05} />
 

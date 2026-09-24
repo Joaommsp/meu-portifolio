@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import { ExternalLink } from "lucide-react"
 
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
-import { GridBackground, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
+import { ScrollReveal } from "@/components/animations"
+import { PageHero } from "@/components/sections/PageHero"
 import { BehanceIcon } from "@/components/icons/brand-icons"
 import {
   fetchBehanceProjects,
@@ -69,91 +69,58 @@ export default async function BehancePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden">
-        <GridBackground />
-        <GradientOrbs
-          orbs={[
-            {
-              size: 380,
-              x: "8%",
-              y: "18%",
-              color: "var(--orb-1)",
-              duration: 18,
-              delay: 0,
-              opacity: 0.22,
-            },
-            {
-              size: 320,
-              x: "78%",
-              y: "62%",
-              color: "var(--orb-2)",
-              duration: 22,
-              delay: 2,
-              opacity: 0.18,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.04} />
-
-        <div className="container relative mx-auto max-w-4xl px-5 py-24 sm:px-6 md:py-32">
-          <FadeIn>
-            <p className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              <BehanceIcon className="size-4" />
-              Behance
-            </p>
-          </FadeIn>
-
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="font-display text-5xl font-bold tracking-tight md:text-6xl">
-              Design <span className="text-gradient-brand">publicado</span>
-            </h1>
-          </SlideIn>
-
-          <SlideIn direction="up" delay={0.2}>
-            <p className="mt-8 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              Interfaces, landing pages e peças de social media que publiquei no
-              Behance como <span className="font-mono text-foreground">{BEHANCE_HANDLE}</span>.
-            </p>
-          </SlideIn>
-
+      <PageHero
+        rotulo="Behance"
+        icone={<BehanceIcon className="size-4" aria-hidden />}
+        janela="behance"
+        titulo={
+          <>
+            Design <span className="text-gradient-brand-claro">publicado</span>
+          </>
+        }
+        descricao={
+          <>
+            Interfaces, landing pages e peças de social media que publiquei no
+            Behance como{" "}
+            <span className="font-mono text-foreground">{BEHANCE_HANDLE}</span>.
+          </>
+        }
+      >
+        <div className="flex flex-col gap-8">
           {projects.length > 0 && (
-            <SlideIn direction="up" delay={0.3}>
-              <div className="mt-10 flex flex-wrap gap-8 border-t border-border pt-6">
-                <div>
+            <div className="flex flex-wrap gap-8 border-t border-border pt-6">
+              <div>
+                <span className="block font-display text-2xl font-bold tabular-nums tracking-tight">
+                  {projects.length}
+                </span>
+                <span className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+                  Projetos
+                </span>
+              </div>
+              {Object.entries(porCategoria).map(([cat, n]) => (
+                <div key={cat}>
                   <span className="block font-display text-2xl font-bold tabular-nums tracking-tight">
-                    {projects.length}
+                    {n}
                   </span>
                   <span className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-                    Projetos
+                    {cat}
                   </span>
                 </div>
-                {Object.entries(porCategoria).map(([cat, n]) => (
-                  <div key={cat}>
-                    <span className="block font-display text-2xl font-bold tabular-nums tracking-tight">
-                      {n}
-                    </span>
-                    <span className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-                      {cat}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </SlideIn>
+              ))}
+            </div>
           )}
 
-          <SlideIn direction="up" delay={0.4}>
-            <a
-              href={BEHANCE_PROFILE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
-            >
-              <BehanceIcon className="size-4" />
-              Ver perfil no Behance
-            </a>
-          </SlideIn>
+          <a
+            href={BEHANCE_PROFILE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex w-fit items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
+          >
+            <BehanceIcon className="size-4" />
+            Ver perfil no Behance
+          </a>
         </div>
-      </section>
+      </PageHero>
 
       {/* Projetos */}
       <section className="container mx-auto max-w-6xl px-5 py-12 sm:px-6">

@@ -11,7 +11,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { GridBackground, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
+import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { ScrollReveal, FadeIn, SlideIn } from "@/components/animations"
 import { ProjectCard } from "@/components/projects/ProjectCard"
 import {
@@ -167,7 +167,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <GridBackground />
+        <DotMesh />
         <GradientOrbs
           orbs={[
             {

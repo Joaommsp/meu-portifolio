@@ -6,7 +6,7 @@ import { ArrowLeft, Clock, Calendar, ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { GridBackground, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
+import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
 import { MarkdownContent } from "@/components/markdown/MarkdownContent"
 import { PostCard } from "@/components/blog/PostCard"
@@ -170,7 +170,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <GridBackground />
+        <DotMesh />
         <GradientOrbs
           orbs={[
             {

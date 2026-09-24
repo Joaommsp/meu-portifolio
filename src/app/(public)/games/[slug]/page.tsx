@@ -7,7 +7,7 @@ import { ArrowLeft, Star, Clock, Calendar, Heart, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
-  GridBackground,
+  DotMesh,
   GradientOrbs,
   NoiseTexture,
 } from "@/components/backgrounds"
@@ -174,7 +174,7 @@ export default async function GameDetailPage({ params }: Props) {
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <GridBackground />
+        <DotMesh />
         <GradientOrbs
           orbs={[
             {

@@ -1,4 +1,3 @@
-export { GridBackground } from "./GridBackground"
 export { DotPattern } from "./DotPattern"
 export { GradientOrbs } from "./GradientOrbs"
 export { BeamBackground } from "./BeamBackground"

@@ -18,16 +18,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { GithubIcon } from "@/components/icons/brand-icons"
-import {
-  FadeIn,
-  SlideIn,
-  ScrollReveal,
-} from "@/components/animations"
-import {
-  GridBackground,
-  GradientOrbs,
-  NoiseTexture,
-} from "@/components/backgrounds"
+import { ScrollReveal } from "@/components/animations"
+import { PageHero } from "@/components/sections/PageHero"
 import { requireAuth, firebaseConfigured } from "@/lib/firebase/config"
 import {
   signInWithGitHub,
@@ -194,34 +186,25 @@ export default function GuestbookPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden">
-        <GridBackground />
-        <GradientOrbs />
-        <NoiseTexture opacity={0.04} />
-
-        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-28">
-          <FadeIn>
-            <p className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              <MessageCircle className="size-3.5" />
-              Guestbook
-            </p>
-          </FadeIn>
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="font-display text-5xl font-bold tracking-tight md:text-7xl">
-              Passou por
-              <br />
-              <span className="text-gradient-brand">aqui?</span>
-            </h1>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.2}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Deixa uma mensagem. Não importa se é &ldquo;oi&rdquo;,
-              comentário sobre algum projeto, ou recomendação aleatória — todo
-              mundo lê.
-            </p>
-          </SlideIn>
-        </div>
-      </section>
+      <PageHero
+        rotulo="Guestbook"
+        icone={<MessageCircle className="size-3.5" aria-hidden />}
+        janela="guestbook"
+        titulo={
+          <>
+            Passou por
+            <br />
+            <span className="text-gradient-brand-claro">aqui?</span>
+          </>
+        }
+        descricao={
+          <>
+            Deixa uma mensagem. Não importa se é &ldquo;oi&rdquo;,
+            comentário sobre algum projeto, ou recomendação aleatória — todo
+            mundo lê.
+          </>
+        }
+      />
 
       {/* Form ou Sign-in */}
       <section className="container mx-auto max-w-2xl px-5 sm:px-6 pt-12 pb-12">

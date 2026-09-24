@@ -11,12 +11,8 @@ import {
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
-import {
-  GridBackground,
-  GradientOrbs,
-  NoiseTexture,
-} from "@/components/backgrounds"
+import { ScrollReveal } from "@/components/animations"
+import { PageHero } from "@/components/sections/PageHero"
 import { SpotifyNowPlaying } from "@/components/sections/SpotifyNowPlaying"
 import { getAllPublishedBooks } from "@/lib/data/books"
 import { getAllPublishedGames } from "@/lib/data/games"
@@ -112,54 +108,44 @@ export default async function NowPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden">
-        <GridBackground />
-        <GradientOrbs />
-        <NoiseTexture opacity={0.04} />
-
-        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-28">
-          <FadeIn>
-            <p className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              <Sparkles className="size-3.5" />
-              Agora
-            </p>
-          </FadeIn>
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="font-display text-5xl font-bold tracking-tight md:text-7xl">
-              O que ando
-              <br />
-              <span className="text-gradient-brand">fazendo</span>
-            </h1>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.2}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Esta página é um snapshot de onde estou — trabalho,
-              estudos, hobbies. Inspirada no movimento{" "}
-              <a
-                href="https://nownownow.com/about"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-brand underline-offset-2 hover:underline"
-              >
-                /now
-              </a>{" "}
-              do Derek Sivers.
-            </p>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.25}>
-            <div className="mt-8 flex flex-wrap items-center gap-4 font-mono text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <MapPin className="size-3.5 text-brand" />
-                {NOW_LOCATION}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Clock className="size-3.5 text-brand" />
-                Atualizado em {dateFormatter.format(lastUpdatedDate)}
-              </span>
-            </div>
-          </SlideIn>
+      <PageHero
+        rotulo="Agora"
+        icone={<Sparkles className="size-3.5" aria-hidden />}
+        janela="now"
+        titulo={
+          <>
+            O que ando
+            <br />
+            <span className="text-gradient-brand-claro">fazendo</span>
+          </>
+        }
+        descricao={
+          <>
+            Esta página é um snapshot de onde estou — trabalho,
+            estudos, hobbies. Inspirada no movimento{" "}
+            <a
+              href="https://nownownow.com/about"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand underline-offset-2 hover:underline"
+            >
+              /now
+            </a>{" "}
+            do Derek Sivers.
+          </>
+        }
+      >
+        <div className="flex flex-wrap items-center gap-4 font-mono text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <MapPin className="size-3.5 text-brand" />
+            {NOW_LOCATION}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Clock className="size-3.5 text-brand" />
+            Atualizado em {dateFormatter.format(lastUpdatedDate)}
+          </span>
         </div>
-      </section>
+      </PageHero>
 
       {/* Live snapshot — auto-puxado dos dados */}
       <section className="container mx-auto max-w-4xl px-5 sm:px-6 pt-12 pb-8">

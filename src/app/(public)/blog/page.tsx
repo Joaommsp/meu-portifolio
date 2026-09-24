@@ -8,8 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { PostCard } from "@/components/blog/PostCard"
-import { GridBackground, GradientOrbs } from "@/components/backgrounds"
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
+import { ScrollReveal } from "@/components/animations"
+import { PageHero } from "@/components/sections/PageHero"
 import { getAllPublishedPosts } from "@/lib/data/posts"
 import { POST_CATEGORIES, type PostCategory } from "@/types/post"
 import type { Post } from "@/types/post"
@@ -110,32 +110,23 @@ export default function BlogPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden">
-        <GridBackground />
-        <GradientOrbs />
-
-        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-28">
-          <FadeIn>
-            <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              Blog
-            </p>
-          </FadeIn>
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="font-display text-5xl font-bold tracking-tight md:text-7xl">
-              Pensamentos, tutoriais
-              <br />
-              <span className="text-gradient-brand">e divagações</span>
-            </h1>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.2}>
-            <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              {publishedPosts.length} post{publishedPosts.length === 1 ? "" : "s"}{" "}
-              que escrevi quando quis. Sobre dev, design e o que aparece no
-              meio.
-            </p>
-          </SlideIn>
-        </div>
-      </section>
+      <PageHero
+        rotulo="Blog"
+        janela="blog"
+        titulo={
+          <>
+            Pensamentos, tutoriais
+            <br />
+            <span className="text-gradient-brand-claro">e divagações</span>
+          </>
+        }
+        descricao={
+          <>
+            {publishedPosts.length} post{publishedPosts.length === 1 ? "" : "s"}{" "}
+            que escrevi quando quis. Sobre dev, design e o que aparece no meio.
+          </>
+        }
+      />
 
       {/* Featured */}
       {featured && !hasActiveFilter && (

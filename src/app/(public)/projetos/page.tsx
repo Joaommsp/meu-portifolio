@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ProjectCard } from "@/components/projects/ProjectCard"
 import { ProjectCardSkeleton } from "@/components/projects/ProjectCardSkeleton"
-import { GridBackground, GradientOrbs } from "@/components/backgrounds"
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
+import { ScrollReveal } from "@/components/animations"
+import { PageHero } from "@/components/sections/PageHero"
 import { getAllProjects } from "@/lib/data/projects"
 import { PROJECT_CATEGORIES, type ProjectCategory } from "@/types/project"
 import type { Project } from "@/types/project"
@@ -98,30 +98,18 @@ export default function ProjetosPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden">
-        <GridBackground />
-        <GradientOrbs />
-
-        <div className="container relative mx-auto max-w-5xl px-5 sm:px-6 py-24 md:py-28">
-          <FadeIn>
-            <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              Projetos
-            </p>
-          </FadeIn>
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="font-display text-5xl font-bold tracking-tight md:text-7xl">
-              O que ando construindo
-            </h1>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.2}>
-            <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              {sourceProjects.length} projeto{sourceProjects.length === 1 ? "" : "s"}{" "}
-              entre clientes, side-projects e experimentos. Use os filtros pra
-              refinar.
-            </p>
-          </SlideIn>
-        </div>
-      </section>
+      <PageHero
+        rotulo="Projetos"
+        janela="projetos"
+        titulo="O que ando construindo"
+        descricao={
+          <>
+            {sourceProjects.length} projeto{sourceProjects.length === 1 ? "" : "s"}{" "}
+            entre clientes, side-projects e experimentos. Use os filtros pra
+            refinar.
+          </>
+        }
+      />
 
       {/* Filtros + lista */}
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-24">

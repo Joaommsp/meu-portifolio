@@ -30,7 +30,7 @@ export async function WakatimeStats() {
         <div>
           <ScrollReveal>
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              04 · Coding stats
+              05 · Coding stats
             </p>
           </ScrollReveal>
           <ScrollReveal delay={0.05}>

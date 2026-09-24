@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { BookCard } from "@/components/books/BookCard"
-import { GridBackground, GradientOrbs } from "@/components/backgrounds"
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
+import { ScrollReveal } from "@/components/animations"
+import { PageHero } from "@/components/sections/PageHero"
 import { getAllPublishedBooks } from "@/lib/data/books"
 import { BOOK_STATUSES, type BookStatus } from "@/types/book"
 import type { Book } from "@/types/book"
@@ -99,31 +99,23 @@ export default function BooksPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden">
-        <GridBackground />
-        <GradientOrbs />
-
-        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-28">
-          <FadeIn>
-            <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              Livros
-            </p>
-          </FadeIn>
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="font-display text-5xl font-bold tracking-tight md:text-7xl">
-              Estante
-              <br />
-              <span className="text-gradient-brand">pessoal</span>
-            </h1>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.2}>
-            <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              {books.length} livro{books.length === 1 ? "" : "s"} que passaram
-              pela mesa — alguns marcaram.
-            </p>
-          </SlideIn>
-        </div>
-      </section>
+      <PageHero
+        rotulo="Livros"
+        janela="livros"
+        titulo={
+          <>
+            Estante
+            <br />
+            <span className="text-gradient-brand-claro">pessoal</span>
+          </>
+        }
+        descricao={
+          <>
+            {books.length} livro{books.length === 1 ? "" : "s"} que passaram
+            pela mesa — alguns marcaram.
+          </>
+        }
+      />
 
       {/* Filtros + grid */}
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-24">

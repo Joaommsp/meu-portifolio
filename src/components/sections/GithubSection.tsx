@@ -39,7 +39,7 @@ export async function GithubSection() {
           <div>
             <ScrollReveal>
               <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-                03 · GitHub
+                04 · GitHub
               </p>
             </ScrollReveal>
             <ScrollReveal delay={0.05}>

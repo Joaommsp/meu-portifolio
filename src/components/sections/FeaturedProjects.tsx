@@ -25,7 +25,7 @@ export async function FeaturedProjects() {
         <div>
           <ScrollReveal>
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              03 · Projetos
+              06 · Projetos
             </p>
           </ScrollReveal>
           <ScrollReveal delay={0.05}>

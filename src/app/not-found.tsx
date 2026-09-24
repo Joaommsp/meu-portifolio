@@ -2,7 +2,7 @@ import Link from "next/link"
 import { ArrowLeft, Home, Search, FolderGit2, BookOpen } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { GridBackground, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
+import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 import { CommandPaletteProvider } from "@/components/command/CommandPaletteProvider"
@@ -13,7 +13,7 @@ export default function NotFound() {
     <CommandPaletteProvider>
       <Header />
       <main className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pt-20">
-        <GridBackground />
+        <DotMesh espacamento={36} />
         <GradientOrbs
           orbs={[
             {

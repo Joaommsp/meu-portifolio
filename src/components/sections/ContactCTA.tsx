@@ -38,7 +38,7 @@ export function ContactCTA() {
       <div className="container relative mx-auto max-w-3xl px-5 py-32 text-center sm:px-6">
         <ScrollReveal>
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-            06 · Contato
+            09 · Contato
           </p>
         </ScrollReveal>
 

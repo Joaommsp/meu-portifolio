@@ -2,12 +2,8 @@ import type { Metadata } from "next";
 import { Mail, Clock, ArrowUpRight } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations";
-import {
-  GridBackground,
-  GradientOrbs,
-  NoiseTexture,
-} from "@/components/backgrounds";
+import { ScrollReveal } from "@/components/animations";
+import { PageHero } from "@/components/sections/PageHero";
 import { ContactForm } from "@/components/sections/ContactForm";
 import {
   GithubIcon,
@@ -57,70 +53,27 @@ export default function ContatoPage() {
   return (
     <>
       {/* Hero da página */}
-      <section className="relative isolate overflow-hidden">
-        <GridBackground />
-        <GradientOrbs
-          orbs={[
-            {
-              size: 380,
-              x: "5%",
-              y: "20%",
-              color: "var(--orb-1)",
-              duration: 18,
-              delay: 0,
-              opacity: 0.25,
-            },
-            {
-              size: 320,
-              x: "75%",
-              y: "60%",
-              color: "var(--orb-2)",
-              duration: 22,
-              delay: 2,
-              opacity: 0.2,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.04} />
-
-        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-32">
-          <FadeIn>
-            <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              Contato
-            </p>
-          </FadeIn>
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="font-display text-5xl font-bold tracking-tight md:text-7xl">
-              Vamos <span className="text-gradient-brand">conversar?</span>
-            </h1>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.2}>
-            <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              Tô sempre aberto a novos projetos, parcerias ou só uma boa
-              conversa sobre design e código. Use o formulário ou me chame
-              direto pelos canais ao lado — respondo o mais rápido possível.
-            </p>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.3}>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Badge
-                variant="outline"
-                className="gap-1.5 px-3 py-1 font-mono text-xs"
-              >
-                <span className="inline-block size-1.5 rounded-full bg-success" />
-                Aceitando freelas
-              </Badge>
-              <Badge
-                variant="outline"
-                className="gap-1.5 px-3 py-1 font-mono text-xs"
-              >
-                <Clock className="size-3" />
-                Resposta em ~24h
-              </Badge>
-            </div>
-          </SlideIn>
+      <PageHero
+        rotulo="Contato"
+        janela="contato"
+        titulo={
+          <>
+            Vamos <span className="text-gradient-brand-claro">conversar?</span>
+          </>
+        }
+        descricao="Tô sempre aberto a novos projetos, parcerias ou só uma boa conversa sobre design e código. Use o formulário ou me chame direto pelos canais ao lado — respondo o mais rápido possível."
+      >
+        <div className="flex flex-wrap items-center gap-3">
+          <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">
+            <span className="inline-block size-1.5 rounded-full bg-success" />
+            Aceitando freelas
+          </Badge>
+          <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">
+            <Clock className="size-3" />
+            Resposta em ~24h
+          </Badge>
         </div>
-      </section>
+      </PageHero>
 
       {/* Form + canais diretos */}
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 py-24">

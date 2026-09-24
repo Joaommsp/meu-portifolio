@@ -18,7 +18,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ScrollReveal, FadeIn, SlideIn } from "@/components/animations"
+import { ScrollReveal } from "@/components/animations"
 import { Education } from "@/components/sections/Education"
 import { SkillGroups } from "@/components/sections/SkillGroups"
 import { getCurrently } from "@/lib/data/currently"
@@ -28,7 +28,7 @@ import {
   CURRENTLY_LABELS,
   CURRENTLY_EMPTY_TEXT,
 } from "@/types/currently"
-import { GridBackground, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
+import { PageHero } from "@/components/sections/PageHero"
 
 export const metadata: Metadata = {
   title: "Sobre",
@@ -210,63 +210,32 @@ export default async function SobrePage() {
   return (
     <>
       {/* Hero da página */}
-      <section className="relative isolate overflow-hidden">
-        <GridBackground />
-        <GradientOrbs
-          orbs={[
-            {
-              size: 400,
-              x: "10%",
-              y: "20%",
-              color: "var(--orb-1)",
-              duration: 18,
-              delay: 0,
-              opacity: 0.25,
-            },
-            {
-              size: 350,
-              x: "75%",
-              y: "60%",
-              color: "var(--orb-2)",
-              duration: 22,
-              delay: 2,
-              opacity: 0.2,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.04} />
-
-        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-32">
-          <FadeIn>
-            <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              Sobre mim
-            </p>
-          </FadeIn>
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="font-display text-5xl font-bold tracking-tight md:text-7xl">
-              Frontend dev que pensa
-              <br />
-              <span className="text-gradient-brand">como designer</span>
-            </h1>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.25}>
-            <Button
-              variant="outline"
-              className="mt-8"
-              render={
-                <a
-                  href="/cv-joaomarcos.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              }
-            >
-              <Download className="size-4" data-icon="inline-start" />
-              Baixar CV
-            </Button>
-          </SlideIn>
-        </div>
-      </section>
+      <PageHero
+        rotulo="Sobre mim"
+        janela="sobre"
+        titulo={
+          <>
+            Frontend dev que pensa
+            <br />
+            <span className="text-gradient-brand-claro">como designer</span>
+          </>
+        }
+        acoes={
+          <Button
+            variant="outline"
+            render={
+              <a
+                href="/cv-joaomarcos.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            }
+          >
+            <Download className="size-4" data-icon="inline-start" />
+            Baixar CV
+          </Button>
+        }
+      />
 
       {/* Bio extendida */}
       <section className="container mx-auto max-w-4xl px-5 sm:px-6 py-24">

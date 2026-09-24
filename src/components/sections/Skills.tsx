@@ -89,7 +89,7 @@ export function Skills() {
         <div className="container mx-auto max-w-6xl px-5 sm:px-6">
           <ScrollReveal>
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              02 · Stack
+              03 · Stack
             </p>
           </ScrollReveal>
           <ScrollReveal delay={0.05}>

@@ -27,7 +27,7 @@ export async function LatestPosts() {
           <div>
             <ScrollReveal>
               <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-                04 · Blog
+                07 · Blog
               </p>
             </ScrollReveal>
             <ScrollReveal delay={0.05}>

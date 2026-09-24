@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { GameCard } from "@/components/games/GameCard"
-import { GridBackground, GradientOrbs } from "@/components/backgrounds"
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
+import { ScrollReveal } from "@/components/animations"
+import { PageHero } from "@/components/sections/PageHero"
 import { getAllPublishedGames } from "@/lib/data/games"
 import { GAME_STATUSES, type GameStatus } from "@/types/game"
 import type { Game } from "@/types/game"
@@ -132,31 +132,23 @@ export default function GamesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden">
-        <GridBackground />
-        <GradientOrbs />
-
-        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-24 md:py-28">
-          <FadeIn>
-            <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              Games
-            </p>
-          </FadeIn>
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="font-display text-5xl font-bold tracking-tight md:text-7xl">
-              Jogos que
-              <br />
-              <span className="text-gradient-brand">marcaram</span>
-            </h1>
-          </SlideIn>
-          <SlideIn direction="up" delay={0.2}>
-            <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              {games.length} jogo{games.length === 1 ? "" : "s"} que ficaram
-              comigo — a história deles e por que me marcaram.
-            </p>
-          </SlideIn>
-        </div>
-      </section>
+      <PageHero
+        rotulo="Games"
+        janela="games"
+        titulo={
+          <>
+            Jogos que
+            <br />
+            <span className="text-gradient-brand-claro">marcaram</span>
+          </>
+        }
+        descricao={
+          <>
+            {games.length} jogo{games.length === 1 ? "" : "s"} que ficaram
+            comigo — a história deles e por que me marcaram.
+          </>
+        }
+      />
 
       {/* Filtros + grid */}
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-24">
