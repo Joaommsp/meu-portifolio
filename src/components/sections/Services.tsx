@@ -1,46 +1,14 @@
 import { ScrollReveal } from "@/components/animations"
-import { ServiceCard, type Service } from "@/components/services/ServiceCard"
-import {
-  BeamsEffect,
-  DriftEffect,
-  MeteorsEffect,
-  WavesEffect,
-} from "@/components/services/effects"
-
-const SERVICOS: readonly Service[] = [
-  {
-    numero: "01",
-    categoria: "Desenvolvimento de sites",
-    titulo: "Construo do zero e cuido do seu site",
-    tags: ["Landing page", "Redesign", "Institucional", "Blog"],
-    Efeito: WavesEffect,
-  },
-  {
-    numero: "02",
-    categoria: "Desenvolvimento de sistemas",
-    titulo: "Sistema de gestão feito pro uso diário",
-    tags: ["Dashboard", "Painel admin", "Relatórios", "API"],
-    Efeito: BeamsEffect,
-  },
-  {
-    numero: "03",
-    categoria: "Desenvolvimento de aplicativos",
-    titulo: "Android e iOS a partir de um código só",
-    tags: ["React Native", "iOS", "Android", "Publicação nas lojas"],
-    Efeito: MeteorsEffect,
-  },
-  {
-    numero: "04",
-    categoria: "Design de software",
-    titulo: "Desenho a interface antes da primeira linha",
-    tags: ["UI/UX", "Design system", "Protótipo", "Figma"],
-    Efeito: DriftEffect,
-  },
-]
+import { ServiceCard } from "@/components/services/ServiceCard"
+import { SERVICOS } from "@/lib/servicos-content"
 
 /**
  * A seção que faz a pergunta: quatro frentes de trabalho, cada uma com o
- * próprio fundo animado.
+ * próprio fundo animado, cada card levando pra página da frente.
+ *
+ * Os dados vêm de `lib/servicos-content`, o mesmo arquivo que alimenta
+ * `/servicos/[slug]`: a promessa que aparece no card é literalmente a que
+ * abre a página, sem duas cópias pra sair de sincronia.
  *
  * Fica entre `About` e `Skills` de propósito: depois de dizer quem é, antes
  * de listar ferramenta. Quem chega aqui já sabe com quem está falando e ainda
@@ -72,11 +40,11 @@ export function Services() {
       <div className="mt-13 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {SERVICOS.map((servico, i) => (
           <ScrollReveal
-            key={servico.numero}
+            key={servico.slug}
             delay={0.15 + i * 0.05}
             className="h-full"
           >
-            <ServiceCard {...servico} />
+            <ServiceCard servico={servico} />
           </ScrollReveal>
         ))}
       </div>

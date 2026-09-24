@@ -608,8 +608,9 @@ html.cursor-none-root * {
    tempo no meio da home. A alternativa (canvas + rAF, como o DotMesh) custa
    main thread e INP numa seção que é decoração, não interação.
 
-   Duração e atraso de cada instância vêm do `style` inline de quem usa — é o
-   que dá o descompasso entre as ondas, os feixes e os meteoros. A duração no
+   Duração, atraso e — no meteoro — distância percorrida (`--fx-dist`) vêm do
+   `style` inline de quem usa: é o que dá o descompasso entre os elementos, e
+   o que deixa o mesmo efeito servir a um card de 260px e a um hero de 1100px. A duração no
    shorthand abaixo é só fallback pra classe usada sem `style`; na seção de
    serviços ela é sempre sobrescrita.
 
@@ -637,7 +638,10 @@ html.cursor-none-root * {
   0% { translate: 0 0; opacity: 0; }
   10% { opacity: 1; }
   75% { opacity: 1; }
-  100% { translate: -300px 300px; opacity: 0; }
+  100% {
+    translate: calc(var(--fx-dist, 300px) * -1) var(--fx-dist, 300px);
+    opacity: 0;
+  }
 }
 @keyframes fx-drift {
   0%, 100% { transform: translate(0, 0) scale(1); }

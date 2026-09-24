@@ -1,11 +1,12 @@
 import type * as React from "react"
 
+import type { EfeitoServico } from "@/lib/servicos-content"
+
 /**
- * Fundos animados dos cards de serviço.
+ * Fundos animados dos cards de serviço — e dos heros das páginas deles.
  *
  * Um efeito por serviço, e cada um diz algo sobre o trabalho: a onda contínua
- * é manutenção de site, o feixe varrendo a grade é dado atravessando um
- * sistema, o meteoro é lançamento de app, o blob sobre a malha é a forma
+ * é manutenção de site, o feixe que desce é dado atravessando um sistema, o meteoro é lançamento de app, o blob sobre a malha é a forma
  * livre encontrando o grid — que é literalmente o que design de software faz.
  *
  * Todos são markup estático + keyframes (`fx-*` no globals.css): sem "use
@@ -13,43 +14,55 @@ import type * as React from "react"
  *
  * CONTRATO: cada um preenche o pai, que precisa ser `relative` e recortar o
  * excesso. Quem usa põe o véu por cima — aqui ninguém escurece nada, pra que
- * o card decida quanto do efeito deixa passar.
+ * quem chama decida quanto do efeito deixa passar.
  *
  * Nenhum efeito conhece a superfície onde pousou: todos leem `--brand` e
  * `--pattern-line` do tema. Sobre o creme sai a tinta calibrada pro creme;
  * dentro de `superficie-painel` a mesma linha já sai no passo claro do
  * accent, porque a utility reaponta o token. Ler `--brand-glow` direto aqui
  * seria o efeito adivinhando onde está.
+ *
+ * `denso` é a diferença entre o card e o hero. A contagem de um card de 260px
+ * de largura some num hero de 1100px — e não é questão de opacidade, é de
+ * quantidade. Por isso os elementos são GERADOS a partir de uma contagem, em
+ * vez de listados à mão em dois tamanhos.
  */
 
-/** Alfa do halo que assenta o efeito no card. */
+/** Alfa do halo que assenta o efeito na superfície. */
 const HALO_ALFA = 0.2
 
-/** Alfa das linhas de grade — o mesmo das outras grades do projeto. */
-const GRADE_ALFA = 0.05
+export type PropsEfeito = {
+  /** Contagem de hero em vez de contagem de card. */
+  denso?: boolean
+}
 
-/** Camada decorativa que preenche o card. Some do leitor de tela. */
-function Camada({
-  className,
-  children,
-  style,
-}: {
-  className?: string
-  children?: React.ReactNode
-  style?: React.CSSProperties
-}) {
+/**
+ * Sequência pseudoaleatória ESTÁVEL: a mesma entrada dá sempre a mesma saída,
+ * no servidor e no cliente. `Math.random` aqui quebraria a hidratação.
+ */
+function serie(i: number, semente: number) {
+  const x = Math.sin(i * 12.9898 + semente) * 43758.5453
+  // Arredondado: `Math.sin` não é bit-exato entre engines, e sem cortar a
+  // precisão um ULP de diferença mudaria a string do style. Também encolhe o
+  // HTML — eram 17 dígitos por atributo.
+  return Math.round((x - Math.floor(x)) * 1000) / 1000
+}
+
+/** Distribui `n` itens pela largura, com folga nas duas pontas. */
+function coluna(i: number, n: number) {
+  return `${((i + 0.5) / n) * 100}%`
+}
+
+/** Camada decorativa que preenche o pai. Some do leitor de tela. */
+function Camada({ children }: { children?: React.ReactNode }) {
   return (
-    <div
-      aria-hidden
-      className={className ?? "pointer-events-none absolute inset-0 overflow-hidden"}
-      style={style}
-    >
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       {children}
     </div>
   )
 }
 
-/** Halo do accent que impede o efeito de flutuar solto sobre o painel. */
+/** Halo do accent que impede o efeito de flutuar solto sobre a superfície. */
 function Halo({ elipse }: { elipse: string }) {
   return (
     <div
@@ -62,66 +75,15 @@ function Halo({ elipse }: { elipse: string }) {
   )
 }
 
-/** Posições em %: o card muda de largura entre os breakpoints. */
-const FEIXES = [
-  { id: "a", esquerda: "16%", altura: "26%", duracao: "5s", atraso: "0s" },
-  { id: "b", esquerda: "38%", altura: "18%", duracao: "6.2s", atraso: "1.4s" },
-  { id: "c", esquerda: "62%", altura: "32%", duracao: "4.6s", atraso: "2.7s" },
-  { id: "d", esquerda: "86%", altura: "21%", duracao: "7s", atraso: "0.7s" },
-] as const
-
-const METEOROS = [
-  { id: "a", esquerda: "30%", largura: "120px", duracao: "5.4s", atraso: "0s" },
-  { id: "b", esquerda: "55%", largura: "84px", duracao: "6.8s", atraso: "1.2s" },
-  { id: "c", esquerda: "80%", largura: "150px", duracao: "4.8s", atraso: "2.6s" },
-  { id: "d", esquerda: "105%", largura: "100px", duracao: "6s", atraso: "3.6s" },
-] as const
-
-const BLOBS = [
-  {
-    id: "a",
-    topo: "-9%",
-    esquerda: "-11%",
-    tamanho: "62%",
-    raio: "48% 52% 60% 40% / 55% 45% 55% 45%",
-    opacidade: 0.26,
-    desfoque: "4px",
-    duracao: "18s",
-    atraso: "0s",
-  },
-  {
-    id: "b",
-    topo: "9%",
-    esquerda: "44%",
-    tamanho: "54%",
-    raio: "62% 38% 44% 56% / 42% 58% 42% 58%",
-    opacidade: 0.18,
-    desfoque: "5px",
-    duracao: "22s",
-    atraso: "3s",
-  },
-  {
-    id: "c",
-    topo: "-15%",
-    esquerda: "35%",
-    tamanho: "70%",
-    raio: "40% 60% 55% 45% / 60% 40% 60% 40%",
-    opacidade: 0.12,
-    desfoque: "6px",
-    duracao: "26s",
-    atraso: "6s",
-  },
-] as const
-
 /**
  * As três ondas. A de trás é a mais lenta — é o que dá profundidade.
  *
- * A EMENDA: a faixa tem 200% da largura do card e desliza -50%, o que sobre o
+ * A EMENDA: a faixa tem 200% da largura do pai e desliza -50%, o que sobre o
  * viewBox de 1200 dá exatamente 600 unidades. Pra onda voltar ao ponto de
  * partida sem salto, o período dela precisa DIVIDIR 600 — por isso 300, 200 e
  * 600, e não qualquer número que desenhe uma curva bonita.
  *
- * A altura passa de 100% do card de propósito: no viewBox a crista fica na
+ * A altura passa de 100% do pai de propósito: no viewBox a crista fica na
  * METADE da caixa, então uma onda da altura do card teria a crista no meio e
  * o corpo inteiro debaixo do véu, que é forte justamente ali embaixo.
  */
@@ -155,7 +117,12 @@ const ONDAS = [
   },
 ] as const
 
-/** Sites — ondas contínuas subindo do rodapé do card. */
+/**
+ * Sites — ondas contínuas subindo do rodapé.
+ *
+ * Não tem `denso`: onda já ocupa a largura inteira, e mais camadas viram
+ * borrão em vez de profundidade.
+ */
 export function WavesEffect() {
   return (
     <Camada>
@@ -174,33 +141,27 @@ export function WavesEffect() {
   )
 }
 
-/** Sistemas — feixes descendo por uma grade. */
-export function BeamsEffect() {
+/**
+ * Sistemas: feixes descendo.
+ *
+ * Tinha uma grade de linhas atrás, removida. Fundo quadriculado é o clichê
+ * mais batido de interface gerada por IA, e aqui ele não estava dizendo nada
+ * que os feixes já não digam.
+ */
+export function BeamsEffect({ denso }: PropsEfeito) {
+  const total = denso ? 9 : 4
+
   return (
     <Camada>
-      {/* Mesma fórmula das outras grades do projeto (About, ProjectCard,
-          projetos/[slug]): a linha é a tinta de padrão decorativo diluída,
-          e dentro do painel `--pattern-line` já aponta pro creme. */}
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, oklch(from var(--pattern-line) l c h / ${GRADE_ALFA}) 1px, transparent 1px),
-            linear-gradient(to bottom, oklch(from var(--pattern-line) l c h / ${GRADE_ALFA}) 1px, transparent 1px)
-          `,
-          backgroundSize: "32px 32px",
-        }}
-      />
-      {FEIXES.map(({ id, esquerda, altura, duracao, atraso }) => (
+      {Array.from({ length: total }, (_, i) => (
         <span
-          key={id}
+          key={i}
           className="fx-beam absolute top-0 w-px opacity-55"
           style={{
-            left: esquerda,
-            height: altura,
-            animationDuration: duracao,
-            animationDelay: atraso,
+            left: coluna(i, total),
+            height: `${16 + serie(i, 1) * 22}%`,
+            animationDuration: `${4.4 + serie(i, 2) * 2.8}s`,
+            animationDelay: `${serie(i, 3) * 4}s`,
             background:
               "linear-gradient(to bottom, transparent, var(--brand), transparent)",
           }}
@@ -212,26 +173,34 @@ export function BeamsEffect() {
 }
 
 /** Aplicativos — meteoros cruzando na diagonal. */
-export function MeteorsEffect() {
+export function MeteorsEffect({ denso }: PropsEfeito) {
+  const total = denso ? 10 : 4
+
   return (
     <Camada>
-      {METEOROS.map(({ id, esquerda, largura, duracao, atraso }) => (
+      {Array.from({ length: total }, (_, i) => (
         <span
-          key={id}
+          key={i}
           /* Rotação em torno do CENTRO (origem padrão): a caixa girada
              continua centrada onde estava, então `left`/`top` seguem
              previsíveis. Com `origin-right` a caixa era arremessada pra fora
-             do card e o `overflow-hidden` comia o meteoro inteiro.
+             e o `overflow-hidden` comia o meteoro inteiro.
 
              135° manda a ponta direita pra baixo-e-esquerda, que é a direção
              do deslocamento — por isso o brilho fica em `to right`: a cabeça
              lidera e o rastro fica pra trás. */
-          className="fx-meteor absolute top-[-8%] h-px rotate-135 opacity-55"
+          className="fx-meteor absolute h-px rotate-135 opacity-55"
           style={{
-            left: esquerda,
-            width: largura,
-            animationDuration: duracao,
-            animationDelay: atraso,
+            /* Passa de 100% de propósito: o meteoro anda pra baixo-esquerda,
+               então quem nasce fora da borda direita ainda cruza a área. */
+            top: `${(denso ? -22 : -14) + serie(i, 13) * (denso ? 70 : 26)}%`,
+            left: `${18 + (i / total) * 116}%`,
+            /* Distância percorrida: 300px atravessam um card, mas num hero
+               mal saem do canto. */
+            ["--fx-dist" as string]: denso ? "680px" : "300px",
+            width: `${78 + serie(i, 4) * 84}px`,
+            animationDuration: `${4.4 + serie(i, 5) * 2.6}s`,
+            animationDelay: `${serie(i, 6) * 5}s`,
             background: "linear-gradient(to right, var(--brand), transparent)",
           }}
         />
@@ -241,41 +210,65 @@ export function MeteorsEffect() {
   )
 }
 
+/** Raios de borda dos blobs — formas irregulares, não círculos. */
+const RAIOS_BLOB = [
+  "48% 52% 60% 40% / 55% 45% 55% 45%",
+  "62% 38% 44% 56% / 42% 58% 42% 58%",
+  "40% 60% 55% 45% / 60% 40% 60% 40%",
+  "56% 44% 38% 62% / 48% 62% 38% 52%",
+  "44% 56% 52% 48% / 58% 42% 58% 42%",
+]
+
 /** Design — formas orgânicas à deriva sobre a malha de pontos. */
-export function DriftEffect() {
+export function DriftEffect({ denso }: PropsEfeito) {
+  const total = denso ? 5 : 3
+
   return (
     <Camada>
-      {BLOBS.map(
-        ({ id, topo, esquerda, tamanho, raio, opacidade, desfoque, duracao, atraso }) => (
-          <span
-            key={id}
-            className="fx-drift absolute aspect-square bg-brand"
-            style={{
-              top: topo,
-              left: esquerda,
-              width: tamanho,
-              borderRadius: raio,
-              opacity: opacidade,
-              filter: `blur(${desfoque})`,
-              animationDuration: duracao,
-              animationDelay: atraso,
-            }}
-          />
-        )
-      )}
+      {Array.from({ length: total }, (_, i) => (
+        <span
+          key={i}
+          className="fx-drift absolute aspect-square bg-brand"
+          style={{
+            top: `${-18 + serie(i, 7) * 38}%`,
+            left: `${-12 + (i / total) * 104}%`,
+            width: `${(denso ? 24 : 54) + serie(i, 8) * 18}%`,
+            borderRadius: RAIOS_BLOB[i % RAIOS_BLOB.length],
+            /* Em hero as formas são muito maiores; a mesma alfa do card
+               vira mancha chapada. */
+            opacity: (denso ? 0.06 : 0.1) + serie(i, 9) * (denso ? 0.09 : 0.16),
+            filter: `blur(${4 + serie(i, 10) * 3}px)`,
+            animationDuration: `${17 + serie(i, 11) * 10}s`,
+            animationDelay: `${serie(i, 12) * 7}s`,
+          }}
+        />
+      ))}
       {/* Malha de pontos na mesma tinta dos outros padrões decorativos. Não é
           o `DotPattern`: aquele traz uma máscara de vinheta que, num card
-          deste tamanho, apaga os pontos justamente nas bordas onde o blob
-          encosta. */}
+          deste tamanho, apaga os pontos nas bordas onde o blob encosta. */}
       <div
         aria-hidden
         className="absolute inset-0"
         style={{
           backgroundImage:
             "radial-gradient(oklch(from var(--pattern-line) l c h / 0.14) 1px, transparent 1px)",
-          backgroundSize: "20px 20px",
+          backgroundSize: denso ? "28px 28px" : "20px 20px",
         }}
       />
     </Camada>
   )
 }
+
+/**
+ * Do nome do efeito no conteúdo pro componente que o desenha.
+ *
+ * Mora aqui, e não em quem usa, porque são DOIS consumidores — o card da home
+ * e o hero da página de serviço — e é justamente essa dupla que faz o card
+ * clicado e a página que abre parecerem a mesma coisa.
+ */
+export const EFEITOS = {
+  ondas: WavesEffect,
+  feixes: BeamsEffect,
+  meteoros: MeteorsEffect,
+  blobs: DriftEffect,
+} as const satisfies Record<EfeitoServico, React.ComponentType<PropsEfeito>>
