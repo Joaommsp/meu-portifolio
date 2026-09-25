@@ -15,3 +15,17 @@ export const SITE_URL =
 
 /** Só o host, para exibir nos cards de Open Graph. */
 export const SITE_HOST = SITE_URL.replace(/^https?:\/\//, "").replace(/\/$/, "")
+
+/**
+ * Disponibilidade para trabalho — fonte única.
+ *
+ * Estava escrito à mão na página de contato e, depois, nas quatro páginas de
+ * serviço, já com a redação divergindo ("aceitando freelas" × "aceitando
+ * projetos") para o mesmo fato. O dia em que a resposta for "não estou
+ * aceitando", o lugar de mudar é aqui — não cinco.
+ */
+export const DISPONIBILIDADE = {
+  status: "Aceitando projetos",
+  resposta: "Resposta em até 24h",
+  base: "Remoto",
+} as const

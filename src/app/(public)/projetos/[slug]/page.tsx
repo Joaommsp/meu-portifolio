@@ -14,6 +14,8 @@ import { Badge } from "@/components/ui/badge"
 import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { ScrollReveal, FadeIn, SlideIn } from "@/components/animations"
 import { ProjectCard } from "@/components/projects/ProjectCard"
+import { PROJECT_STATUS_COLOR } from "@/components/projects/project-status"
+import { PROJECT_STATUS_LABEL } from "@/types/project"
 import {
   ProjectGallery,
   PROPORCAO_MOLDURA,
@@ -27,7 +29,6 @@ import {
   getAllProjects,
 } from "@/lib/data/projects"
 import { TECH_ICONS, type TechName } from "@/components/icons/tech-icons"
-import type { Project } from "@/types/project"
 import { cn } from "@/lib/utils"
 import { SITE_URL } from "@/lib/site"
 
@@ -83,17 +84,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-const STATUS_LABEL: Record<Project["status"], string> = {
-  "em-desenvolvimento": "Em desenvolvimento",
-  concluido: "Concluído",
-  arquivado: "Arquivado",
-}
-
-const STATUS_COLOR: Record<Project["status"], string> = {
-  "em-desenvolvimento": "bg-warning/15 text-warning border-warning/30",
-  concluido: "bg-success/15 text-success border-success/30",
-  arquivado: "bg-muted-foreground/15 text-muted-foreground border-muted-foreground/30",
-}
 
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
   month: "short",
@@ -192,7 +182,7 @@ export default async function ProjectDetailPage({ params }: Props) {
         />
         <NoiseTexture opacity={0.05} />
 
-        <div className="container relative mx-auto max-w-4xl px-5 sm:px-6 py-20 md:py-28">
+        <div className="container relative mx-auto max-w-5xl px-5 sm:px-6 py-20 md:py-28">
           <FadeIn>
             <Button
               variant="ghost"
@@ -210,16 +200,16 @@ export default async function ProjectDetailPage({ params }: Props) {
               <Badge
                 variant="outline"
                 className={cn(
-                  "font-mono text-[0.65rem] uppercase tracking-widest",
-                  STATUS_COLOR[project.status]
+                  "font-mono text-xs uppercase tracking-wider",
+                  PROJECT_STATUS_COLOR[project.status]
                 )}
               >
-                {STATUS_LABEL[project.status]}
+                {PROJECT_STATUS_LABEL[project.status]}
               </Badge>
-              <Badge variant="outline" className="font-mono text-[0.65rem] uppercase">
+              <Badge variant="outline" className="font-mono text-xs uppercase">
                 {project.category}
               </Badge>
-              <Badge variant="outline" className="gap-1 font-mono text-[0.65rem]">
+              <Badge variant="outline" className="gap-1 font-mono text-xs">
                 <Calendar className="size-3" />
                 {dateFormatter.format(project.startDate)}
                 {project.endDate && (
@@ -301,7 +291,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       </section>
 
       {/* Stack + Conteúdo */}
-      <section className="container mx-auto max-w-4xl px-5 sm:px-6 py-20">
+      <section className="container mx-auto max-w-5xl px-5 sm:px-6 py-20">
         <div className="grid gap-12 md:grid-cols-[200px_1fr] md:items-start">
           <ScrollReveal direction="left">
             <aside className="md:sticky md:top-24">
@@ -330,7 +320,9 @@ export default async function ProjectDetailPage({ params }: Props) {
           </ScrollReveal>
 
           <ScrollReveal direction="right">
-            <div>
+            {/* Teto de medida: o container alargou pra alinhar com o resto da
+                página, mas linha de leitura acima de ~70 caracteres cansa. */}
+            <div className="max-w-[68ch]">
               {project.fullDescription ? (
                 <MarkdownContent>{project.fullDescription}</MarkdownContent>
               ) : (
@@ -371,7 +363,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
       {suggestions.length > 0 && (
         <section className="border-t border-border bg-card/30 py-24">
-          <div className="container mx-auto max-w-6xl px-5 sm:px-6">
+          <div className="container mx-auto max-w-5xl px-5 sm:px-6">
             <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
               <div>
                 <ScrollReveal>

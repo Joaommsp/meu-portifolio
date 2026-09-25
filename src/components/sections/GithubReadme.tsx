@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 
+import { TITULOS_UM_NIVEL_ABAIXO } from "@/components/markdown/titulos"
 import { cn } from "@/lib/utils"
 
 /**
@@ -105,7 +106,9 @@ export function GithubReadme({ conteudo }: { conteudo: string }) {
       className={cn(
         "prose max-w-none",
         "prose-headings:font-display prose-headings:tracking-tight",
-        "prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg",
+        // Um nível abaixo (ver TITULOS_UM_NIVEL_ABAIXO): o `#` do README
+        // sai como h2 e mantém o tamanho que tinha como h1.
+        "prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-h5:text-base",
         "prose-p:text-muted-foreground prose-p:leading-relaxed",
         "prose-li:text-muted-foreground",
         "prose-strong:text-foreground",
@@ -122,7 +125,11 @@ export function GithubReadme({ conteudo }: { conteudo: string }) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw, [rehypeSanitize, schema]]}
-        components={{ img: ImagemDoReadme, source: FonteDoReadme }}
+        components={{
+          ...TITULOS_UM_NIVEL_ABAIXO,
+          img: ImagemDoReadme,
+          source: FonteDoReadme,
+        }}
       >
         {conteudo}
       </ReactMarkdown>

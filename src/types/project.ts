@@ -16,6 +16,13 @@ export const PROJECT_STATUSES = [
 ] as const
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number]
 
+/** Rótulo de cada status (o do selo, o do admin e o da imagem de OG). */
+export const PROJECT_STATUS_LABEL: Record<ProjectStatus, string> = {
+  "em-desenvolvimento": "Em desenvolvimento",
+  concluido: "Concluído",
+  arquivado: "Arquivado",
+}
+
 export type ProjectDoc = {
   id: string
   slug: string

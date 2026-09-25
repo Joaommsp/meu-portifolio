@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { ScrollReveal } from "@/components/animations"
 import { GameCard } from "@/components/games/GameCard"
 import { getFeaturedGames, getAllPublishedGames } from "@/lib/data/games"
+import { SECAO_HOME } from "@/components/sections/secao"
+import { cn } from "@/lib/utils"
 
 export async function FeaturedGames() {
   // Tenta featured primeiro, cai pros 4 mais recentes se ninguém marcado
@@ -20,7 +22,7 @@ export async function FeaturedGames() {
   return (
     <section
       id="featured-games"
-      className="container mx-auto max-w-6xl scroll-mt-20 px-5 sm:px-6 py-32"
+      className={cn(SECAO_HOME, "scroll-mt-20")}
     >
       <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
         <div>

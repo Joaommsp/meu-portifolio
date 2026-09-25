@@ -91,6 +91,10 @@ html[data-loaded="true"] {
   --color-destructive: var(--destructive);
   --color-success: var(--success);
   --color-warning: var(--warning);
+  /* Passos de TEXTO sobre o tom claro do próprio status (ver :root). */
+  --color-brand-texto: var(--brand-texto);
+  --color-success-texto: var(--success-texto);
+  --color-warning-texto: var(--warning-texto);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -143,6 +147,14 @@ html[data-loaded="true"] {
   --destructive: oklch(0.52 0.20 25);
   --success: oklch(0.50 0.14 152);
   --warning: oklch(0.62 0.15 70);
+  /* Passo escuro do tom, pra TEXTO pequeno sobre o tom claro dele mesmo (os
+     selos de status, ver components/selo/tons.ts). --brand, --warning e
+     --success servem pra ícone e borda; como texto de 12px sobre o próprio
+     tom ficavam abaixo de 4,5:1. O do brand acompanha o accent escolhido,
+     por isso aponta pro passo escuro da escala em vez de ter valor fixo. */
+  --brand-texto: var(--brand-hover);
+  --success-texto: oklch(0.44 0.13 152);
+  --warning-texto: oklch(0.47 0.12 65);
 
   --border: oklch(from var(--foreground) l c h / 10%);
   --input: oklch(from var(--foreground) l c h / 16%);
@@ -454,6 +466,7 @@ html[data-loaded="true"] {
      legível aqui — mesma decisão do terminal do hero da home. */
   --brand: var(--brand-glow);
   --brand-hover: var(--brand-glow);
+  --brand-texto: var(--brand-glow);
   --brand-foreground: var(--painel);
   --primary: var(--brand-glow);
   --primary-foreground: var(--painel);
@@ -608,8 +621,9 @@ html.cursor-none-root * {
    tempo no meio da home. A alternativa (canvas + rAF, como o DotMesh) custa
    main thread e INP numa seção que é decoração, não interação.
 
-   Duração e atraso de cada instância vêm do `style` inline de quem usa — é o
-   que dá o descompasso entre as ondas, os feixes e os meteoros. A duração no
+   Duração, atraso e — no meteoro — distância percorrida (`--fx-dist`) vêm do
+   `style` inline de quem usa: é o que dá o descompasso entre os elementos, e
+   o que deixa o mesmo efeito servir a um card de 260px e a um hero de 1100px. A duração no
    shorthand abaixo é só fallback pra classe usada sem `style`; na seção de
    serviços ela é sempre sobrescrita.
 
@@ -637,7 +651,10 @@ html.cursor-none-root * {
   0% { translate: 0 0; opacity: 0; }
   10% { opacity: 1; }
   75% { opacity: 1; }
-  100% { translate: -300px 300px; opacity: 0; }
+  100% {
+    translate: calc(var(--fx-dist, 300px) * -1) var(--fx-dist, 300px);
+    opacity: 0;
+  }
 }
 @keyframes fx-drift {
   0%, 100% { transform: translate(0, 0) scale(1); }

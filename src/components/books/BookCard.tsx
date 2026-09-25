@@ -3,26 +3,9 @@ import Image from "next/image"
 import { ArrowUpRight, Star, BookOpen } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import type { Book, BookStatus } from "@/types/book"
+import { BOOK_STATUS_COLOR } from "@/components/books/book-status"
+import { BOOK_STATUS_LABEL, type Book } from "@/types/book"
 import { cn } from "@/lib/utils"
-
-const STATUS_LABEL: Record<BookStatus, string> = {
-  lendo: "Lendo",
-  lido: "Lido",
-  relendo: "Relendo",
-  wishlist: "Wishlist",
-  pausado: "Pausado",
-  abandonado: "Abandonado",
-}
-
-const STATUS_COLORS: Record<BookStatus, string> = {
-  lendo: "border-brand/40 bg-brand/10 text-brand",
-  lido: "border-success/40 bg-success/10 text-success",
-  relendo: "border-brand/40 bg-brand/10 text-brand",
-  wishlist: "border-info/40 bg-info/10 text-info",
-  pausado: "border-warning/40 bg-warning/10 text-warning",
-  abandonado: "border-muted-foreground/30 bg-muted/30 text-muted-foreground",
-}
 
 type Props = {
   book: Book
@@ -55,11 +38,11 @@ export function BookCard({ book }: Props) {
           <Badge
             variant="outline"
             className={cn(
-              "font-mono text-[0.65rem] uppercase backdrop-blur-sm",
-              STATUS_COLORS[book.status]
+              "font-mono text-xs uppercase",
+              BOOK_STATUS_COLOR[book.status]
             )}
           >
-            {STATUS_LABEL[book.status]}
+            {BOOK_STATUS_LABEL[book.status]}
           </Badge>
         </div>
 
@@ -84,7 +67,7 @@ export function BookCard({ book }: Props) {
           <h3 className="font-display text-base font-semibold leading-tight tracking-tight transition-colors group-hover:text-brand">
             {book.title}
           </h3>
-          <p className="mt-1 font-mono text-[0.7rem] text-muted-foreground">
+          <p className="mt-1 font-mono text-xs text-muted-foreground">
             {book.author}
           </p>
         </div>
@@ -93,7 +76,7 @@ export function BookCard({ book }: Props) {
           {book.shortDescription}
         </p>
 
-        <div className="mt-auto flex items-center gap-3 pt-2 font-mono text-[0.65rem] text-muted-foreground">
+        <div className="mt-auto flex items-center gap-3 pt-2 font-mono text-xs text-muted-foreground">
           <span>{book.yearRead}</span>
           {book.pages != null && (
             <span className="inline-flex items-center gap-1">

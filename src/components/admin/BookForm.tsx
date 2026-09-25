@@ -24,18 +24,9 @@ import { ImageUploader } from "@/components/admin/ImageUploader"
 import { MarkdownEditor } from "@/components/admin/MarkdownEditor"
 import { TagsInput } from "@/components/admin/TagsInput"
 import { bookFormSchema, type BookFormValues } from "@/lib/validations"
-import { BOOK_STATUSES, type BookStatus } from "@/types/book"
+import { BOOK_STATUS_LABEL, BOOK_STATUSES } from "@/types/book"
 import { slugify } from "@/lib/utils"
 import { createBook, updateBook, isSlugTaken } from "@/lib/firebase/books"
-
-const STATUS_LABEL: Record<BookStatus, string> = {
-  lendo: "Lendo",
-  lido: "Lido",
-  relendo: "Relendo",
-  wishlist: "Wishlist",
-  pausado: "Pausado",
-  abandonado: "Abandonado",
-}
 
 type Props = {
   bookId?: string
@@ -330,7 +321,7 @@ export function BookForm({ bookId, initialValues }: Props) {
                     <SelectContent>
                       {BOOK_STATUSES.map((s) => (
                         <SelectItem key={s} value={s}>
-                          {STATUS_LABEL[s]}
+                          {BOOK_STATUS_LABEL[s]}
                         </SelectItem>
                       ))}
                     </SelectContent>

@@ -44,7 +44,7 @@ function Cartao({ projeto }: { projeto: BehanceProject }) {
 
       <div className="flex flex-1 flex-col gap-1.5 p-4">
         {projeto.category && (
-          <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-brand">
+          <span className="font-mono text-xs uppercase tracking-[0.16em] text-brand">
             {projeto.category}
           </span>
         )}
@@ -93,7 +93,7 @@ export default async function BehancePage() {
                 <span className="block font-display text-2xl font-bold tabular-nums tracking-tight">
                   {projects.length}
                 </span>
-                <span className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+                <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
                   Projetos
                 </span>
               </div>
@@ -102,7 +102,7 @@ export default async function BehancePage() {
                   <span className="block font-display text-2xl font-bold tabular-nums tracking-tight">
                     {n}
                   </span>
-                  <span className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+                  <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
                     {cat}
                   </span>
                 </div>

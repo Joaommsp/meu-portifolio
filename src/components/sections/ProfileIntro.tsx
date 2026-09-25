@@ -44,7 +44,7 @@ export function ProfileIntro() {
       // selecionado pelo caminho. Os links continuam clicáveis e o conteúdo
       // segue legível por leitor de tela — só a seleção do mouse sai.
       // Padding menor embaixo que em cima: a seção seguinte (About) já traz
-      // py-32, e os dois somados abriam um vão de 240px. O respiro de cima
+      // py-32 (py-16 no celular), e os dois somados abriam um vão de 240px. O respiro de cima
       // continua inteiro, que é o que separa do hero.
       className="scroll-mt-20 pt-20 pb-10 select-none md:pt-28 md:pb-14"
     >
@@ -100,7 +100,7 @@ export function ProfileIntro() {
                     <Icon className="size-4.75 shrink-0" />
                     <span className="flex flex-col leading-[1.28]">
                       <span className="text-sm font-medium">{label}</span>
-                      <span className="font-mono text-[0.7rem] text-muted-foreground">
+                      <span className="font-mono text-xs text-muted-foreground">
                         {handle}
                       </span>
                     </span>

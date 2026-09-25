@@ -131,7 +131,7 @@ export function MobileNav() {
                         className={cn(
                           "flex items-center gap-3 rounded-md px-3 py-3 text-base transition-colors",
                           ativo
-                            ? "bg-brand/10 text-brand"
+                            ? "bg-brand/10 text-brand-texto"
                             : "text-muted-foreground hover:bg-muted hover:text-foreground"
                         )}
                       >
@@ -154,7 +154,12 @@ export function MobileNav() {
             </span>
             <ThemeColorSwitcher align="end" />
           </div>
-          <div className="flex flex-wrap gap-2">
+          {/* Cinco ícones de 44px não cabem numa linha do sheet. A caixa fica em
+              36px e o `after:-inset-1.5` estende a área de toque até 46px (o
+              `::after` conta de dentro da borda de 1px: 6px viram 5 pra fora).
+              Com o `gap-2.5` (10px), as áreas vizinhas encostam sem se
+              sobrepor. */}
+          <div className="flex flex-wrap gap-2.5">
             {SOCIAL_LINKS.map((s) => (
               <a
                 key={s.label}
@@ -162,7 +167,7 @@ export function MobileNav() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.label}
-                className="inline-flex size-9 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand"
+                className="relative inline-flex size-9 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors after:absolute after:-inset-1.5 hover:border-brand hover:text-brand"
               >
                 <s.icon className="size-4" />
               </a>

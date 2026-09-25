@@ -21,6 +21,7 @@ import { ScrollReveal } from "@/components/animations"
 import { DataStoryChart } from "@/components/charts/DataStoryChart"
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
 import { cn } from "@/lib/utils"
+import { SECAO_HOME } from "@/components/sections/secao"
 
 /* ─────────────────────────────────────────────────────────── */
 /* Slides                                                       */
@@ -100,7 +101,7 @@ function IconPanel({
         }}
       />
       <Icon className="relative size-20 text-brand" />
-      <span className="absolute bottom-4 right-4 font-mono text-[0.7rem] uppercase tracking-widest text-muted-foreground">
+      <span className="absolute bottom-4 right-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {index}
       </span>
     </div>
@@ -135,13 +136,13 @@ function AILogosPanel() {
               height={36}
               className="size-9"
             />
-            <span className="text-center font-mono text-[0.55rem] uppercase tracking-wide text-muted-foreground">
+            <span className="text-center font-mono text-xs uppercase tracking-wide text-muted-foreground">
               {tool.name}
             </span>
           </div>
         ))}
       </div>
-      <span className="absolute bottom-4 right-4 font-mono text-[0.7rem] uppercase tracking-widest text-muted-foreground">
+      <span className="absolute bottom-4 right-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
         02
       </span>
     </div>
@@ -154,7 +155,7 @@ function TechPills({ items }: { items: readonly string[] }) {
       {items.map((item) => (
         <span
           key={item}
-          className="rounded-md border border-border bg-background px-2.5 py-1 font-mono text-[0.7rem] uppercase tracking-wide text-muted-foreground"
+          className="rounded-md border border-border bg-background px-2.5 py-1 font-mono text-xs uppercase tracking-wide text-muted-foreground"
         >
           {item}
         </span>
@@ -362,7 +363,7 @@ export function About() {
   return (
     <section
       id="about"
-      className="container mx-auto max-w-6xl scroll-mt-20 px-5 sm:px-6 py-32"
+      className={cn(SECAO_HOME, "scroll-mt-20")}
     >
       <ScrollReveal>
         <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
@@ -383,7 +384,7 @@ export function About() {
             exit={reduced ? { opacity: 0 } : { opacity: 0, y: -8 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            <p className="mb-1 font-mono text-[0.7rem] uppercase tracking-widest text-muted-foreground">
+            <p className="mb-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
               {SLIDE_EYEBROWS[index]}
             </p>
             <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">

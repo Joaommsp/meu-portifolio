@@ -13,6 +13,8 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { BOOK_STATUS_COLOR } from "@/components/books/book-status"
+import { BOOK_STATUS_LABEL } from "@/types/book"
 import {
   DotMesh,
   GradientOrbs,
@@ -28,7 +30,6 @@ import {
   getAllBookSlugs,
   getAllPublishedBooks,
 } from "@/lib/data/books"
-import type { BookStatus } from "@/types/book"
 import { BookCard } from "@/components/books/BookCard"
 import { cn } from "@/lib/utils"
 import { SITE_URL } from "@/lib/site"
@@ -83,24 +84,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: book.shortDescription,
     },
   }
-}
-
-const STATUS_LABEL: Record<BookStatus, string> = {
-  lendo: "Lendo",
-  lido: "Lido",
-  relendo: "Relendo",
-  wishlist: "Wishlist",
-  pausado: "Pausado",
-  abandonado: "Abandonado",
-}
-
-const STATUS_COLORS: Record<BookStatus, string> = {
-  lendo: "border-brand/40 bg-brand/10 text-brand",
-  lido: "border-success/40 bg-success/10 text-success",
-  relendo: "border-brand/40 bg-brand/10 text-brand",
-  wishlist: "border-info/40 bg-info/10 text-info",
-  pausado: "border-warning/40 bg-warning/10 text-warning",
-  abandonado: "border-muted-foreground/30 bg-muted/30 text-muted-foreground",
 }
 
 export default async function BookDetailPage({ params }: Props) {
@@ -241,24 +224,24 @@ export default async function BookDetailPage({ params }: Props) {
                   <Badge
                     variant="outline"
                     className={cn(
-                      "font-mono text-[0.65rem] uppercase",
-                      STATUS_COLORS[book.status]
+                      "font-mono text-xs uppercase",
+                      BOOK_STATUS_COLOR[book.status]
                     )}
                   >
-                    {STATUS_LABEL[book.status]}
+                    {BOOK_STATUS_LABEL[book.status]}
                   </Badge>
-                  <span className="flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground">
+                  <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
                     <Calendar className="size-3" />
                     {book.yearRead}
                   </span>
                   {book.pages != null && (
-                    <span className="flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground">
+                    <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
                       <BookOpen className="size-3" />
                       {book.pages} páginas
                     </span>
                   )}
                   {book.rating != null && (
-                    <span className="flex items-center gap-1 rounded-md border border-brand/40 bg-brand/10 px-2 py-0.5 font-mono text-[0.7rem] text-brand">
+                    <span className="flex items-center gap-1 rounded-md border border-brand/40 bg-brand/10 px-2 py-0.5 font-mono text-xs text-brand-texto">
                       <Star className="size-3 fill-brand" />
                       {book.rating.toFixed(1)}/10
                     </span>
@@ -288,7 +271,7 @@ export default async function BookDetailPage({ params }: Props) {
               {book.genres.length > 0 && (
                 <SlideIn direction="up" delay={0.2}>
                   <div className="mt-6">
-                    <p className="mb-2 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+                    <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                       Gêneros
                     </p>
                     <div className="flex flex-wrap gap-1.5">
@@ -314,7 +297,7 @@ export default async function BookDetailPage({ params }: Props) {
         <section className="container mx-auto max-w-3xl px-5 sm:px-6 py-16">
           <ScrollReveal>
             <div className="rounded-2xl border border-brand/30 bg-brand/[0.04] p-8 md:p-10">
-              <div className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
+              <div className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand-texto">
                 <Heart className="size-3.5" />
                 Por que eu gosto
               </div>

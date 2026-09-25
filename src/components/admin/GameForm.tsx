@@ -25,17 +25,9 @@ import { GalleryUploader } from "@/components/admin/GalleryUploader"
 import { MarkdownEditor } from "@/components/admin/MarkdownEditor"
 import { TagsInput } from "@/components/admin/TagsInput"
 import { gameFormSchema, type GameFormValues } from "@/lib/validations"
-import { GAME_STATUSES, type GameStatus } from "@/types/game"
+import { GAME_STATUS_LABEL, GAME_STATUSES } from "@/types/game"
 import { slugify } from "@/lib/utils"
 import { createGame, updateGame, isSlugTaken } from "@/lib/firebase/games"
-
-const STATUS_LABEL: Record<GameStatus, string> = {
-  jogando: "Jogando",
-  concluido: "Concluído",
-  rejogando: "Rejogando",
-  wishlist: "Wishlist",
-  abandonado: "Abandonado",
-}
 
 type Props = {
   gameId?: string
@@ -341,7 +333,7 @@ export function GameForm({ gameId, initialValues }: Props) {
                     <SelectContent>
                       {GAME_STATUSES.map((s) => (
                         <SelectItem key={s} value={s}>
-                          {STATUS_LABEL[s]}
+                          {GAME_STATUS_LABEL[s]}
                         </SelectItem>
                       ))}
                     </SelectContent>

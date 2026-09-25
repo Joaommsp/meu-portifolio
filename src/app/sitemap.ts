@@ -4,6 +4,7 @@ import { getAllPublishedPosts } from "@/lib/data/posts"
 import { getAllProjects } from "@/lib/data/projects"
 import { getAllPublishedGames } from "@/lib/data/games"
 import { getAllPublishedBooks } from "@/lib/data/books"
+import { SERVICOS, rotaServico } from "@/lib/servicos-content"
 import { SITE_URL } from "@/lib/site"
 
 
@@ -14,6 +15,15 @@ import { SITE_URL } from "@/lib/site"
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
+
+  /* As páginas de serviço são as que mais precisam ser achadas na busca —
+     saem da mesma lista que monta as rotas, pra não esquecer nenhuma. */
+  const servicos: MetadataRoute.Sitemap = SERVICOS.map(({ slug }) => ({
+    url: `${SITE_URL}${rotaServico(slug)}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.85,
+  }))
 
   const staticEntries: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
@@ -123,6 +133,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticEntries,
+    ...servicos,
     ...postEntries,
     ...projectEntries,
     ...gameEntries,

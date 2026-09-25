@@ -126,7 +126,7 @@ export function SpotifyNowPlaying({
           {isLive && (
             <span className="inline-flex size-1.5 shrink-0 rounded-full bg-brand shadow-[0_0_8px_var(--brand-glow)]" />
           )}
-          <span className="font-mono text-[0.65rem] uppercase tracking-widest text-brand">
+          <span className="font-mono text-xs uppercase tracking-widest text-brand">
             {SOURCE_LABEL[source]}
           </span>
         </div>

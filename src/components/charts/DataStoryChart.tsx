@@ -56,7 +56,7 @@ function ChartTooltip(props: {
   const up = (d.delta ?? 0) >= 0
   return (
     <div className="rounded-lg border border-brand/40 bg-card/95 px-3 py-2 shadow-lg backdrop-blur-md">
-      <p className="font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground">
+      <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {d.mes}
       </p>
       <p className="mt-1 font-display text-lg font-semibold leading-none">
@@ -102,7 +102,7 @@ export function DataStoryChart() {
   return (
     <div className="rounded-xl border border-border bg-card/50 p-4">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+        <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
           Acessos / mês · exemplo
         </p>
         <div
@@ -119,7 +119,7 @@ export function DataStoryChart() {
               onClick={() => setType(t.id)}
               className={cn(
                 // min-h-11 dá o alvo tocável no mobile sem inchar o controle no desktop.
-                "min-h-11 rounded-md px-3 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-colors sm:min-h-0 sm:px-2.5",
+                "min-h-11 rounded-md px-3 py-1 font-mono text-xs uppercase tracking-wide transition-colors sm:min-h-0 sm:px-2.5",
                 type === t.id
                   ? "bg-brand text-brand-foreground"
                   : "text-muted-foreground hover:text-foreground"

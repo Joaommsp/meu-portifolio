@@ -26,7 +26,7 @@ function Numero({ valor, rotulo }: { valor: number; rotulo: string }) {
       <span className="block font-display text-2xl font-bold tabular-nums tracking-tight">
         {valor.toLocaleString("pt-BR")}
       </span>
-      <span className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+      <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {rotulo}
       </span>
     </div>
@@ -119,6 +119,8 @@ export default async function FigmaPage() {
         <NoiseTexture opacity={0.04} />
 
         <div className="container relative mx-auto max-w-4xl px-5 py-24 sm:px-6 md:py-32">
+          {/* A página não tinha h1: o topo é um rótulo e um parágrafo. */}
+          <h1 className="sr-only">Arquivos de João Marcos na Figma Community</h1>
           <FadeIn>
             <p className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
               <FigmaIcon className="size-4" />

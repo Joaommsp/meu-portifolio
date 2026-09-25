@@ -6,6 +6,8 @@ import { ArrowLeft, Star, Clock, Calendar, Heart, BookOpen } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { GAME_STATUS_COLOR } from "@/components/games/game-status"
+import { GAME_STATUS_LABEL } from "@/types/game"
 import {
   DotMesh,
   GradientOrbs,
@@ -21,7 +23,6 @@ import {
   getAllGameSlugs,
   getAllPublishedGames,
 } from "@/lib/data/games"
-import type { Game, GameStatus } from "@/types/game"
 import { GameCard } from "@/components/games/GameCard"
 import { cn } from "@/lib/utils"
 import { SITE_URL } from "@/lib/site"
@@ -76,22 +77,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: game.shortDescription,
     },
   }
-}
-
-const STATUS_LABEL: Record<GameStatus, string> = {
-  jogando: "Jogando",
-  concluido: "Concluído",
-  rejogando: "Rejogando",
-  wishlist: "Wishlist",
-  abandonado: "Abandonado",
-}
-
-const STATUS_COLORS: Record<GameStatus, string> = {
-  jogando: "border-brand/40 bg-brand/10 text-brand",
-  concluido: "border-success/40 bg-success/10 text-success",
-  rejogando: "border-brand/40 bg-brand/10 text-brand",
-  wishlist: "border-info/40 bg-info/10 text-info",
-  abandonado: "border-muted-foreground/30 bg-muted/30 text-muted-foreground",
 }
 
 export default async function GameDetailPage({ params }: Props) {
@@ -236,24 +221,24 @@ export default async function GameDetailPage({ params }: Props) {
                   <Badge
                     variant="outline"
                     className={cn(
-                      "font-mono text-[0.65rem] uppercase",
-                      STATUS_COLORS[game.status]
+                      "font-mono text-xs uppercase",
+                      GAME_STATUS_COLOR[game.status]
                     )}
                   >
-                    {STATUS_LABEL[game.status]}
+                    {GAME_STATUS_LABEL[game.status]}
                   </Badge>
-                  <span className="flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground">
+                  <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
                     <Calendar className="size-3" />
                     {game.yearPlayed}
                   </span>
                   {game.hoursPlayed != null && (
-                    <span className="flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground">
+                    <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
                       <Clock className="size-3" />
                       {game.hoursPlayed}h
                     </span>
                   )}
                   {game.rating != null && (
-                    <span className="flex items-center gap-1 rounded-md border border-brand/40 bg-brand/10 px-2 py-0.5 font-mono text-[0.7rem] text-brand">
+                    <span className="flex items-center gap-1 rounded-md border border-brand/40 bg-brand/10 px-2 py-0.5 font-mono text-xs text-brand-texto">
                       <Star className="size-3 fill-brand" />
                       {game.rating.toFixed(1)}/10
                     </span>
@@ -276,7 +261,7 @@ export default async function GameDetailPage({ params }: Props) {
               {game.platforms.length > 0 && (
                 <SlideIn direction="up" delay={0.2}>
                   <div className="mt-6">
-                    <p className="mb-2 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+                    <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                       Plataformas
                     </p>
                     <div className="flex flex-wrap gap-1.5">
@@ -296,7 +281,7 @@ export default async function GameDetailPage({ params }: Props) {
               {game.genres.length > 0 && (
                 <SlideIn direction="up" delay={0.25}>
                   <div className="mt-4">
-                    <p className="mb-2 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+                    <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                       Gêneros
                     </p>
                     <div className="flex flex-wrap gap-1.5">
@@ -322,7 +307,7 @@ export default async function GameDetailPage({ params }: Props) {
         <section className="container mx-auto max-w-3xl px-5 sm:px-6 py-16">
           <ScrollReveal>
             <div className="rounded-2xl border border-brand/30 bg-brand/[0.04] p-8 md:p-10">
-              <div className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
+              <div className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand-texto">
                 <Heart className="size-3.5" />
                 Por que eu gosto
               </div>

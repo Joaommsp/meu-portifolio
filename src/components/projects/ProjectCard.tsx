@@ -12,22 +12,11 @@ import {
 import { ArrowUpRight, Globe } from "lucide-react"
 
 import { GithubIcon } from "@/components/icons/brand-icons"
+import { PROJECT_STATUS_COLOR } from "@/components/projects/project-status"
 import { Badge } from "@/components/ui/badge"
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
 import { cn } from "@/lib/utils"
-import type { Project } from "@/types/project"
-
-const STATUS_LABEL: Record<Project["status"], string> = {
-  "em-desenvolvimento": "Em desenvolvimento",
-  concluido: "Concluído",
-  arquivado: "Arquivado",
-}
-
-const STATUS_COLOR: Record<Project["status"], string> = {
-  "em-desenvolvimento": "bg-warning/15 text-warning border-warning/30",
-  concluido: "bg-success/15 text-success border-success/30",
-  arquivado: "bg-muted-foreground/15 text-muted-foreground border-muted-foreground/30",
-}
+import { PROJECT_STATUS_LABEL, type Project } from "@/types/project"
 
 type Props = {
   project: Project
@@ -138,11 +127,11 @@ export function ProjectCard({ project }: Props) {
           <Badge
             variant="outline"
             className={cn(
-              "font-mono text-[0.65rem] uppercase tracking-widest",
-              STATUS_COLOR[project.status]
+              "font-mono text-xs uppercase tracking-wider",
+              PROJECT_STATUS_COLOR[project.status]
             )}
           >
-            {STATUS_LABEL[project.status]}
+            {PROJECT_STATUS_LABEL[project.status]}
           </Badge>
         </div>
       </div>
@@ -166,7 +155,7 @@ export function ProjectCard({ project }: Props) {
           {project.technologies.slice(0, 5).map((tech) => (
             <span
               key={tech}
-              className="rounded-md border border-border px-2 py-0.5 font-mono text-[0.7rem] text-muted-foreground"
+              className="rounded-md border border-border px-2 py-0.5 font-mono text-xs text-muted-foreground"
             >
               {tech}
             </span>
@@ -182,7 +171,7 @@ export function ProjectCard({ project }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`GitHub do projeto ${project.title}`}
-                className="inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand"
+                className="inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand pointer-coarse:size-11"
               >
                 <GithubIcon className="size-3.5" />
               </a>
@@ -193,7 +182,7 @@ export function ProjectCard({ project }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Site do projeto ${project.title}`}
-                className="inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand"
+                className="inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand pointer-coarse:size-11"
               >
                 <Globe className="size-3.5" />
               </a>

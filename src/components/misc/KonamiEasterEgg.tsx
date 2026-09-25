@@ -70,7 +70,7 @@ export function KonamiEasterEgg() {
 
             {/* Banner topo */}
             <div className="text-center">
-              <span className="font-mono text-[0.65rem] uppercase tracking-[0.4em] text-brand">
+              <span className="font-mono text-xs uppercase tracking-[0.4em] text-brand">
                 ★ ACHIEVEMENT UNLOCKED ★
               </span>
             </div>
@@ -104,7 +104,7 @@ export function KonamiEasterEgg() {
             </div>
 
             {/* Footer */}
-            <div className="mt-6 flex items-center justify-center gap-2 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+            <div className="mt-6 flex items-center justify-center gap-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
               <kbd className="rounded border border-border/60 bg-muted/30 px-1.5 py-0.5">
                 Esc
               </kbd>

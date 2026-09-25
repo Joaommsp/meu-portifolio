@@ -3,24 +3,9 @@ import Image from "next/image"
 import { ArrowUpRight, Star, Clock } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import type { Game, GameStatus } from "@/types/game"
+import { GAME_STATUS_COLOR } from "@/components/games/game-status"
+import { GAME_STATUS_LABEL, type Game } from "@/types/game"
 import { cn } from "@/lib/utils"
-
-const STATUS_LABEL: Record<GameStatus, string> = {
-  jogando: "Jogando",
-  concluido: "Concluído",
-  rejogando: "Rejogando",
-  wishlist: "Wishlist",
-  abandonado: "Abandonado",
-}
-
-const STATUS_COLORS: Record<GameStatus, string> = {
-  jogando: "border-brand/40 bg-brand/10 text-brand",
-  concluido: "border-success/40 bg-success/10 text-success",
-  rejogando: "border-brand/40 bg-brand/10 text-brand",
-  wishlist: "border-info/40 bg-info/10 text-info",
-  abandonado: "border-muted-foreground/30 bg-muted/30 text-muted-foreground",
-}
 
 type Props = {
   game: Game
@@ -53,11 +38,11 @@ export function GameCard({ game }: Props) {
           <Badge
             variant="outline"
             className={cn(
-              "font-mono text-[0.65rem] uppercase backdrop-blur-sm",
-              STATUS_COLORS[game.status]
+              "font-mono text-xs uppercase",
+              GAME_STATUS_COLOR[game.status]
             )}
           >
-            {STATUS_LABEL[game.status]}
+            {GAME_STATUS_LABEL[game.status]}
           </Badge>
         </div>
 
@@ -82,7 +67,7 @@ export function GameCard({ game }: Props) {
           <h3 className="font-display text-base font-semibold tracking-tight transition-colors group-hover:text-brand">
             {game.title}
           </h3>
-          <p className="font-mono text-[0.65rem] text-muted-foreground">
+          <p className="font-mono text-xs text-muted-foreground">
             {game.yearPlayed}
             {game.hoursPlayed != null && (
               <span className="ml-2 inline-flex items-center gap-1">
@@ -102,13 +87,13 @@ export function GameCard({ game }: Props) {
             {game.platforms.slice(0, 3).map((p) => (
               <span
                 key={p}
-                className="rounded border border-border/60 bg-muted/30 px-1.5 py-0.5 font-mono text-[0.6rem] text-muted-foreground"
+                className="rounded border border-border/60 bg-muted/30 px-1.5 py-0.5 font-mono text-xs text-muted-foreground"
               >
                 {p}
               </span>
             ))}
             {game.platforms.length > 3 && (
-              <span className="font-mono text-[0.6rem] text-muted-foreground">
+              <span className="font-mono text-xs text-muted-foreground">
                 +{game.platforms.length - 3}
               </span>
             )}

@@ -34,14 +34,16 @@ function ItemCard({ item }: { item: UsesItem }) {
           {item.starred && (
             <Badge
               variant="outline"
-              className="h-4 border-brand/40 bg-brand/10 px-1.5 font-mono text-[0.6rem] uppercase text-brand"
+              className="border-brand/40 bg-brand/10 px-1.5 font-mono text-xs uppercase text-brand-texto"
             >
               fav
             </Badge>
           )}
         </div>
         {item.description && (
-          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+          /* `whitespace-pre-line`: a descrição vem de um textarea do admin, e
+             uma ficha técnica em linhas separadas virava um bloco corrido. */
+          <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
             {item.description}
           </p>
         )}

@@ -1,18 +1,23 @@
 "use client"
 
 import * as React from "react"
-import { Search, X, BookMarked } from "lucide-react"
+import { X, BookMarked } from "lucide-react"
 
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { BookCard } from "@/components/books/BookCard"
 import { ScrollReveal } from "@/components/animations"
+import { CampoBusca } from "@/components/listagem/CampoBusca"
+import { EstadoListagem } from "@/components/listagem/EstadoListagem"
+import { FilterChip, FiltroGrupo } from "@/components/listagem/filtros"
+import {
+  contagem,
+  rotuloContador,
+  useListagem,
+} from "@/components/listagem/useListagem"
+import { contarRotulos, temAlgumRotulo } from "@/components/listagem/rotulos"
 import { PageHero } from "@/components/sections/PageHero"
 import { getAllPublishedBooks } from "@/lib/data/books"
 import { BOOK_STATUSES, type BookStatus } from "@/types/book"
-import type { Book } from "@/types/book"
-import { cn } from "@/lib/utils"
 
 const STATUS_LABEL: Record<BookStatus, string> = {
   lendo: "Lendo",
@@ -25,49 +30,35 @@ const STATUS_LABEL: Record<BookStatus, string> = {
 
 type StatusFilter = BookStatus | "all"
 
+/* Estável e estrito: uma consulta que falha aparece como erro, e não como
+   lista vazia (ver useListagem). */
+const carregarLivros = () => getAllPublishedBooks({ estrito: true })
+
 export default function BooksPage() {
-  const [allBooks, setAllBooks] = React.useState<Book[] | null>(null)
   const [activeStatus, setActiveStatus] = React.useState<StatusFilter>("all")
   const [activeGenres, setActiveGenres] = React.useState<Set<string>>(new Set())
   const [search, setSearch] = React.useState("")
   const deferredSearch = React.useDeferredValue(search)
 
-  React.useEffect(() => {
-    let cancelled = false
-    getAllPublishedBooks().then((books) => {
-      if (!cancelled) setAllBooks(books)
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  const { itens: allBooks, erro, carregando, tentarDeNovo } =
+    useListagem(carregarLivros)
 
   const books = React.useMemo(() => {
     if (!allBooks) return []
     return [...allBooks].sort((a, b) => b.yearRead - a.yearRead)
   }, [allBooks])
 
-  const allGenres = React.useMemo(() => {
-    const counts = new Map<string, number>()
-    for (const b of books) {
-      for (const g of b.genres) {
-        counts.set(g, (counts.get(g) ?? 0) + 1)
-      }
-    }
-    return Array.from(counts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([g]) => g)
-  }, [books])
+  const allGenres = React.useMemo(
+    () => contarRotulos(books, (b) => b.genres),
+    [books]
+  )
 
   const filtered = React.useMemo(() => {
     const term = deferredSearch.trim().toLowerCase()
     return books.filter((b) => {
       if (activeStatus !== "all" && b.status !== activeStatus) return false
-      if (activeGenres.size > 0) {
-        const hasAny = Array.from(activeGenres).some((g) =>
-          b.genres.includes(g)
-        )
-        if (!hasAny) return false
+      if (activeGenres.size > 0 && !temAlgumRotulo(b.genres, activeGenres)) {
+        return false
       }
       if (term) {
         const haystack =
@@ -111,8 +102,11 @@ export default function BooksPage() {
         }
         descricao={
           <>
-            {books.length} livro{books.length === 1 ? "" : "s"} que passaram
-            pela mesa — alguns marcaram.
+            {/* Sem número enquanto carrega ou com zero. */}
+            {books.length > 0
+              ? contagem(books.length, "livro", "livros")
+              : "Os livros"}{" "}
+            que passaram pela mesa — alguns marcaram.
           </>
         }
       />
@@ -120,75 +114,50 @@ export default function BooksPage() {
       {/* Filtros + grid */}
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-24">
         <div className="space-y-5 rounded-2xl border border-border bg-card/50 p-6">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar por título, autor ou gênero…"
-              className="pl-9"
-              aria-label="Buscar livros"
-            />
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch("")}
-                aria-label="Limpar busca"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <X className="size-4" />
-              </button>
-            )}
-          </div>
+          <CampoBusca
+            valor={search}
+            onChange={setSearch}
+            placeholder="Buscar por título, autor ou gênero…"
+            rotulo="Buscar livros"
+          />
 
-          <div className="space-y-2">
-            <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-              Status
-            </p>
-            <div className="flex flex-wrap gap-2">
+          <FiltroGrupo rotulo="Status">
+            <FilterChip
+              active={activeStatus === "all"}
+              onClick={() => setActiveStatus("all")}
+            >
+              Todos
+            </FilterChip>
+            {BOOK_STATUSES.map((s) => (
               <FilterChip
-                active={activeStatus === "all"}
-                onClick={() => setActiveStatus("all")}
+                key={s}
+                active={activeStatus === s}
+                onClick={() => setActiveStatus(s)}
               >
-                Todos
+                {STATUS_LABEL[s]}
               </FilterChip>
-              {BOOK_STATUSES.map((s) => (
-                <FilterChip
-                  key={s}
-                  active={activeStatus === s}
-                  onClick={() => setActiveStatus(s)}
-                >
-                  {STATUS_LABEL[s]}
-                </FilterChip>
-              ))}
-            </div>
-          </div>
+            ))}
+          </FiltroGrupo>
 
           {allGenres.length > 0 && (
-            <div className="space-y-2">
-              <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-                Gêneros
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {allGenres.map((g) => (
-                  <FilterChip
-                    key={g}
-                    active={activeGenres.has(g)}
-                    onClick={() => toggleGenre(g)}
-                  >
-                    {g}
-                  </FilterChip>
-                ))}
-              </div>
-            </div>
+            <FiltroGrupo rotulo="Gêneros">
+              {allGenres.map((g) => (
+                <FilterChip
+                  key={g.chave}
+                  active={activeGenres.has(g.chave)}
+                  onClick={() => toggleGenre(g.chave)}
+                >
+                  {g.rotulo}
+                </FilterChip>
+              ))}
+            </FiltroGrupo>
           )}
 
           <div className="flex items-center justify-between border-t border-border pt-4">
             <p className="text-sm text-muted-foreground">
               {filtered.length === books.length ? (
                 <>
-                  {filtered.length} livro{filtered.length === 1 ? "" : "s"}
+                  {rotuloContador({ carregando, erro }, filtered.length, "livro", "livros")}
                 </>
               ) : (
                 <>
@@ -207,6 +176,8 @@ export default function BooksPage() {
           </div>
         </div>
 
+        {/* Os cards usam h3; sem este h2 a página pulava do h1 direto pra eles. */}
+        <h2 className="sr-only">Livros da estante</h2>
         {filtered.length > 0 ? (
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
             {filtered.map((book, idx) => (
@@ -216,51 +187,21 @@ export default function BooksPage() {
             ))}
           </div>
         ) : (
-          <div className="mt-12 flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-card/30 px-6 py-20 text-center">
-            <div className="flex size-12 items-center justify-center rounded-full bg-muted">
-              <BookMarked className="size-5 text-muted-foreground" />
-            </div>
-            <h2 className="font-display text-xl font-semibold">
-              Nenhum livro encontrado
-            </h2>
-            <p className="max-w-sm text-sm text-muted-foreground">
-              Ajuste os filtros ou{" "}
-              <button
-                onClick={clearFilters}
-                className="text-brand underline-offset-2 hover:underline"
-              >
-                limpe tudo
-              </button>
-              .
-            </p>
-          </div>
+          <EstadoListagem
+            icone={BookMarked}
+            carregando={carregando}
+            erro={erro}
+            onTentarDeNovo={tentarDeNovo}
+            temConteudo={books.length > 0}
+            vazio={{
+              titulo: "Ainda não há livros por aqui",
+              texto: "A estante enche conforme eu for escrevendo sobre as leituras.",
+            }}
+            semResultado="Nenhum livro encontrado"
+            onLimpar={clearFilters}
+          />
         )}
       </section>
     </>
-  )
-}
-
-function FilterChip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean
-  onClick: () => void
-  children: React.ReactNode
-}) {
-  return (
-    <Badge
-      variant={active ? "default" : "outline"}
-      className={cn(
-        "cursor-pointer select-none px-3 py-1 font-mono text-xs transition-all",
-        active
-          ? "bg-brand text-brand-foreground hover:bg-brand-hover"
-          : "hover:border-brand/60 hover:text-brand"
-      )}
-      render={<button type="button" onClick={onClick} aria-pressed={active} />}
-    >
-      {children}
-    </Badge>
   )
 }

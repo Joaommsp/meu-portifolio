@@ -111,7 +111,7 @@ function CourseCard({ course }: { course: Course }) {
   const conteudo = (
     <>
       <div className="flex items-start justify-between gap-2">
-        <time className="font-mono text-[0.65rem] uppercase tracking-widest text-brand">
+        <time className="font-mono text-xs uppercase tracking-widest text-brand">
           {course.issued}
         </time>
         {course.credentialUrl && (
@@ -126,7 +126,7 @@ function CourseCard({ course }: { course: Course }) {
         {course.tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-md border border-border bg-background px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-wide text-muted-foreground"
+            className="rounded-md border border-border bg-background px-2 py-0.5 font-mono text-xs uppercase tracking-wide text-muted-foreground"
           >
             {tag}
           </span>
@@ -220,7 +220,7 @@ export function Education() {
   }
 
   return (
-    <section className="container mx-auto max-w-5xl px-5 py-24 sm:px-6">
+    <section className="container mx-auto max-w-5xl px-5 py-16 sm:px-6 md:py-24">
       <ScrollReveal>
         <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
           Formação
@@ -240,10 +240,10 @@ export function Education() {
       {/* Trilho de cursos */}
       <div className="mt-12 select-none">
         <div className="flex items-baseline justify-between gap-4">
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.22em] text-muted-foreground">
+          <p className="font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">
             Cursos e certificações
           </p>
-          <p className="font-mono text-[0.65rem] tabular-nums text-muted-foreground">
+          <p className="font-mono text-xs tabular-nums text-muted-foreground">
             {String(COURSE_COUNT).padStart(2, "0")} no total
           </p>
         </div>
@@ -307,7 +307,7 @@ export function Education() {
                   style={{ width: `${Math.max(12, progress * 100)}%` }}
                 />
               </div>
-              <span className="font-mono text-[0.65rem] tabular-nums text-muted-foreground">
+              <span className="font-mono text-xs tabular-nums text-muted-foreground">
                 {String(page + 1).padStart(2, "0")}/{String(pageCount).padStart(2, "0")}
               </span>
             </div>
@@ -317,7 +317,7 @@ export function Education() {
           {page === 0 && (
             <span
               aria-hidden="true"
-              className="flex items-center gap-1 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground sm:hidden"
+              className="flex items-center gap-1 font-mono text-xs uppercase tracking-widest text-muted-foreground sm:hidden"
             >
               Arrasta
               <ChevronRight className="size-3" />
@@ -365,16 +365,16 @@ function DegreeCard() {
 
         <dl className="mt-5 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-muted-foreground">
           <div className="flex gap-1.5">
-            <dt className="text-muted-foreground/60">Emissão</dt>
+            <dt className="text-muted-foreground">Emissão</dt>
             <dd>{DEGREE.issued}</dd>
           </div>
           <div className="flex gap-1.5">
-            <dt className="text-muted-foreground/60">Credencial</dt>
+            <dt className="text-muted-foreground">Credencial</dt>
             <dd className="tabular-nums">{DEGREE.credentialId}</dd>
           </div>
           {DEGREE.registry && (
             <div className="flex gap-1.5">
-              <dt className="text-muted-foreground/60">Registro</dt>
+              <dt className="text-muted-foreground">Registro</dt>
               <dd>{DEGREE.registry}</dd>
             </div>
           )}

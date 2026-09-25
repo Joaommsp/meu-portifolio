@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og"
+import { PROJECT_STATUS_LABEL } from "@/types/project"
 
 import { findProjectBySlug } from "@/lib/data/projects"
 import { SITE_HOST } from "@/lib/site"
@@ -7,12 +8,6 @@ import { SITE_HOST } from "@/lib/site"
 export const alt = "Projeto"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
-
-const STATUS_LABEL: Record<string, string> = {
-  "em-desenvolvimento": "Em desenvolvimento",
-  concluido: "Concluído",
-  arquivado: "Arquivado",
-}
 
 const CATEGORY_LABEL: Record<string, string> = {
   web: "Web",
@@ -129,7 +124,7 @@ export default async function ProjectOG({
                 letterSpacing: "0.15em",
               }}
             >
-              {STATUS_LABEL[project.status] ?? project.status}
+              {PROJECT_STATUS_LABEL[project.status] ?? project.status}
             </div>
           </div>
         </div>

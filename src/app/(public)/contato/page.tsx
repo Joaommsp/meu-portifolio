@@ -11,6 +11,7 @@ import {
   InstagramIcon,
 } from "@/components/icons/brand-icons";
 import { CONTACT_EMAIL, SOCIAL_LINKS } from "@/lib/nav";
+import { DISPONIBILIDADE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contato",
@@ -61,16 +62,16 @@ export default function ContatoPage() {
             Vamos <span className="text-gradient-brand-claro">conversar?</span>
           </>
         }
-        descricao="Tô sempre aberto a novos projetos, parcerias ou só uma boa conversa sobre design e código. Use o formulário ou me chame direto pelos canais ao lado — respondo o mais rápido possível."
+        descricao="Tô sempre aberto a novos projetos, parcerias ou só uma boa conversa sobre design e código. Use o formulário ou me chame direto pelos canais — respondo o mais rápido possível."
       >
         <div className="flex flex-wrap items-center gap-3">
           <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">
             <span className="inline-block size-1.5 rounded-full bg-success" />
-            Aceitando freelas
+            {DISPONIBILIDADE.status}
           </Badge>
           <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">
             <Clock className="size-3" />
-            Resposta em ~24h
+            {DISPONIBILIDADE.resposta}
           </Badge>
         </div>
       </PageHero>

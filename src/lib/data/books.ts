@@ -6,9 +6,16 @@ import {
 import { sampleBooks } from "@/lib/mocks/sample-data"
 import type { Book } from "@/types/book"
 
-export async function getAllPublishedBooks(): Promise<Book[]> {
+/**
+ * `estrito`: pra página que mostra a lista e precisa separar "não há nada"
+ * de "a consulta falhou". Lança `ErroConsultaFirestore`. Quem monta página no
+ * SSR fica no tolerante: vazio, com o erro no console.
+ */
+export async function getAllPublishedBooks({
+  estrito = false,
+}: { estrito?: boolean } = {}): Promise<Book[]> {
   if (!firestoreRestAvailable) return sampleBooks
-  const real = await restListBooks({ publishedOnly: true })
+  const real = await restListBooks({ publishedOnly: true, estrito })
   return real.length > 0 ? real : sampleBooks
 }
 

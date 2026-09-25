@@ -5,6 +5,7 @@ import {
   Clock,
   Monitor,
   Briefcase,
+  Layers,
   FileText,
   Gamepad2,
   BookMarked,
@@ -20,6 +21,7 @@ import {
   FigmaIcon,
   BehanceIcon,
 } from "@/components/icons/brand-icons"
+import { ROTA_SERVICOS } from "@/lib/rotas"
 
 type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>
 
@@ -51,8 +53,8 @@ const ANO_ATUAL = new Date().getFullYear()
  * Fonte única da navegação.
  *
  * Eram 9 links soltos numa linha; com GitHub, Behance e Figma seriam 12 e a
- * barra não fecha mais. Agrupados em 3 popovers + 2 links diretos: cinco alvos
- * cobrindo catorze destinos, e `/uses` e `/recap` — que existiam sem entrada no
+ * barra não fecha mais. Agrupados em 4 popovers + 1 link direto: cinco alvos
+ * cobrindo quinze destinos, e `/uses` e `/recap` — que existiam sem entrada no
  * menu — finalmente aparecem.
  */
 export const NAV_GROUPS: readonly NavEntry[] = [
@@ -85,6 +87,14 @@ export const NAV_GROUPS: readonly NavEntry[] = [
     kind: "group",
     label: "Trabalho",
     items: [
+      /* Aponta pra seção da home, e não pras quatro páginas: é lá que o
+         visitante escolhe a frente. */
+      {
+        href: ROTA_SERVICOS,
+        label: "Serviços",
+        description: "Sites, sistemas, apps e design",
+        icon: Layers,
+      },
       {
         href: "/projetos",
         label: "Projetos",

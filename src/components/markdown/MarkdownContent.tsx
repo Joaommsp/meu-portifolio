@@ -1,6 +1,7 @@
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
+import { H1_VIRA_H2 } from "@/components/markdown/titulos"
 import { cn } from "@/lib/utils"
 
 type Props = {
@@ -37,7 +38,10 @@ export function MarkdownContent({ children, className }: Props) {
         className
       )}
     >
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{children}</ReactMarkdown>
+      {/* Só o h1 desce: os `##` e `###` do CMS mantêm o tamanho de sempre. */}
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={H1_VIRA_H2}>
+        {children}
+      </ReactMarkdown>
     </div>
   )
 }

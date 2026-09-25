@@ -112,6 +112,19 @@ As rules em `firestore.rules` garantem:
 
 Troque o UID em `isAdmin()` pelo seu e publique em **Firebase Console → Firestore → Rules**.
 
+### Índices
+
+O `firestore.indexes.json` guarda os índices compostos que as consultas do site
+exigem (hoje só o da lista de posts: `published` + `publishedAt desc`). Sem ele,
+o blog responde "The query requires an index". Publique com:
+
+```bash
+firebase deploy --only firestore:indexes --project <id-do-projeto>
+```
+
+O `firebase.json` aponta só pros índices, de propósito: as rules continuam sendo
+publicadas pelo Console, como acima, e um deploy não sobrescreve nada lá.
+
 ---
 
 ## 📁 Estrutura

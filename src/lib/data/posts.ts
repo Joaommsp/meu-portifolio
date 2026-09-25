@@ -13,12 +13,19 @@ import type { Post } from "@/types/post"
  * JS SDK em Node.js). Cai pros mocks quando:
  *  - Firebase não configurado (sem env vars)
  *  - Coleção vazia no Firestore (UX melhor em dev)
- *  - Network falha
+ *  - A consulta falha, no modo tolerante (o padrão). No estrito, ela lança.
  */
 
-export async function getAllPublishedPosts(): Promise<Post[]> {
+/**
+ * `estrito`: pra quem mostra a lista na tela e precisa separar "não há posts"
+ * de "a consulta falhou" (a página do blog). Lança `ErroConsultaFirestore`.
+ * As seções do SSR ficam no modo tolerante: vazio e erro no console.
+ */
+export async function getAllPublishedPosts({
+  estrito = false,
+}: { estrito?: boolean } = {}): Promise<Post[]> {
   if (!firestoreRestAvailable) return samplePosts
-  const real = await restListPosts({ publishedOnly: true })
+  const real = await restListPosts({ publishedOnly: true, estrito })
   return real.length > 0 ? real : samplePosts
 }
 

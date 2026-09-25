@@ -7,6 +7,8 @@ import {
   fetchWakatimeToday,
   getLangColor,
 } from "@/lib/wakatime"
+import { SECAO_HOME } from "@/components/sections/secao"
+import { cn } from "@/lib/utils"
 
 export async function WakatimeStats() {
   const [stats, today] = await Promise.all([
@@ -24,7 +26,7 @@ export async function WakatimeStats() {
   return (
     <section
       id="wakatime"
-      className="container mx-auto max-w-6xl scroll-mt-20 px-5 sm:px-6 py-32"
+      className={cn(SECAO_HOME, "scroll-mt-20")}
     >
       <div className="mb-12 flex items-end justify-between gap-4">
         <div>
@@ -148,7 +150,7 @@ function BigStat({
         {isLive && (
           <span className="ml-auto inline-flex items-center gap-1 text-brand">
             <span className="size-1.5 animate-pulse rounded-full bg-brand shadow-[0_0_8px_var(--brand-glow)]" />
-            <span className="text-[0.6rem]">ao vivo</span>
+            <span className="text-xs">ao vivo</span>
           </span>
         )}
       </p>
@@ -211,7 +213,7 @@ function RankCard({
 }) {
   return (
     <div className="rounded-xl border border-border bg-card p-5">
-      <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+      <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
       <p className="mt-2 font-display text-2xl font-semibold tracking-tight">
@@ -229,7 +231,7 @@ function EmptyState() {
     <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border bg-card/30 p-12 text-center">
       <Badge
         variant="outline"
-        className="font-mono text-[0.65rem] uppercase"
+        className="font-mono text-xs uppercase"
       >
         Iniciando rastreamento
       </Badge>

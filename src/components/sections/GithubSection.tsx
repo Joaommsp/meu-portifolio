@@ -10,6 +10,7 @@ import {
   getLanguageColor,
   type GithubRepo,
 } from "@/lib/github";
+import { SECAO_HOME } from "@/components/sections/secao";
 
 const PROFILE_URL = "https://github.com/Joaommsp";
 
@@ -34,7 +35,7 @@ export async function GithubSection() {
       id="github"
       className="border-y border-border bg-card/30 scroll-mt-20"
     >
-      <div className="container mx-auto max-w-6xl px-5 sm:px-6 py-32">
+      <div className={SECAO_HOME}>
         <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
           <div>
             <ScrollReveal>
@@ -122,7 +123,7 @@ function Stat({
 }) {
   return (
     <div className="rounded-xl border border-border bg-card p-5">
-      <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+      <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
       <p className="mt-2 flex items-baseline gap-1.5 font-display text-3xl font-bold">

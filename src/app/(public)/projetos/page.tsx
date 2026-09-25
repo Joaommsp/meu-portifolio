@@ -1,14 +1,21 @@
 "use client"
 
 import * as React from "react"
-import { Search, X, FolderX } from "lucide-react"
+import { X, FolderX } from "lucide-react"
 
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { ProjectCard } from "@/components/projects/ProjectCard"
 import { ProjectCardSkeleton } from "@/components/projects/ProjectCardSkeleton"
 import { ScrollReveal } from "@/components/animations"
+import { CampoBusca } from "@/components/listagem/CampoBusca"
+import { EstadoListagem } from "@/components/listagem/EstadoListagem"
+import { FilterChip, FiltroGrupo } from "@/components/listagem/filtros"
+import {
+  contagem,
+  rotuloContador,
+  useListagem,
+} from "@/components/listagem/useListagem"
+import { contarRotulos, temTodosRotulos } from "@/components/listagem/rotulos"
 import { PageHero } from "@/components/sections/PageHero"
 import { getAllProjects } from "@/lib/data/projects"
 import { PROJECT_CATEGORIES, type ProjectCategory } from "@/types/project"
@@ -25,6 +32,13 @@ const CATEGORY_LABEL: Record<ProjectCategory, string> = {
 
 type CategoryFilter = ProjectCategory | "all"
 
+/** Referência estável: um `?? []` inline criaria um array novo a cada render. */
+const SEM_PROJETOS: Project[] = []
+
+/* Estável e estrito: uma consulta que falha aparece como erro, e não como
+   lista vazia (ver useListagem). */
+const carregarProjetos = () => getAllProjects({ estrito: true })
+
 export default function ProjetosPage() {
   const [activeCategory, setActiveCategory] =
     React.useState<CategoryFilter>("all")
@@ -32,42 +46,28 @@ export default function ProjetosPage() {
   const [search, setSearch] = React.useState("")
   const deferredSearch = React.useDeferredValue(search)
 
-  const [projects, setProjects] = React.useState<Project[] | null>(null)
+  /* No celular as tecnologias ficam recolhidas: são uns 15 chips, e abertos
+     eles empurravam o primeiro projeto pra depois da primeira tela. */
+  const [mostrarTechs, setMostrarTechs] = React.useState(false)
+  const idTecnologias = React.useId()
 
-  React.useEffect(() => {
-    let cancelled = false
-    getAllProjects().then((data) => {
-      if (!cancelled) setProjects(data)
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  const { itens: projects, erro, carregando, tentarDeNovo } =
+    useListagem(carregarProjetos)
 
-  const sourceProjects = projects ?? []
+  const sourceProjects = projects ?? SEM_PROJETOS
 
   // Lista única de techs ordenada por frequência
-  const allTechs = React.useMemo(() => {
-    const counts = new Map<string, number>()
-    for (const p of sourceProjects) {
-      for (const t of p.technologies) {
-        counts.set(t, (counts.get(t) ?? 0) + 1)
-      }
-    }
-    return Array.from(counts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([t]) => t)
-  }, [sourceProjects])
+  const allTechs = React.useMemo(
+    () => contarRotulos(sourceProjects, (p) => p.technologies),
+    [sourceProjects]
+  )
 
   const filtered = React.useMemo(() => {
     const term = deferredSearch.trim().toLowerCase()
     return sourceProjects.filter((p) => {
       if (activeCategory !== "all" && p.category !== activeCategory) return false
       if (activeTechs.size > 0) {
-        const hasAll = Array.from(activeTechs).every((t) =>
-          p.technologies.includes(t)
-        )
-        if (!hasAll) return false
+        if (!temTodosRotulos(p.technologies, activeTechs)) return false
       }
       if (term) {
         const haystack = `${p.title} ${p.shortDescription} ${p.technologies.join(" ")}`.toLowerCase()
@@ -104,7 +104,10 @@ export default function ProjetosPage() {
         titulo="O que ando construindo"
         descricao={
           <>
-            {sourceProjects.length} projeto{sourceProjects.length === 1 ? "" : "s"}{" "}
+            {/* Sem número enquanto carrega ou com zero. */}
+            {sourceProjects.length > 0
+              ? contagem(sourceProjects.length, "projeto", "projetos")
+              : "Projetos"}{" "}
             entre clientes, side-projects e experimentos. Use os filtros pra
             refinar.
           </>
@@ -115,75 +118,71 @@ export default function ProjetosPage() {
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-24">
         <div className="space-y-6 rounded-2xl border border-border bg-card/50 p-6">
           {/* Search */}
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar por título, descrição ou tech…"
-              className="pl-9"
-              aria-label="Buscar projetos"
-            />
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch("")}
-                aria-label="Limpar busca"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <X className="size-4" />
-              </button>
-            )}
-          </div>
+          <CampoBusca
+            valor={search}
+            onChange={setSearch}
+            placeholder="Buscar por título, descrição ou tech…"
+            rotulo="Buscar projetos"
+          />
 
           {/* Categorias */}
-          <div className="space-y-2">
-            <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-              Categoria
-            </p>
-            <div className="flex flex-wrap gap-2">
+          <FiltroGrupo rotulo="Categoria">
+            <FilterChip
+              active={activeCategory === "all"}
+              onClick={() => setActiveCategory("all")}
+            >
+              Todos
+            </FilterChip>
+            {PROJECT_CATEGORIES.map((cat) => (
               <FilterChip
-                active={activeCategory === "all"}
-                onClick={() => setActiveCategory("all")}
+                key={cat}
+                active={activeCategory === cat}
+                onClick={() => setActiveCategory(cat)}
               >
-                Todos
+                {CATEGORY_LABEL[cat]}
               </FilterChip>
-              {PROJECT_CATEGORIES.map((cat) => (
-                <FilterChip
-                  key={cat}
-                  active={activeCategory === cat}
-                  onClick={() => setActiveCategory(cat)}
-                >
-                  {CATEGORY_LABEL[cat]}
-                </FilterChip>
-              ))}
-            </div>
-          </div>
+            ))}
+          </FiltroGrupo>
 
-          {/* Techs */}
-          <div className="space-y-2">
-            <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-              Tecnologias
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {allTechs.map((tech) => (
-                <FilterChip
-                  key={tech}
-                  active={activeTechs.has(tech)}
-                  onClick={() => toggleTech(tech)}
-                >
-                  {tech}
-                </FilterChip>
-              ))}
-            </div>
-          </div>
+          {/* Techs: recolhidas no celular, sempre abertas a partir de md */}
+          {allTechs.length > 0 && (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                className="md:hidden"
+                aria-expanded={mostrarTechs}
+                aria-controls={idTecnologias}
+                onClick={() => setMostrarTechs((v) => !v)}
+              >
+                {mostrarTechs
+                  ? "Esconder tecnologias"
+                  : `Filtrar por tecnologia${activeTechs.size > 0 ? ` (${activeTechs.size})` : ""}`}
+              </Button>
+              <div
+                id={idTecnologias}
+                className={cn(!mostrarTechs && "max-md:hidden")}
+              >
+                <FiltroGrupo rotulo="Tecnologias">
+                  {allTechs.map((tech) => (
+                    <FilterChip
+                      key={tech.chave}
+                      active={activeTechs.has(tech.chave)}
+                      onClick={() => toggleTech(tech.chave)}
+                    >
+                      {tech.rotulo}
+                    </FilterChip>
+                  ))}
+                </FiltroGrupo>
+              </div>
+            </>
+          )}
 
           {/* Status */}
           <div className="flex items-center justify-between border-t border-border pt-4">
             <p className="text-sm text-muted-foreground">
               {filtered.length === sourceProjects.length ? (
-                <>{filtered.length} projetos</>
+                <>{rotuloContador({ carregando, erro }, filtered.length, "projeto", "projetos")}</>
               ) : (
                 <>
                   Mostrando{" "}
@@ -202,7 +201,9 @@ export default function ProjetosPage() {
         </div>
 
         {/* Grid */}
-        {!projects ? (
+        {/* Os cards usam h3; sem este h2 a página pulava do h1 direto pra eles. */}
+        <h2 className="sr-only">Projetos</h2>
+        {carregando ? (
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[0, 1, 2, 3, 4, 5].map((i) => (
               <ProjectCardSkeleton key={i} />
@@ -217,51 +218,21 @@ export default function ProjetosPage() {
             ))}
           </div>
         ) : (
-          <div className="mt-12 flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-card/30 px-6 py-20 text-center">
-            <div className="flex size-12 items-center justify-center rounded-full bg-muted">
-              <FolderX className="size-5 text-muted-foreground" />
-            </div>
-            <h2 className="font-display text-xl font-semibold">
-              Nenhum projeto encontrado
-            </h2>
-            <p className="max-w-sm text-sm text-muted-foreground">
-              Ajuste os filtros ou{" "}
-              <button
-                onClick={clearFilters}
-                className="text-brand underline-offset-2 hover:underline"
-              >
-                limpe tudo
-              </button>{" "}
-              pra ver os {sourceProjects.length} projetos.
-            </p>
-          </div>
+          <EstadoListagem
+            icone={FolderX}
+            carregando={false}
+            erro={erro}
+            onTentarDeNovo={tentarDeNovo}
+            temConteudo={sourceProjects.length > 0}
+            vazio={{
+              titulo: "Ainda não há projetos por aqui",
+              texto: "Os projetos aparecem aqui assim que forem publicados.",
+            }}
+            semResultado="Nenhum projeto encontrado"
+            onLimpar={clearFilters}
+          />
         )}
       </section>
     </>
-  )
-}
-
-type FilterChipProps = {
-  active: boolean
-  onClick: () => void
-  children: React.ReactNode
-}
-
-function FilterChip({ active, onClick, children }: FilterChipProps) {
-  return (
-    <Badge
-      variant={active ? "default" : "outline"}
-      className={cn(
-        "cursor-pointer select-none px-3 py-1 font-mono text-xs transition-all",
-        active
-          ? "bg-brand text-brand-foreground hover:bg-brand-hover"
-          : "hover:border-brand/60 hover:text-brand"
-      )}
-      render={
-        <button type="button" onClick={onClick} aria-pressed={active} />
-      }
-    >
-      {children}
-    </Badge>
   )
 }

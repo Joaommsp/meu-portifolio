@@ -63,16 +63,18 @@ function SheetContent({
           <SheetPrimitive.Close
             data-slot="sheet-close"
             render={
+              /* `size-11` sobre o `icon-sm`: o sheet é o menu do celular, e
+                 28px ficava abaixo dos 44px de área de toque. */
               <Button
                 variant="ghost"
-                className="absolute top-3 right-3"
+                className="absolute top-2 right-2 size-11"
                 size="icon-sm"
               />
             }
           >
             <XIcon
             />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">Fechar</span>
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Popup>

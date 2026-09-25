@@ -101,13 +101,15 @@ export function ProjectGallery({ images, title }: Props) {
                 sizes="(min-width: 640px) 30rem, 100vw"
               />
 
-              <span className="absolute top-2 right-2 rounded-md border border-border bg-background/85 px-1.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-muted-foreground">
+              <span className="absolute top-2 right-2 rounded-md border border-border bg-background/85 px-1.5 py-0.5 font-mono text-xs tracking-wider text-muted-foreground">
                 {i + 1}/{total}
               </span>
 
               {/*
                 A legenda sobe no hover. Com movimento reduzido ela fica parada e
                 visível, em vez de depender de uma transição que não vai rodar.
+                Em tela de toque também: lá não existe hover, e sem ela nada
+                dizia que a imagem abre.
               */}
               <span
                 className={cn(
@@ -117,7 +119,8 @@ export function ProjectGallery({ images, title }: Props) {
                   "translate-y-full opacity-0 transition duration-150",
                   "group-hover:translate-y-0 group-hover:opacity-100",
                   "group-focus-visible:translate-y-0 group-focus-visible:opacity-100",
-                  "motion-reduce:translate-y-0 motion-reduce:opacity-100"
+                  "motion-reduce:translate-y-0 motion-reduce:opacity-100",
+                  "pointer-coarse:translate-y-0 pointer-coarse:opacity-100"
                 )}
               >
                 Ampliar

@@ -30,10 +30,10 @@ export function PostCard({ post }: Props) {
       className="group flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:border-brand/50 hover:bg-card/80"
     >
       <div className="flex items-center gap-2">
-        <Badge variant="outline" className="font-mono text-[0.65rem] uppercase">
+        <Badge variant="outline" className="font-mono text-xs uppercase">
           {CATEGORY_LABEL[post.category]}
         </Badge>
-        <span className="flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground">
+        <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
           <Clock className="size-3" />
           {post.readingTime} min
         </span>

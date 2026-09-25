@@ -42,6 +42,7 @@ import {
 } from "@/lib/firebase/projects"
 import {
   PROJECT_CATEGORIES,
+  PROJECT_STATUS_LABEL,
   PROJECT_STATUSES,
   type ProjectCategory,
   type ProjectStatus,
@@ -55,12 +56,6 @@ const CATEGORY_LABEL: Record<ProjectCategory, string> = {
   api: "API",
   design: "Design",
   outro: "Outro",
-}
-
-const STATUS_LABEL: Record<ProjectStatus, string> = {
-  "em-desenvolvimento": "Em desenvolvimento",
-  concluido: "Concluído",
-  arquivado: "Arquivado",
 }
 
 const STATUS_COLOR: Record<ProjectStatus, string> = {
@@ -192,7 +187,7 @@ export default function AdminProjectsPage() {
                 active={status === s}
                 onClick={() => setStatus(s)}
               >
-                {STATUS_LABEL[s]}
+                {PROJECT_STATUS_LABEL[s]}
               </FilterPill>
             ))}
           </div>
@@ -264,7 +259,7 @@ export default function AdminProjectsPage() {
                         STATUS_COLOR[project.status]
                       )}
                     >
-                      {STATUS_LABEL[project.status]}
+                      {PROJECT_STATUS_LABEL[project.status]}
                     </Badge>
                     {project.featured && (
                       <Badge
