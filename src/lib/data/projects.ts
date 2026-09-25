@@ -6,9 +6,16 @@ import {
 import { sampleProjects } from "@/lib/mocks/sample-data"
 import type { Project } from "@/types/project"
 
-export async function getAllProjects(): Promise<Project[]> {
+/**
+ * `estrito`: pra página que mostra a lista e precisa separar "não há nada"
+ * de "a consulta falhou". Lança `ErroConsultaFirestore`. Quem monta página no
+ * SSR fica no tolerante: vazio, com o erro no console.
+ */
+export async function getAllProjects({
+  estrito = false,
+}: { estrito?: boolean } = {}): Promise<Project[]> {
   if (!firestoreRestAvailable) return sampleProjects
-  const real = await restListProjects()
+  const real = await restListProjects({ estrito })
   return real.length > 0 ? real : sampleProjects
 }
 

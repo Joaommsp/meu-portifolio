@@ -11,9 +11,16 @@ import type { Game } from "@/types/game"
  * Cai pros mocks quando Firebase não configurado OU coleção vazia.
  */
 
-export async function getAllPublishedGames(): Promise<Game[]> {
+/**
+ * `estrito`: pra página que mostra a lista e precisa separar "não há nada"
+ * de "a consulta falhou". Lança `ErroConsultaFirestore`. Quem monta página no
+ * SSR fica no tolerante: vazio, com o erro no console.
+ */
+export async function getAllPublishedGames({
+  estrito = false,
+}: { estrito?: boolean } = {}): Promise<Game[]> {
   if (!firestoreRestAvailable) return sampleGames
-  const real = await restListGames({ publishedOnly: true })
+  const real = await restListGames({ publishedOnly: true, estrito })
   return real.length > 0 ? real : sampleGames
 }
 

@@ -100,23 +100,81 @@ type StructuredQuery = {
   limit?: number
 }
 
-async function runQuery(
-  query: StructuredQuery
-): Promise<RestDocument[]> {
-  if (!firestoreRestAvailable) return []
+/**
+ * A consulta que o Firestore recusou. A mensagem é a DELE (ex.: "The query
+ * requires an index…"), porque é ela que diz o que consertar.
+ */
+export class ErroConsultaFirestore extends Error {
+  constructor(
+    message: string,
+    readonly status?: number
+  ) {
+    super(message)
+    this.name = "ErroConsultaFirestore"
+  }
+}
+
+type CorpoDeErro = { error?: { message?: string } }
+
+/** Roda a consulta e LANÇA quando o Firestore recusa ou a rede cai. */
+async function consultar(query: StructuredQuery): Promise<RestDocument[]> {
+  // A guarda mora aqui, e não só no runQuery: sem env, o fetch iria pra uma
+  // URL relativa e o erro diria "404", escondendo a causa.
+  if (!firestoreRestAvailable) {
+    throw new ErroConsultaFirestore(
+      "Firestore não configurado: faltam as variáveis NEXT_PUBLIC_FIREBASE_*."
+    )
+  }
+  let res: Response
   try {
-    const res = await fetch(`${BASE}:runQuery`, {
+    res = await fetch(`${BASE}:runQuery`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ structuredQuery: query }),
       cache: "no-store",
     })
-    if (!res.ok) return []
-    const data = (await res.json()) as QueryResponse
-    return data
-      .map((entry) => entry.document)
-      .filter((d): d is RestDocument => Boolean(d))
-  } catch {
+  } catch (erro) {
+    throw new ErroConsultaFirestore(
+      erro instanceof Error ? erro.message : "Falha de rede ao consultar o Firestore"
+    )
+  }
+
+  if (!res.ok) {
+    // O runQuery responde o erro dentro de um array; os outros endpoints, solto.
+    const corpo = (await res.json().catch(() => null)) as
+      | CorpoDeErro
+      | CorpoDeErro[]
+      | null
+    const detalhe = Array.isArray(corpo)
+      ? corpo[0]?.error?.message
+      : corpo?.error?.message
+    throw new ErroConsultaFirestore(
+      detalhe ?? `O Firestore respondeu ${res.status}`,
+      res.status
+    )
+  }
+
+  const data = (await res.json()) as QueryResponse
+  return data
+    .map((entry) => entry.document)
+    .filter((d): d is RestDocument => Boolean(d))
+}
+
+/**
+ * Versão tolerante, a padrão das listagens: uma consulta que falha não pode
+ * derrubar uma página do SSR. Mas o erro não some mais calado. Um índice
+ * faltando virava "0 posts" sem rastro; agora vai pro console com a
+ * mensagem do Firestore.
+ */
+async function runQuery(query: StructuredQuery): Promise<RestDocument[]> {
+  if (!firestoreRestAvailable) return []
+  try {
+    return await consultar(query)
+  } catch (erro) {
+    console.error(
+      `[firestore] consulta em "${query.from[0]?.collectionId}" falhou:`,
+      erro instanceof Error ? erro.message : erro
+    )
     return []
   }
 }
@@ -165,7 +223,8 @@ function toPost(doc: RestDocument): Post {
 }
 
 export async function restListPosts(
-  options: { publishedOnly?: boolean } = {}
+  /** `estrito`: lança em vez de devolver vazio quando a consulta falha. */
+  options: { publishedOnly?: boolean; estrito?: boolean } = {}
 ): Promise<Post[]> {
   const where = options.publishedOnly
     ? {
@@ -177,7 +236,7 @@ export async function restListPosts(
       }
     : undefined
 
-  const docs = await runQuery({
+  const docs = await (options.estrito ? consultar : runQuery)({
     from: [{ collectionId: "posts" }],
     where,
     orderBy: [
@@ -270,7 +329,8 @@ function toProject(doc: RestDocument): Project {
 }
 
 export async function restListProjects(
-  options: { featuredOnly?: boolean } = {}
+  /** `estrito`: lança em vez de devolver vazio quando a consulta falha. */
+  options: { featuredOnly?: boolean; estrito?: boolean } = {}
 ): Promise<Project[]> {
   const where = options.featuredOnly
     ? {
@@ -282,7 +342,7 @@ export async function restListProjects(
       }
     : undefined
 
-  const docs = await runQuery({
+  const docs = await (options.estrito ? consultar : runQuery)({
     from: [{ collectionId: "projects" }],
     where,
     orderBy: [
@@ -366,7 +426,8 @@ function toGame(doc: RestDocument): Game {
 }
 
 export async function restListGames(
-  options: { publishedOnly?: boolean; featuredOnly?: boolean } = {}
+  /** `estrito`: lança em vez de devolver vazio quando a consulta falha. */
+  options: { publishedOnly?: boolean; featuredOnly?: boolean; estrito?: boolean } = {}
 ): Promise<Game[]> {
   const filters = []
   if (options.publishedOnly) {
@@ -397,7 +458,7 @@ export async function restListGames(
 
   // Sem orderBy aqui — evita exigir índice composto no Firestore.
   // Sort em memória abaixo (limite de 100 docs).
-  const docs = await runQuery({
+  const docs = await (options.estrito ? consultar : runQuery)({
     from: [{ collectionId: "games" }],
     where,
     limit: 100,
@@ -487,7 +548,8 @@ function toBook(doc: RestDocument): Book {
 }
 
 export async function restListBooks(
-  options: { publishedOnly?: boolean; featuredOnly?: boolean } = {}
+  /** `estrito`: lança em vez de devolver vazio quando a consulta falha. */
+  options: { publishedOnly?: boolean; featuredOnly?: boolean; estrito?: boolean } = {}
 ): Promise<Book[]> {
   const filters = []
   if (options.publishedOnly) {
@@ -517,7 +579,7 @@ export async function restListBooks(
       : { compositeFilter: { op: "AND", filters } }
 
   // Sem orderBy — evita exigir índice composto. Sort em memória abaixo.
-  const docs = await runQuery({
+  const docs = await (options.estrito ? consultar : runQuery)({
     from: [{ collectionId: "books" }],
     where,
     limit: 100,
