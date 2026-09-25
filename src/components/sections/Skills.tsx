@@ -73,7 +73,7 @@ export function Skills() {
   return (
     <section
       id="skills"
-      className="relative overflow-hidden border-y border-border bg-card/30 py-24 select-none"
+      className="relative overflow-hidden border-y border-border bg-card/30 py-16 select-none md:py-24"
     >
       {/* Wash: assume a cor da marca em foco. Mais lento que a carta, pra cor
           chegar depois do movimento em vez de competir com ele. */}
@@ -213,7 +213,7 @@ export function Skills() {
                 }}
               />
             </div>
-            <span className="font-mono text-[0.65rem] tabular-nums text-muted-foreground">
+            <span className="font-mono text-xs tabular-nums text-muted-foreground">
               {String(active + 1).padStart(2, "0")}/{STACK_COUNT}
             </span>
           </div>
@@ -222,7 +222,7 @@ export function Skills() {
           {active === 0 && (
             <span
               aria-hidden="true"
-              className="flex items-center gap-1 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground sm:hidden"
+              className="flex items-center gap-1 font-mono text-xs uppercase tracking-widest text-muted-foreground sm:hidden"
             >
               Arrasta
               <ChevronRight className="size-3" />

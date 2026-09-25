@@ -9,6 +9,15 @@ export const GAME_STATUSES = [
 ] as const
 export type GameStatus = (typeof GAME_STATUSES)[number]
 
+/** Rótulo de cada status, no singular (o do selo e o do admin). */
+export const GAME_STATUS_LABEL: Record<GameStatus, string> = {
+  jogando: "Jogando",
+  concluido: "Concluído",
+  rejogando: "Rejogando",
+  wishlist: "Wishlist",
+  abandonado: "Abandonado",
+}
+
 /**
  * Plataformas comuns. É array de strings livres na verdade
  * (pra suportar "PS5", "PC", "Switch", etc.), mas estes são

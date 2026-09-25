@@ -357,7 +357,7 @@ export default function GuestbookPage() {
             <MessageCircle className="size-3.5 text-brand" />
             Mensagens
             {entries && (
-              <Badge variant="outline" className="ml-1 font-mono text-[0.65rem]">
+              <Badge variant="outline" className="ml-1 font-mono text-xs">
                 {entries.length}
               </Badge>
             )}
@@ -411,7 +411,7 @@ export default function GuestbookPage() {
                             {entry.name}
                           </span>
                           {provider && (
-                            <span className="inline-flex items-center gap-1 font-mono text-[0.65rem] text-muted-foreground">
+                            <span className="inline-flex items-center gap-1 font-mono text-xs text-muted-foreground">
                               {provider.icon}
                               {provider.label}
                             </span>
@@ -419,12 +419,12 @@ export default function GuestbookPage() {
                           {isOwn && (
                             <Badge
                               variant="outline"
-                              className="border-brand/40 bg-brand/10 font-mono text-[0.6rem] text-brand"
+                              className="border-brand/40 bg-brand/10 font-mono text-xs text-brand-texto"
                             >
                               você
                             </Badge>
                           )}
-                          <span className="ml-auto font-mono text-[0.65rem] text-muted-foreground">
+                          <span className="ml-auto font-mono text-xs text-muted-foreground">
                             {dateFormatter.format(entry.createdAt)}
                           </span>
                         </div>

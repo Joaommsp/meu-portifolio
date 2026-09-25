@@ -357,7 +357,7 @@ function BigNumber({
     "group flex flex-col gap-2 rounded-xl border border-border bg-card p-5 transition-colors hover:border-brand/40"
   const content = (
     <>
-      <p className="flex items-center gap-2 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+      <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {icon}
         {label}
       </p>
@@ -421,7 +421,7 @@ function HighlightCard({
         <div className="flex items-center justify-between gap-2">
           <Badge
             variant="outline"
-            className="border-brand/40 bg-brand/10 font-mono text-[0.6rem] uppercase text-brand"
+            className="border-brand/40 bg-brand/10 font-mono text-xs uppercase text-brand-texto"
           >
             {type}
           </Badge>
@@ -452,7 +452,7 @@ function YearNav({ currentYear }: { currentYear: number }) {
   return (
     <section className="border-t border-border bg-card/30 py-12">
       <div className="container mx-auto max-w-5xl px-5 sm:px-6">
-        <p className="mb-4 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+        <p className="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
           Outros anos
         </p>
         <div className="flex flex-wrap gap-2">

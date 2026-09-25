@@ -2,18 +2,25 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Search, X, FileX, Clock, ArrowUpRight, Sparkles } from "lucide-react"
+import { X, FileX, Clock, ArrowUpRight, Sparkles } from "lucide-react"
 
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { PostCard } from "@/components/blog/PostCard"
 import { ScrollReveal } from "@/components/animations"
+import { CampoBusca } from "@/components/listagem/CampoBusca"
+import { EstadoListagem } from "@/components/listagem/EstadoListagem"
+import { FilterChip, FiltroGrupo } from "@/components/listagem/filtros"
+import {
+  contagem,
+  rotuloContador,
+  useListagem,
+} from "@/components/listagem/useListagem"
+import { contarRotulos, temAlgumRotulo } from "@/components/listagem/rotulos"
 import { PageHero } from "@/components/sections/PageHero"
 import { getAllPublishedPosts } from "@/lib/data/posts"
 import { POST_CATEGORIES, type PostCategory } from "@/types/post"
 import type { Post } from "@/types/post"
-import { cn } from "@/lib/utils"
 
 const CATEGORY_LABEL: Record<PostCategory, string> = {
   pensamento: "Pensamentos",
@@ -31,6 +38,10 @@ const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
   year: "numeric",
 })
 
+/* Estável e estrito: uma consulta que falha aparece como erro, e não como
+   lista vazia (ver useListagem). */
+const carregarPosts = () => getAllPublishedPosts({ estrito: true })
+
 export default function BlogPage() {
   const [activeCategory, setActiveCategory] =
     React.useState<CategoryFilter>("all")
@@ -38,17 +49,8 @@ export default function BlogPage() {
   const [search, setSearch] = React.useState("")
   const deferredSearch = React.useDeferredValue(search)
 
-  const [allPosts, setAllPosts] = React.useState<Post[] | null>(null)
-
-  React.useEffect(() => {
-    let cancelled = false
-    getAllPublishedPosts().then((posts) => {
-      if (!cancelled) setAllPosts(posts)
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  const { itens: allPosts, erro, carregando, tentarDeNovo } =
+    useListagem(carregarPosts)
 
   const publishedPosts = React.useMemo(() => {
     if (!allPosts) return []
@@ -60,26 +62,18 @@ export default function BlogPage() {
 
   const featured = publishedPosts.find((p) => p.featured) ?? null
 
-  const allTags = React.useMemo(() => {
-    const counts = new Map<string, number>()
-    for (const p of publishedPosts) {
-      for (const t of p.tags) {
-        counts.set(t, (counts.get(t) ?? 0) + 1)
-      }
-    }
-    return Array.from(counts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([t]) => t)
-  }, [publishedPosts])
+  const allTags = React.useMemo(
+    () => contarRotulos(publishedPosts, (p) => p.tags),
+    [publishedPosts]
+  )
 
   const filtered = React.useMemo(() => {
     const term = deferredSearch.trim().toLowerCase()
     return publishedPosts.filter((p) => {
       if (activeCategory !== "all" && p.category !== activeCategory)
         return false
-      if (activeTags.size > 0) {
-        const hasAny = Array.from(activeTags).some((t) => p.tags.includes(t))
-        if (!hasAny) return false
+      if (activeTags.size > 0 && !temAlgumRotulo(p.tags, activeTags)) {
+        return false
       }
       if (term) {
         const haystack = `${p.title} ${p.excerpt} ${p.tags.join(" ")}`.toLowerCase()
@@ -122,7 +116,11 @@ export default function BlogPage() {
         }
         descricao={
           <>
-            {publishedPosts.length} post{publishedPosts.length === 1 ? "" : "s"}{" "}
+            {/* Sem número enquanto carrega ou com zero: "0 posts" lia como
+                "O posts". */}
+            {publishedPosts.length > 0
+              ? contagem(publishedPosts.length, "post", "posts")
+              : "Os posts"}{" "}
             que escrevi quando quis. Sobre dev, design e o que aparece no meio.
           </>
         }
@@ -140,74 +138,49 @@ export default function BlogPage() {
       {/* Filtros + grid */}
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 py-16">
         <div className="space-y-5 rounded-2xl border border-border bg-card/50 p-6">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar por título, excerpt ou tag…"
-              className="pl-9"
-              aria-label="Buscar posts"
-            />
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch("")}
-                aria-label="Limpar busca"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <X className="size-4" />
-              </button>
-            )}
-          </div>
+          <CampoBusca
+            valor={search}
+            onChange={setSearch}
+            placeholder="Buscar por título, excerpt ou tag…"
+            rotulo="Buscar posts"
+          />
 
-          <div className="space-y-2">
-            <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-              Categoria
-            </p>
-            <div className="flex flex-wrap gap-2">
+          <FiltroGrupo rotulo="Categoria">
+            <FilterChip
+              active={activeCategory === "all"}
+              onClick={() => setActiveCategory("all")}
+            >
+              Todos
+            </FilterChip>
+            {POST_CATEGORIES.map((cat) => (
               <FilterChip
-                active={activeCategory === "all"}
-                onClick={() => setActiveCategory("all")}
+                key={cat}
+                active={activeCategory === cat}
+                onClick={() => setActiveCategory(cat)}
               >
-                Todos
+                {CATEGORY_LABEL[cat]}
               </FilterChip>
-              {POST_CATEGORIES.map((cat) => (
-                <FilterChip
-                  key={cat}
-                  active={activeCategory === cat}
-                  onClick={() => setActiveCategory(cat)}
-                >
-                  {CATEGORY_LABEL[cat]}
-                </FilterChip>
-              ))}
-            </div>
-          </div>
+            ))}
+          </FiltroGrupo>
 
           {allTags.length > 0 && (
-            <div className="space-y-2">
-              <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-                Tags
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {allTags.map((tag) => (
-                  <FilterChip
-                    key={tag}
-                    active={activeTags.has(tag)}
-                    onClick={() => toggleTag(tag)}
-                  >
-                    #{tag}
-                  </FilterChip>
-                ))}
-              </div>
-            </div>
+            <FiltroGrupo rotulo="Tags">
+              {allTags.map((tag) => (
+                <FilterChip
+                  key={tag.chave}
+                  active={activeTags.has(tag.chave)}
+                  onClick={() => toggleTag(tag.chave)}
+                >
+                  #{tag.rotulo}
+                </FilterChip>
+              ))}
+            </FiltroGrupo>
           )}
 
           <div className="flex items-center justify-between border-t border-border pt-4">
             <p className="text-sm text-muted-foreground">
               {filtered.length === publishedPosts.length ? (
-                <>{filtered.length} posts</>
+                <>{rotuloContador({ carregando, erro }, filtered.length, "post", "posts")}</>
               ) : (
                 <>
                   Mostrando{" "}
@@ -226,6 +199,8 @@ export default function BlogPage() {
         </div>
 
         {/* Grid */}
+        {/* Os cards usam h3; sem este h2 a página pulava do h1 direto pra eles. */}
+        <h2 className="sr-only">Posts</h2>
         {filtered.length > 0 ? (
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((post, idx) => (
@@ -235,24 +210,19 @@ export default function BlogPage() {
             ))}
           </div>
         ) : (
-          <div className="mt-12 flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-card/30 px-6 py-20 text-center">
-            <div className="flex size-12 items-center justify-center rounded-full bg-muted">
-              <FileX className="size-5 text-muted-foreground" />
-            </div>
-            <h2 className="font-display text-xl font-semibold">
-              Nenhum post encontrado
-            </h2>
-            <p className="max-w-sm text-sm text-muted-foreground">
-              Ajuste os filtros ou{" "}
-              <button
-                onClick={clearFilters}
-                className="text-brand underline-offset-2 hover:underline"
-              >
-                limpe tudo
-              </button>
-              .
-            </p>
-          </div>
+          <EstadoListagem
+            icone={FileX}
+            carregando={carregando}
+            erro={erro}
+            temConteudo={publishedPosts.length > 0}
+            vazio={{
+              titulo: "Ainda não há posts por aqui",
+              texto: "O primeiro texto aparece aqui assim que for publicado.",
+            }}
+            semResultado="Nenhum post encontrado"
+            onLimpar={clearFilters}
+            onTentarDeNovo={tentarDeNovo}
+          />
         )}
       </section>
     </>
@@ -292,14 +262,14 @@ function FeaturedCard({ post }: { post: Post }) {
 
       <div className="flex flex-1 flex-col gap-4 p-6 md:p-8">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="outline" className="font-mono text-[0.65rem] uppercase">
+          <Badge variant="outline" className="font-mono text-xs uppercase">
             {CATEGORY_LABEL[post.category]}
           </Badge>
-          <span className="flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground">
+          <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
             <Clock className="size-3" />
             {post.readingTime} min
           </span>
-          <span className="font-mono text-[0.7rem] text-muted-foreground">
+          <span className="font-mono text-xs text-muted-foreground">
             {dateFormatter.format(date)}
           </span>
         </div>
@@ -318,30 +288,5 @@ function FeaturedCard({ post }: { post: Post }) {
         </div>
       </div>
     </Link>
-  )
-}
-
-type FilterChipProps = {
-  active: boolean
-  onClick: () => void
-  children: React.ReactNode
-}
-
-function FilterChip({ active, onClick, children }: FilterChipProps) {
-  return (
-    <Badge
-      variant={active ? "default" : "outline"}
-      className={cn(
-        "cursor-pointer select-none px-3 py-1 font-mono text-xs transition-all",
-        active
-          ? "bg-brand text-brand-foreground hover:bg-brand-hover"
-          : "hover:border-brand/60 hover:text-brand"
-      )}
-      render={
-        <button type="button" onClick={onClick} aria-pressed={active} />
-      }
-    >
-      {children}
-    </Badge>
   )
 }

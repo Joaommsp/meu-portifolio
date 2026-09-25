@@ -58,7 +58,7 @@ function SkillCard({ skill }: { skill: Skill }) {
           ) : (
             <span
               aria-hidden
-              className="font-mono text-[0.7rem] font-semibold tracking-tight"
+              className="font-mono text-xs font-semibold tracking-tight"
               style={{ color: cor }}
             >
               {iniciais(skill.name)}
@@ -70,10 +70,10 @@ function SkillCard({ skill }: { skill: Skill }) {
           <h4 className="truncate font-display text-lg font-semibold tracking-tight">
             {skill.name}
           </h4>
-          <p
-            className="font-mono text-[0.6rem] uppercase tracking-[0.14em]"
-            style={{ color: cor }}
-          >
+          {/* O nível sai na tinta; a cor da tecnologia fica só nas barras.
+              Como texto de 12px, o ciano do React ou o laranja do Figma sobre
+              o card ficavam entre 1:1 e 4:1 de contraste. */}
+          <p className="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
             {skill.level}
           </p>
           {/* nível em três barras: mais honesto que porcentagem */}
@@ -99,7 +99,7 @@ function SkillCard({ skill }: { skill: Skill }) {
         {skill.text}
       </p>
 
-      <p className="relative mt-auto border-t border-border pt-3 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-muted-foreground/70">
+      <p className="relative mt-auto border-t border-border pt-3 font-mono text-xs uppercase tracking-[0.1em] text-muted-foreground">
         {skill.context}
       </p>
     </article>
@@ -166,7 +166,7 @@ function GroupRail({ group, index }: { group: SkillGroup; index: number }) {
         <h3 className="font-display text-xl font-semibold tracking-tight">
           {group.label}
         </h3>
-        <span className="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">
+        <span className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
           {String(index + 1).padStart(2, "0")} · {group.skills.length}{" "}
           {group.skills.length === 1 ? "ferramenta" : "ferramentas"}
         </span>

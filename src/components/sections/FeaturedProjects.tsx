@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { ScrollReveal } from "@/components/animations"
 import { ProjectCard } from "@/components/projects/ProjectCard"
 import { getAllProjects } from "@/lib/data/projects"
+import { SECAO_HOME } from "@/components/sections/secao"
+import { cn } from "@/lib/utils"
 
 export async function FeaturedProjects() {
   const all = await getAllProjects()
@@ -19,7 +21,7 @@ export async function FeaturedProjects() {
   return (
     <section
       id="featured-projects"
-      className="container mx-auto max-w-6xl scroll-mt-20 px-5 sm:px-6 py-32"
+      className={cn(SECAO_HOME, "scroll-mt-20")}
     >
       <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
         <div>

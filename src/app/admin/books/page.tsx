@@ -37,18 +37,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { listBooks, deleteBook, updateBook } from "@/lib/firebase/books"
-import { BOOK_STATUSES, type BookStatus } from "@/types/book"
+import { BOOK_STATUS_LABEL, BOOK_STATUSES, type BookStatus } from "@/types/book"
 import type { Book } from "@/types/book"
 import { cn } from "@/lib/utils"
-
-const STATUS_LABEL: Record<BookStatus, string> = {
-  lendo: "Lendo",
-  lido: "Lido",
-  relendo: "Relendo",
-  wishlist: "Wishlist",
-  pausado: "Pausado",
-  abandonado: "Abandonado",
-}
 
 type VisibilityFilter = "all" | "published" | "draft"
 
@@ -177,7 +168,7 @@ export default function AdminBooksPage() {
             </FilterPill>
             {BOOK_STATUSES.map((s) => (
               <FilterPill key={s} active={status === s} onClick={() => setStatus(s)}>
-                {STATUS_LABEL[s]}
+                {BOOK_STATUS_LABEL[s]}
               </FilterPill>
             ))}
           </div>
@@ -232,7 +223,7 @@ export default function AdminBooksPage() {
                       variant="outline"
                       className="font-mono text-[0.65rem] uppercase"
                     >
-                      {STATUS_LABEL[book.status]}
+                      {BOOK_STATUS_LABEL[book.status]}
                     </Badge>
                     {book.published ? (
                       <Badge

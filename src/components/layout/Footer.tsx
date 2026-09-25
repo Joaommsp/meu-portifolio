@@ -41,30 +41,29 @@ export function Footer() {
           </div>
 
           {/* Nav */}
-          <nav className="flex flex-col gap-2.5" aria-label="Rodapé">
-            <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          {/* O espaço entre links vem do `py-2` de cada um, não do `gap`: assim
+              ele vira área de toque em vez de vão morto entre alvos de 20px.
+              Duas colunas abaixo de md: numa só, os 15 links davam ~570px. */}
+          <nav aria-label="Rodapé">
+            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-muted-foreground">
               Navegação
             </p>
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="w-fit text-sm text-foreground/80 transition-colors hover:text-brand"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <Link
-              href="/uses"
-              className="w-fit text-sm text-foreground/80 transition-colors hover:text-brand"
-            >
-              Uses
-            </Link>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-0.5 md:grid-cols-1">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="w-fit py-2 text-sm text-foreground/80 transition-colors hover:text-brand"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
           </nav>
 
           {/* Socials */}
-          <div className="flex flex-col gap-2.5">
-            <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <div className="flex flex-col gap-0.5">
+            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-muted-foreground">
               Conecte-se
             </p>
             {SOCIAL_LINKS.map((s) => (
@@ -73,7 +72,7 @@ export function Footer() {
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex w-fit items-center gap-2.5 text-sm text-foreground/80 transition-colors hover:text-brand"
+                className="group flex w-fit items-center gap-2.5 py-2 text-sm text-foreground/80 transition-colors hover:text-brand"
               >
                 <s.icon className="size-3.5" />
                 <span>{s.handle}</span>

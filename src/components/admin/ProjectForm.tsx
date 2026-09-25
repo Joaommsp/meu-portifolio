@@ -27,6 +27,7 @@ import { TagsInput } from "@/components/admin/TagsInput"
 import { projectFormSchema, type ProjectFormValues } from "@/lib/validations"
 import {
   PROJECT_CATEGORIES,
+  PROJECT_STATUS_LABEL,
   PROJECT_STATUSES,
   type ProjectCategory,
   type ProjectStatus,
@@ -45,12 +46,6 @@ const CATEGORY_LABEL: Record<ProjectCategory, string> = {
   api: "API",
   design: "Design",
   outro: "Outro",
-}
-
-const STATUS_LABEL: Record<ProjectStatus, string> = {
-  "em-desenvolvimento": "Em desenvolvimento",
-  concluido: "Concluído",
-  arquivado: "Arquivado",
 }
 
 const AUTO_SAVE_INTERVAL_MS = 30_000
@@ -486,7 +481,7 @@ export function ProjectForm({ projectId, initialValues }: Props) {
                     <SelectContent>
                       {PROJECT_STATUSES.map((s) => (
                         <SelectItem key={s} value={s}>
-                          {STATUS_LABEL[s]}
+                          {PROJECT_STATUS_LABEL[s]}
                         </SelectItem>
                       ))}
                     </SelectContent>

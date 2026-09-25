@@ -6,8 +6,13 @@ import { ContactActions } from "@/components/services/ContactActions"
 import { SERVICOS, rotaServico, type Servico } from "@/lib/servicos-content"
 import { cn } from "@/lib/utils"
 
-/** Shell de seção, no mesmo ritmo das seções da home. */
-export const SECAO = "container mx-auto max-w-6xl px-5 py-24 sm:px-6 md:py-28"
+/**
+ * Shell de seção, no mesmo ritmo das seções da home.
+ *
+ * `py-16` no celular: com `py-24`, o fim de uma seção e o começo da próxima
+ * somavam 192px de vazio, e as páginas passavam de 8 mil px de altura.
+ */
+export const SECAO = "container mx-auto max-w-6xl px-5 py-16 sm:px-6 md:py-28"
 
 /**
  * Cabeçalho de seção.

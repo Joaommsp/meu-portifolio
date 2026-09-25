@@ -10,6 +10,16 @@ export const BOOK_STATUSES = [
 ] as const
 export type BookStatus = (typeof BOOK_STATUSES)[number]
 
+/** Rótulo de cada status, no singular (o do selo e o do admin). */
+export const BOOK_STATUS_LABEL: Record<BookStatus, string> = {
+  lendo: "Lendo",
+  lido: "Lido",
+  relendo: "Relendo",
+  wishlist: "Wishlist",
+  pausado: "Pausado",
+  abandonado: "Abandonado",
+}
+
 /**
  * Documento de livro no Firestore (collection `books`).
  * Timestamps serializados como Date no client após fetch.

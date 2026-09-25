@@ -124,7 +124,7 @@ function CurrentlyCard({
         <div className="flex size-8 items-center justify-center rounded-lg bg-brand/10 text-brand">
           <Icon className="size-4" />
         </div>
-        <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+        <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
           {label}
         </p>
       </div>
@@ -132,7 +132,7 @@ function CurrentlyCard({
         className={cn(
           "mt-3 font-display text-base leading-tight tracking-tight",
           vazio
-            ? "font-normal text-muted-foreground/70"
+            ? "font-normal text-muted-foreground"
             : "font-semibold"
         )}
       >
@@ -238,7 +238,7 @@ export default async function SobrePage() {
       />
 
       {/* Bio extendida */}
-      <section className="container mx-auto max-w-4xl px-5 sm:px-6 py-24">
+      <section className="container mx-auto max-w-4xl px-5 sm:px-6 py-16 md:py-24">
         <div className="grid gap-12 md:grid-cols-[280px_1fr] md:items-start">
           <div className="self-start md:sticky md:top-24">
             <ScrollReveal direction="left">
@@ -350,12 +350,12 @@ export default async function SobrePage() {
       </section>
 
       {/* Skills — trilhos por categoria */}
-      <section className="border-t border-border bg-card/30 py-24">
+      <section className="border-t border-border bg-card/30 py-16 md:py-24">
         <SkillGroups />
       </section>
 
       {/* Timeline */}
-      <section className="container mx-auto max-w-4xl px-5 sm:px-6 py-24">
+      <section className="container mx-auto max-w-4xl px-5 sm:px-6 py-16 md:py-24">
         <ScrollReveal>
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
             Trajetória
@@ -398,7 +398,7 @@ export default async function SobrePage() {
       <Education />
 
       {/* Soft skills */}
-      <section className="border-t border-border bg-card/30 py-24">
+      <section className="border-t border-border bg-card/30 py-16 md:py-24">
         <div className="container mx-auto max-w-5xl px-5 sm:px-6">
           <ScrollReveal>
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
@@ -435,9 +435,9 @@ export default async function SobrePage() {
       </section>
 
       {/* CTA pra contato */}
-      <section className="container mx-auto max-w-3xl px-5 sm:px-6 py-24 text-center">
+      <section className="container mx-auto max-w-3xl px-5 sm:px-6 py-16 md:py-24 text-center">
         <ScrollReveal>
-          <Badge variant="outline" className="mb-6 font-mono text-[0.7rem] uppercase">
+          <Badge variant="outline" className="mb-6 font-mono text-xs uppercase">
             Próximo passo
           </Badge>
         </ScrollReveal>

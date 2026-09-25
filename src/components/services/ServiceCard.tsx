@@ -37,7 +37,7 @@ export function ServiceCard({ servico }: { servico: Servico }) {
 
       <span
         aria-hidden
-        className="absolute top-5.5 left-5.5 font-mono text-[0.7rem] tracking-[0.2em] text-muted-foreground"
+        className="absolute top-5.5 left-5.5 font-mono text-xs tracking-[0.2em] text-muted-foreground"
       >
         {servico.numero}
       </span>
@@ -48,7 +48,7 @@ export function ServiceCard({ servico }: { servico: Servico }) {
       />
 
       <div className="relative p-5.5">
-        <p className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-brand">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-brand">
           {servico.categoria}
         </p>
         <h3 className="mt-2.5 font-display text-2xl font-bold leading-tight tracking-tight text-pretty">
@@ -58,7 +58,7 @@ export function ServiceCard({ servico }: { servico: Servico }) {
           {servico.tags.map((tag) => (
             <li
               key={tag}
-              className="rounded-full border border-border px-2.5 py-1 font-mono text-[0.65rem] text-muted-foreground"
+              className="rounded-full border border-border px-2.5 py-1 font-mono text-xs text-muted-foreground"
             >
               {tag}
             </li>

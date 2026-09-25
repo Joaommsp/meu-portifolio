@@ -35,7 +35,7 @@ export function ContactCTA() {
         ]}
       />
 
-      <div className="container relative mx-auto max-w-3xl px-5 py-32 text-center sm:px-6">
+      <div className="container relative mx-auto max-w-3xl px-5 py-16 text-center sm:px-6 md:py-32">
         <ScrollReveal>
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
             09 · Contato

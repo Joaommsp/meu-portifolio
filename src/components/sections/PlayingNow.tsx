@@ -42,12 +42,12 @@ function PlayingCard({ jogo }: { jogo: Playing }) {
         )}
       >
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/40 bg-brand/10 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-widest text-brand">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/40 bg-brand/10 px-2.5 py-1 font-mono text-xs uppercase tracking-widest text-brand-texto">
             <Gamepad2 className="size-3" />
             {PLAYING_STATUS_LABEL[jogo.status]}
           </span>
           {jogo.platform && (
-            <span className="rounded-full border border-border bg-background/60 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+            <span className="rounded-full border border-border bg-background/60 px-2.5 py-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
               {jogo.platform}
             </span>
           )}
@@ -68,7 +68,7 @@ function PlayingCard({ jogo }: { jogo: Playing }) {
             {jogo.genres.map((g) => (
               <li
                 key={g}
-                className="rounded-md border border-border bg-background/60 px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-wide text-muted-foreground"
+                className="rounded-md border border-border bg-background/60 px-2 py-0.5 font-mono text-xs uppercase tracking-wide text-muted-foreground"
               >
                 {g}
               </li>
@@ -87,9 +87,9 @@ export function PlayingNow({ jogos }: { jogos: readonly Playing[] }) {
   return (
     <section className="container mx-auto max-w-5xl px-5 py-12 sm:px-6">
       <ScrollReveal>
-        <p className="mb-6 font-mono text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground">
+        <h2 className="mb-6 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
           Jogando agora
-        </p>
+        </h2>
       </ScrollReveal>
 
       <div className="grid gap-4 md:grid-cols-2">

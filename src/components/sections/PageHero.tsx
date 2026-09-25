@@ -3,6 +3,7 @@ import * as React from "react"
 import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { FadeIn, SlideIn } from "@/components/animations"
 import { WindowFrame } from "@/components/misc/WindowFrame"
+import { CASCA_HERO } from "@/components/sections/secao"
 import { cn } from "@/lib/utils"
 
 /** Atmosfera do creme — a mesma em toda página interna, de propósito. */
@@ -71,6 +72,10 @@ type Props = {
  *
  * O rail vira uma linha horizontal acima da janela abaixo de `lg`: o
  * `writing-mode` vertical não cabe em tela estreita.
+ *
+ * Ocupa a tela inteira e centra na vertical o bloco janela + `children`, com
+ * a mesma casca do hero da home (`CASCA_HERO`). Só com padding, a janela subia
+ * pra baixo do header, e as internas ficavam com cara de outra linguagem.
  */
 export function PageHero({
   rotulo,
@@ -83,7 +88,7 @@ export function PageHero({
   className,
 }: Props) {
   return (
-    <section className={cn("relative isolate overflow-hidden", className)}>
+    <section className={cn(CASCA_HERO, className)}>
       <DotMesh espacamento={ESPACAMENTO_MARGEM} />
       <GradientOrbs orbs={ORBS} />
       <NoiseTexture opacity={0.04} />
@@ -122,7 +127,8 @@ export function PageHero({
                 />
 
                 <div className="relative">
-                  <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-[-0.035em] text-pretty md:text-[5rem]">
+                  {/* 2.5rem no celular: a 3rem, "Pensamentos," passava da borda da janela. */}
+                  <h1 className="font-display text-[2.5rem] font-bold leading-[0.95] tracking-[-0.035em] text-pretty sm:text-5xl md:text-[5rem]">
                     {titulo}
                   </h1>
                   {descricao && (

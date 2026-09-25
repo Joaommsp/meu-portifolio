@@ -54,7 +54,7 @@ function CardLinha({
           {titulo}
         </p>
         {detalhe && (
-          <p className="truncate font-mono text-[0.7rem] text-muted-foreground">
+          <p className="truncate font-mono text-xs text-muted-foreground">
             {detalhe}
           </p>
         )}
@@ -150,16 +150,16 @@ export default async function NowPage() {
       {/* Live snapshot — auto-puxado dos dados */}
       <section className="container mx-auto max-w-4xl px-5 sm:px-6 pt-12 pb-8">
         <ScrollReveal>
-          <p className="mb-4 font-mono text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground">
+          <h2 className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
             Em tempo real
-          </p>
+          </h2>
         </ScrollReveal>
 
         <div className="grid gap-3 sm:grid-cols-3">
           {/* Spotify (live) */}
           <ScrollReveal delay={0.05}>
             <div className="rounded-xl border border-border bg-card p-4">
-              <div className="mb-2 flex items-center gap-1.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+              <div className="mb-2 flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                 <Music className="size-3 text-brand" />
                 Tocando
               </div>
@@ -176,7 +176,7 @@ export default async function NowPage() {
                       href={currently.ouvindo.link || undefined}
                     />
                   ) : (
-                    <p className="text-xs text-muted-foreground/70">
+                    <p className="text-xs text-muted-foreground">
                       {CURRENTLY_EMPTY_TEXT}
                     </p>
                   )
@@ -188,7 +188,7 @@ export default async function NowPage() {
           {/* Livro atual */}
           <ScrollReveal delay={0.1}>
             <div className="rounded-xl border border-border bg-card p-4">
-              <div className="mb-2 flex items-center gap-1.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+              <div className="mb-2 flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                 <BookMarked className="size-3 text-brand" />
                 Lendo
               </div>
@@ -207,7 +207,7 @@ export default async function NowPage() {
                   imagem={currentBook.coverImage}
                 />
               ) : (
-                <p className="text-xs text-muted-foreground/70">
+                <p className="text-xs text-muted-foreground">
                   {CURRENTLY_EMPTY_TEXT}
                 </p>
               )}
@@ -217,7 +217,7 @@ export default async function NowPage() {
           {/* Jogo atual */}
           <ScrollReveal delay={0.15}>
             <div className="rounded-xl border border-border bg-card p-4">
-              <div className="mb-2 flex items-center gap-1.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+              <div className="mb-2 flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                 <Gamepad2 className="size-3 text-brand" />
                 Jogando
               </div>
@@ -235,7 +235,7 @@ export default async function NowPage() {
                   imagem={currentGame.coverImage}
                 />
               ) : (
-                <p className="text-xs text-muted-foreground/70">
+                <p className="text-xs text-muted-foreground">
                   {CURRENTLY_EMPTY_TEXT}
                 </p>
               )}
@@ -253,7 +253,7 @@ export default async function NowPage() {
           <div className="flex justify-center">
             <Badge
               variant="outline"
-              className="font-mono text-[0.65rem] uppercase"
+              className="font-mono text-xs uppercase"
             >
               Movimento /now · nownownow.com
             </Badge>

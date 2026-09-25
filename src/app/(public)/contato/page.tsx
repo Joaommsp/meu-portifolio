@@ -62,7 +62,7 @@ export default function ContatoPage() {
             Vamos <span className="text-gradient-brand-claro">conversar?</span>
           </>
         }
-        descricao="Tô sempre aberto a novos projetos, parcerias ou só uma boa conversa sobre design e código. Use o formulário ou me chame direto pelos canais ao lado — respondo o mais rápido possível."
+        descricao="Tô sempre aberto a novos projetos, parcerias ou só uma boa conversa sobre design e código. Use o formulário ou me chame direto pelos canais — respondo o mais rápido possível."
       >
         <div className="flex flex-wrap items-center gap-3">
           <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">

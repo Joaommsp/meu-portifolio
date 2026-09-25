@@ -16,8 +16,10 @@ import {
 import { SlideIn, TextReveal, MagneticButton } from "@/components/animations"
 import { WindowFrame } from "@/components/misc/WindowFrame"
 import { TerminalOverlay } from "@/components/misc/TerminalOverlay"
+import { CASCA_HERO } from "@/components/sections/secao"
 import { CONTACT_EMAIL } from "@/lib/nav"
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
+import { cn } from "@/lib/utils"
 
 /**
  * Retrato recortado: fundo removido na origem, então ele pousa direto no
@@ -51,7 +53,7 @@ export function Hero() {
       // select-none: a janela é uma peça visual, não texto pra copiar —
       // arrastar sobre ela ia deixando seleção pelo caminho. Os CTAs seguem
       // clicáveis e leitor de tela lê tudo; só a seleção do mouse sai.
-      className="relative isolate flex min-h-dvh items-center overflow-hidden py-24 select-none lg:py-28"
+      className={cn(CASCA_HERO, "py-24 select-none lg:py-28")}
     >
       <div className="pointer-events-none absolute inset-0 z-0 opacity-50">
         <GradientOrbs />
@@ -203,7 +205,7 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground"
       >
-        <span className="font-mono text-[0.65rem] uppercase tracking-[0.3em]">
+        <span className="font-mono text-xs uppercase tracking-[0.3em]">
           Role
         </span>
         <ArrowDown className="size-4 animate-bounce" />

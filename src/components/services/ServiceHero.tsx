@@ -6,6 +6,7 @@ import { ContactActions } from "@/components/services/ContactActions"
 import { EFEITOS } from "@/components/services/effects"
 import { HeroVideo } from "@/components/services/HeroVideo"
 import { DISPONIBILIDADE } from "@/lib/site"
+import { ROTA_SERVICOS } from "@/lib/rotas"
 import type { Servico } from "@/lib/servicos-content"
 
 const ORBS = [
@@ -42,6 +43,11 @@ type Props = { servico: Servico }
  * home quando não tem. Quem clica no card dos meteoros cai numa página com
  * meteoros, e a passagem de uma tela pra outra fica óbvia sem transição.
  *
+ * O vídeo só entra a partir de `lg`. Abaixo disso o hero fica em pé, o
+ * `object-cover` amplia o quadro 16:9 e a tipografia que existe DENTRO do
+ * vídeo cai gigante atrás do resumo. Ali vale o efeito do card, como nas
+ * páginas sem vídeo.
+ *
  * A seção NÃO leva `isolate`. Ele criaria um grupo de blending isolado, e o
  * `mix-blend-multiply` do vídeo passaria a compor contra um backdrop
  * transparente em vez do creme do body: o branco do vídeo voltaria a aparecer
@@ -51,6 +57,16 @@ export function ServiceHero({ servico }: Props) {
   const Efeito = EFEITOS[servico.efeito]
   const { video } = servico
 
+  const fundoEfeito = (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0"
+      style={{ maskImage: MASCARA_EFEITO, WebkitMaskImage: MASCARA_EFEITO }}
+    >
+      <Efeito denso />
+    </div>
+  )
+
   return (
     <section className="relative flex min-h-152 items-center overflow-hidden lg:min-h-176">
       {video ? (
@@ -58,15 +74,10 @@ export function ServiceHero({ servico }: Props) {
           src={video.src}
           poster={video.poster}
           opacidade={video.opacidade}
+          fundoAbaixoDoLg={fundoEfeito}
         />
       ) : (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ maskImage: MASCARA_EFEITO, WebkitMaskImage: MASCARA_EFEITO }}
-        >
-          <Efeito denso />
-        </div>
+        fundoEfeito
       )}
 
       <GradientOrbs orbs={ORBS} />
@@ -87,7 +98,12 @@ export function ServiceHero({ servico }: Props) {
             aria-label="Trilha"
             className="flex items-center justify-center gap-2.5 font-mono text-xs font-medium uppercase tracking-[0.3em]"
           >
-            <Link href="/#services" className="text-muted-foreground hover:text-brand">
+            {/* Padding com margem negativa: a área de toque sobe pra 44px sem
+                mexer na linha. */}
+            <Link
+              href={ROTA_SERVICOS}
+              className="-my-3.5 py-3.5 text-muted-foreground hover:text-brand"
+            >
               Serviços
             </Link>
             <span aria-hidden className="text-muted-foreground">
@@ -98,7 +114,8 @@ export function ServiceHero({ servico }: Props) {
         </FadeIn>
 
         <SlideIn direction="up" delay={0.1}>
-          <h1 className="mt-7 font-display text-5xl font-bold leading-[0.98] tracking-[-0.04em] text-balance md:text-7xl">
+          {/* 2.5rem no celular: a 3rem o destaque partia ("antes / do código"). */}
+          <h1 className="mt-7 font-display text-[2.5rem] font-bold leading-[0.98] tracking-[-0.04em] text-balance sm:text-5xl md:text-7xl">
             {servico.titulo.antes}{" "}
             <span className="text-gradient-brand">{servico.titulo.destaque}</span>
             {servico.titulo.depois ? ` ${servico.titulo.depois}` : null}
@@ -111,7 +128,9 @@ export function ServiceHero({ servico }: Props) {
           </p>
         </SlideIn>
 
-        <SlideIn direction="up" delay={0.26}>
+        {/* `w-full` no celular: a coluna centrada encolheria o wrapper até a
+            largura do maior botão, e os botões não chegariam à largura total. */}
+        <SlideIn direction="up" delay={0.26} className="w-full sm:w-auto">
           <ContactActions className="mt-10 justify-center" />
         </SlideIn>
 

@@ -509,7 +509,7 @@ export const SERVICOS: readonly Servico[] = [
       {
         pergunta: "Faz design de marca também?",
         resposta:
-          "Não. Trabalho com a identidade que você já tem, ou com um designer de marca. O que faço é interface de produto.",
+          "Sim, faço design de marca. E como também desenho a interface, a identidade já nasce pensada pra tela.",
       },
       {
         pergunta: "E se eu quiser que você construa depois?",

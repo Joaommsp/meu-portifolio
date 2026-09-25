@@ -1,6 +1,9 @@
 import { ScrollReveal } from "@/components/animations"
 import { ServiceCard } from "@/components/services/ServiceCard"
+import { ANCORA_SERVICOS } from "@/lib/rotas"
 import { SERVICOS } from "@/lib/servicos-content"
+import { SECAO_HOME } from "@/components/sections/secao"
+import { cn } from "@/lib/utils"
 
 /**
  * A seção que faz a pergunta: quatro frentes de trabalho, cada uma com o
@@ -17,8 +20,8 @@ import { SERVICOS } from "@/lib/servicos-content"
 export function Services() {
   return (
     <section
-      id="services"
-      className="container mx-auto max-w-6xl scroll-mt-20 px-5 py-32 sm:px-6"
+      id={ANCORA_SERVICOS}
+      className={cn(SECAO_HOME, "scroll-mt-20")}
     >
       <ScrollReveal>
         <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">

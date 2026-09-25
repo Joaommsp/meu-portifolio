@@ -7,6 +7,7 @@ import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { GithubIcon } from "@/components/icons/brand-icons"
 import { GithubReadme } from "@/components/sections/GithubReadme"
 import { GithubContributions } from "@/components/sections/GithubContributions"
+import { ListaExpansivel } from "@/components/misc/ListaExpansivel"
 import {
   fetchGithubProfile,
   fetchGithubRepos,
@@ -24,13 +25,16 @@ export const metadata: Metadata = {
 
 const PERFIL_URL = "https://github.com/Joaommsp"
 
+/** Quantos repositórios aparecem antes do "mostrar mais". */
+const REPOS_VISIVEIS = 6
+
 function Numero({ valor, rotulo }: { valor: number; rotulo: string }) {
   return (
     <div>
       <span className="block font-display text-2xl font-bold tabular-nums tracking-tight">
         {valor.toLocaleString("pt-BR")}
       </span>
-      <span className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+      <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {rotulo}
       </span>
     </div>
@@ -90,7 +94,7 @@ function CartaoRepo({ repo }: { repo: GithubRepo }) {
 
 function Rotulo({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-5 font-mono text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground">
+    <p className="mb-5 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
       {children}
     </p>
   )
@@ -259,8 +263,13 @@ export default async function GithubPage() {
                 <ScrollReveal>
                   <Rotulo>Repositórios Públicos · {repos.length}</Rotulo>
                 </ScrollReveal>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {repos.map((repo, i) => (
+                {/* Abre com os primeiros: os 24 empilhados davam ~4.200px no
+                    celular, mais da metade da página. */}
+                <ListaExpansivel
+                  className="grid gap-4 sm:grid-cols-2"
+                  inicial={REPOS_VISIVEIS}
+                  nomeItens="repositórios"
+                  itens={repos.map((repo, i) => (
                     <ScrollReveal
                       key={repo.id}
                       delay={Math.min(i, 6) * 0.04}
@@ -269,7 +278,7 @@ export default async function GithubPage() {
                       <CartaoRepo repo={repo} />
                     </ScrollReveal>
                   ))}
-                </div>
+                />
               </div>
             )}
           </div>

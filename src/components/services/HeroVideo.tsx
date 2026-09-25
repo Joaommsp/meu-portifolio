@@ -8,6 +8,12 @@ type Props = {
   poster: string
   /** Menor que 1 pra vídeo com cor e tipografia, que competem com o título. */
   opacidade?: number
+  /**
+   * O fundo abaixo de `lg`, onde o vídeo não entra. Vem de fora, mas quem
+   * decide ONDE ele aparece é este componente: os três `lg` (vídeo, botão e
+   * fundo) e o `MIDIA_VIDEO` ficam no mesmo arquivo e não saem de sincronia.
+   */
+  fundoAbaixoDoLg: React.ReactNode
 }
 
 /**
@@ -24,7 +30,7 @@ type Props = {
  * Ele é o que mantém a página acessível agora que a preferência do sistema
  * deixou de ser respeitada.
  */
-export function HeroVideo({ src, poster, opacidade }: Props) {
+export function HeroVideo({ src, poster, opacidade, fundoAbaixoDoLg }: Props) {
   const ref = React.useRef<HTMLVideoElement>(null)
   const [tocando, setTocando] = React.useState(false)
 
@@ -38,10 +44,30 @@ export function HeroVideo({ src, poster, opacidade }: Props) {
   }, [])
 
   React.useEffect(() => {
+    const mq = window.matchMedia(MIDIA_VIDEO)
+
     // `autoPlay` cobre o caso normal. Este play() existe pro caso de a
     // política do navegador ter recusado o primeiro: recusa não é erro, o
     // botão continua ali.
-    void ref.current?.play().catch(() => {})
+    if (mq.matches) void ref.current?.play().catch(() => {})
+
+    /* O `media` do `<source>` só é lido quando o navegador escolhe a fonte.
+       Quem cruza o `lg` sem recarregar (tablet girando, janela alargada)
+       ficaria com o vídeo sem arquivo e o botão sem efeito: aqui ele carrega.
+       No sentido contrário, pausa, pra não decodificar escondido. */
+    function aoCruzarLg() {
+      const video = ref.current
+      if (!video) return
+      if (!mq.matches) {
+        video.pause()
+        return
+      }
+      if (!video.currentSrc) video.load()
+      void video.play().catch(() => {})
+    }
+
+    mq.addEventListener("change", aoCruzarLg)
+    return () => mq.removeEventListener("change", aoCruzarLg)
   }, [])
 
   function alternar() {
@@ -59,10 +85,22 @@ export function HeroVideo({ src, poster, opacidade }: Props) {
 
           A máscara radial dissolve as quatro bordas. O quadro tem um leve
           degradê cinza nesse branco, e sob multiply a borda da caixa apareceria
-          como uma emenda reta. */}
+          como uma emenda reta.
+
+          `hidden lg:block` + `<source media>`: abaixo de `lg` quem aparece é o
+          `fundoAbaixoDoLg`, e o `media` é o que impede o navegador de baixar
+          o vídeo só pra esconder. O `poster` ainda é baixado (o navegador busca
+          o atributo mesmo com o elemento escondido): 50 a 100 KB, aceitos pra
+          manter o quadro pintado no SSR do desktop. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 mix-blend-multiply"
+        className="pointer-events-none absolute inset-0 lg:hidden"
+      >
+        {fundoAbaixoDoLg}
+      </div>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 hidden mix-blend-multiply lg:block"
         style={{ maskImage: MASCARA, WebkitMaskImage: MASCARA, opacity: opacidade }}
       >
         {/* O arquivo é VAI-E-VOLTA: monta o site, segura montado por ~3s,
@@ -71,7 +109,6 @@ export function HeroVideo({ src, poster, opacidade }: Props) {
         <video
           ref={montar}
           className="size-full object-cover"
-          src={src}
           poster={poster}
           autoPlay
           muted
@@ -80,7 +117,9 @@ export function HeroVideo({ src, poster, opacidade }: Props) {
           preload="auto"
           onPlay={() => setTocando(true)}
           onPause={() => setTocando(false)}
-        />
+        >
+          <source src={src} media={MIDIA_VIDEO} />
+        </video>
       </div>
 
       <button
@@ -89,7 +128,7 @@ export function HeroVideo({ src, poster, opacidade }: Props) {
         aria-label={
           tocando ? "Pausar a animação de fundo" : "Reproduzir a animação de fundo"
         }
-        className="absolute right-5 bottom-5 z-10 flex size-11 items-center justify-center rounded-full border border-border bg-card/80 text-muted-foreground backdrop-blur-sm transition-colors hover:text-brand"
+        className="absolute right-5 bottom-5 z-10 hidden size-11 items-center justify-center rounded-full border border-border bg-card/80 text-muted-foreground backdrop-blur-sm transition-colors hover:text-brand lg:flex"
       >
         {tocando ? (
           <Pause className="size-4" aria-hidden />
@@ -114,3 +153,6 @@ export function HeroVideo({ src, poster, opacidade }: Props) {
  */
 const MASCARA =
   "radial-gradient(ellipse 90% 60% at 50% 50%, #000 26%, transparent 76%)"
+
+/** O `lg` do Tailwind (64rem). Tem que bater com o `lg:` das classes acima. */
+const MIDIA_VIDEO = "(min-width: 64rem)"

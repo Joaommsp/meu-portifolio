@@ -37,17 +37,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { listGames, deleteGame, updateGame } from "@/lib/firebase/games"
-import { GAME_STATUSES, type GameStatus } from "@/types/game"
+import { GAME_STATUS_LABEL, GAME_STATUSES, type GameStatus } from "@/types/game"
 import type { Game } from "@/types/game"
 import { cn } from "@/lib/utils"
-
-const STATUS_LABEL: Record<GameStatus, string> = {
-  jogando: "Jogando",
-  concluido: "Concluído",
-  rejogando: "Rejogando",
-  wishlist: "Wishlist",
-  abandonado: "Abandonado",
-}
 
 type VisibilityFilter = "all" | "published" | "draft"
 
@@ -176,7 +168,7 @@ export default function AdminGamesPage() {
             </FilterPill>
             {GAME_STATUSES.map((s) => (
               <FilterPill key={s} active={status === s} onClick={() => setStatus(s)}>
-                {STATUS_LABEL[s]}
+                {GAME_STATUS_LABEL[s]}
               </FilterPill>
             ))}
           </div>
@@ -227,7 +219,7 @@ export default function AdminGamesPage() {
                       variant="outline"
                       className="font-mono text-[0.65rem] uppercase"
                     >
-                      {STATUS_LABEL[game.status]}
+                      {GAME_STATUS_LABEL[game.status]}
                     </Badge>
                     {game.published ? (
                       <Badge

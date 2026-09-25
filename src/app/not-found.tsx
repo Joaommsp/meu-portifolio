@@ -57,7 +57,7 @@ export default function NotFound() {
           </h1>
 
           {/* Glitch line */}
-          <div className="mt-2 flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-widest text-muted-foreground">
+          <div className="mt-2 flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
             <span className="h-px w-8 bg-brand" />
             <span>signal lost</span>
             <span className="h-px w-8 bg-brand" />
@@ -121,8 +121,9 @@ export default function NotFound() {
             ))}
           </div>
 
-          {/* Footer hint */}
-          <p className="mt-12 font-mono text-[0.7rem] uppercase tracking-widest text-muted-foreground">
+          {/* Footer hint. Some em tela de toque: lá não tem teclado pro atalho,
+              e o botão "Buscar" acima já abre a mesma busca. */}
+          <p className="mt-12 font-mono text-xs uppercase tracking-widest text-muted-foreground pointer-coarse:hidden">
             <kbd className="mr-1 rounded border border-border/60 bg-muted/30 px-1.5 py-0.5">
               Ctrl
             </kbd>
