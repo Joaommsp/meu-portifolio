@@ -1,7 +1,10 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
+import { CopyDoServico } from "@/components/services/CopyDoServico"
 import { ServiceHero } from "@/components/services/ServiceHero"
+import { VideoDoPalco } from "@/components/services/VideoDoPalco"
 import { ServiceProof } from "@/components/services/ServiceProof"
 import {
   CtaFinal,
@@ -90,9 +93,28 @@ export default async function ServicoPage({ params }: Props) {
   const n = (chave: string) =>
     String(ordem.indexOf(chave) + 1).padStart(2, "0")
 
+  /* Serviço com vídeo de palco: o hero é só o vídeo, e a copy vira a primeira
+     faixa da folha que sobe por cima dele. Os outros seguem com a copy sobre
+     o fundo animado. */
+  const { videoPalco } = servico
   return (
-    <>
-      <ServiceHero servico={servico} />
+    <HeroSobreposto
+      soNoDesktop={Boolean(videoPalco)}
+      hero={
+        videoPalco ? (
+          <VideoDoPalco
+            src={videoPalco.src}
+            poster={videoPalco.poster}
+            fundo={videoPalco.fundo}
+          />
+        ) : (
+          <ServiceHero servico={servico} />
+        )
+      }
+    >
+      {videoPalco && (
+        <CopyDoServico servico={servico} className="py-20 md:py-28" />
+      )}
       <Entregaveis servico={servico} numero={n("entregaveis")} />
       <Processo servico={servico} numero={n("processo")} />
       {provas.length > 0 && (
@@ -102,6 +124,6 @@ export default async function ServicoPage({ params }: Props) {
       <Faq servico={servico} numero={n("faq")} />
       <Relacionados servico={servico} numero={n("relacionados")} />
       <CtaFinal />
-    </>
+    </HeroSobreposto>
   )
 }

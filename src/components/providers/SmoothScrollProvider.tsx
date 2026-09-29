@@ -45,6 +45,19 @@ const SILENCIO_APOS_ROTA_MS = 700
  * aqui anota quase nada, e o pouco que anota chega atrasado. O `scroll` do DOM
  * fica só pro caminho sem Lenis.
  */
+type RolarPara = (y: number, opcoes?: { imediato?: boolean }) => void
+
+/**
+ * Rolar por código passa por aqui. Com o Lenis no ar, `window.scrollTo` é
+ * desfeito no frame seguinte (ele guarda a posição dele); quem manda no scroll
+ * é quem tem que mover.
+ */
+const RolagemContexto = React.createContext<RolarPara>((y) => window.scrollTo(0, y))
+
+export function useRolarPara(): RolarPara {
+  return React.useContext(RolagemContexto)
+}
+
 export function SmoothScrollProvider({
   children,
 }: {
@@ -156,5 +169,13 @@ export function SmoothScrollProvider({
     return () => cancelAnimationFrame(raf)
   }, [pathname])
 
-  return <>{children}</>
+  const rolarPara = React.useCallback<RolarPara>((y, opcoes) => {
+    const lenis = lenisRef.current
+    if (lenis) lenis.scrollTo(y, { immediate: opcoes?.imediato })
+    else window.scrollTo({ top: y, behavior: opcoes?.imediato ? "instant" : "smooth" })
+  }, [])
+
+  return (
+    <RolagemContexto.Provider value={rolarPara}>{children}</RolagemContexto.Provider>
+  )
 }

@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { Pause, Play } from "lucide-react"
+
+import { BotaoPausa, useVideoPausavel } from "@/components/services/video-pausavel"
 
 type Props = {
   src: string
@@ -25,23 +26,11 @@ type Props = {
  * montado, e quem tinha a preferência ativa no sistema (muita gente tem sem
  * saber) nunca via a animação nem entendia por quê.
  *
- * O BOTÃO NÃO É OPCIONAL. A WCAG 2.2.2 exige um jeito de parar qualquer coisa
- * que se mova sozinha por mais de 5 segundos, e isto roda em loop infinito.
- * Ele é o que mantém a página acessível agora que a preferência do sistema
- * deixou de ser respeitada.
+ * O botão de pausa (BotaoPausa) é o que mantém a página acessível agora que a
+ * preferência do sistema deixou de ser respeitada.
  */
 export function HeroVideo({ src, poster, opacidade, fundoAbaixoDoLg }: Props) {
-  const ref = React.useRef<HTMLVideoElement>(null)
-  const [tocando, setTocando] = React.useState(false)
-
-  /* O vídeo tem `autoPlay`, então ele já começou a tocar quando o React
-     hidrata: o evento `play` disparou antes de existir listener, e o botão
-     ficava dizendo "Reproduzir" com o vídeo rodando. O ref callback roda no
-     commit e lê o estado real do elemento. */
-  const montar = React.useCallback((node: HTMLVideoElement | null) => {
-    ref.current = node
-    if (node) setTocando(!node.paused)
-  }, [])
+  const { ref, montar, tocando, alternar, aoTocar, aoPausar } = useVideoPausavel()
 
   React.useEffect(() => {
     const mq = window.matchMedia(MIDIA_VIDEO)
@@ -68,14 +57,7 @@ export function HeroVideo({ src, poster, opacidade, fundoAbaixoDoLg }: Props) {
 
     mq.addEventListener("change", aoCruzarLg)
     return () => mq.removeEventListener("change", aoCruzarLg)
-  }, [])
-
-  function alternar() {
-    const video = ref.current
-    if (!video) return
-    if (video.paused) void video.play().catch(() => {})
-    else video.pause()
-  }
+  }, [ref])
 
   return (
     <>
@@ -115,27 +97,18 @@ export function HeroVideo({ src, poster, opacidade, fundoAbaixoDoLg }: Props) {
           loop
           playsInline
           preload="auto"
-          onPlay={() => setTocando(true)}
-          onPause={() => setTocando(false)}
+          onPlay={aoTocar}
+          onPause={aoPausar}
         >
           <source src={src} media={MIDIA_VIDEO} />
         </video>
       </div>
 
-      <button
-        type="button"
+      <BotaoPausa
+        tocando={tocando}
         onClick={alternar}
-        aria-label={
-          tocando ? "Pausar a animação de fundo" : "Reproduzir a animação de fundo"
-        }
-        className="absolute right-5 bottom-5 z-10 hidden size-11 items-center justify-center rounded-full border border-border bg-card/80 text-muted-foreground backdrop-blur-sm transition-colors hover:text-brand lg:flex"
-      >
-        {tocando ? (
-          <Pause className="size-4" aria-hidden />
-        ) : (
-          <Play className="size-4" aria-hidden />
-        )}
-      </button>
+        className="right-5 bottom-5 hidden lg:flex"
+      />
     </>
   )
 }

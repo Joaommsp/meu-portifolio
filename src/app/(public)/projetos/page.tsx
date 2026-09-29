@@ -17,6 +17,7 @@ import {
 } from "@/components/listagem/useListagem"
 import { contarRotulos, temTodosRotulos } from "@/components/listagem/rotulos"
 import { PageHero } from "@/components/sections/PageHero"
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
 import { getAllProjects } from "@/lib/data/projects"
 import { PROJECT_CATEGORIES, type ProjectCategory } from "@/types/project"
 import type { Project } from "@/types/project"
@@ -96,24 +97,25 @@ export default function ProjetosPage() {
   }
 
   return (
-    <>
-      {/* Hero */}
-      <PageHero
-        rotulo="Projetos"
-        janela="projetos"
-        titulo="O que ando construindo"
-        descricao={
-          <>
-            {/* Sem número enquanto carrega ou com zero. */}
-            {sourceProjects.length > 0
-              ? contagem(sourceProjects.length, "projeto", "projetos")
-              : "Projetos"}{" "}
-            entre clientes, side-projects e experimentos. Use os filtros pra
-            refinar.
-          </>
-        }
-      />
-
+    <HeroSobreposto
+      hero={
+        <PageHero
+          rotulo="Projetos"
+          janela="projetos"
+          titulo="O que ando construindo"
+          descricao={
+            <>
+              {/* Sem número enquanto carrega ou com zero. */}
+              {sourceProjects.length > 0
+                ? contagem(sourceProjects.length, "projeto", "projetos")
+                : "Projetos"}{" "}
+              entre clientes, side-projects e experimentos. Use os filtros pra
+              refinar.
+            </>
+          }
+        />
+      }
+    >
       {/* Filtros + lista */}
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-24">
         <div className="space-y-6 rounded-2xl border border-border bg-card/50 p-6">
@@ -233,6 +235,6 @@ export default function ProjetosPage() {
           />
         )}
       </section>
-    </>
+    </HeroSobreposto>
   )
 }

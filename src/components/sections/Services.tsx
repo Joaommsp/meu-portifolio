@@ -13,9 +13,9 @@ import { cn } from "@/lib/utils"
  * `/servicos/[slug]`: a promessa que aparece no card é literalmente a que
  * abre a página, sem duas cópias pra sair de sincronia.
  *
- * Fica entre `About` e `Skills` de propósito: depois de dizer quem é, antes
- * de listar ferramenta. Quem chega aqui já sabe com quem está falando e ainda
- * não precisa saber em qual stack.
+ * Vem logo depois do cartão de apresentação (ProfileIntro) e antes do
+ * `About`: quem chega vê primeiro o que pode contratar, e o "sobre mim" vem
+ * depois, pra quem quer saber com quem está falando.
  */
 export function Services() {
   return (
@@ -25,7 +25,7 @@ export function Services() {
     >
       <ScrollReveal>
         <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-          02 · Serviços
+          01 · Serviços
         </p>
       </ScrollReveal>
       <ScrollReveal delay={0.05}>

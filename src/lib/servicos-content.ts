@@ -25,7 +25,7 @@ type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>
 /** Efeito animado do card, reaproveitado como fundo do hero da página. */
 export type EfeitoServico = "ondas" | "feixes" | "meteoros" | "blobs"
 
-export type Servico = {
+type ServicoBase = {
   slug: string
   /** Índice, o mesmo do card na home. */
   numero: string
@@ -46,11 +46,6 @@ export type Servico = {
    * que é o que liga visualmente o card clicado à página que abre.
    */
   efeito: EfeitoServico
-  /**
-   * Vídeo do hero. `opacidade` existe pra vídeo com cor e tipografia própria,
-   * que atrás do título da página compete com a leitura. Sem ela, cheio.
-   */
-  video?: { src: string; poster: string; opacidade?: number }
   entregaveis: readonly { icone: IconComponent; titulo: string; texto: string }[]
   processo: readonly { numero: string; titulo: string; texto: string }[]
   escopo: { incluso: readonly string[]; tambem: readonly string[] }
@@ -61,6 +56,35 @@ export type Servico = {
    */
   provas: { categorias: readonly ProjectCategory[]; projetos?: readonly string[] }
 }
+
+/**
+ * O topo da página é um OU outro: copy sobre o fundo animado (com vídeo de
+ * fundo opcional) ou o vídeo de palco com a copy abaixo. O tipo barra os dois
+ * juntos, que a página ignoraria sem avisar.
+ */
+type ComFundoAnimado = {
+  /**
+   * Vídeo do hero. `opacidade` existe pra vídeo com cor e tipografia própria,
+   * que atrás do título da página compete com a leitura. Sem ela, cheio.
+   */
+  video?: { src: string; poster: string; opacidade?: number }
+  videoPalco?: never
+}
+
+type ComVideoDePalco = {
+  /**
+   * Hero que é SÓ o vídeo, com a copy abaixo, na folha que sobe por cima dele.
+   * Substitui `efeito` e `video` no topo da página. `fundo` é a cor chapada do
+   * fundo do próprio vídeo, pra sobra ao redor dele (object-contain) sumir.
+   */
+  videoPalco: { src: string; poster: string; fundo: string }
+  video?: never
+}
+
+export type Servico = ServicoBase & (ComFundoAnimado | ComVideoDePalco)
+
+/** A cor do fundo renderizado nos vídeos de palco (não é o `--background`). */
+const FUNDO_VIDEO_PALCO = "#faf6eb"
 
 /**
  * Conteúdo das quatro páginas de serviço.
@@ -84,10 +108,10 @@ export const SERVICOS: readonly Servico[] = [
     promessa: "Construo do zero e cuido do seu site",
     tags: ["Landing page", "Redesign", "Institucional", "Blog"],
     efeito: "ondas",
-    video: {
-      src: "/videos/site-montando.mp4",
-      poster: "/videos/site-montando.jpg",
-      opacidade: 0.45,
+    videoPalco: {
+      src: "/videos/site-no-ar.mp4",
+      poster: "/videos/site-no-ar.jpg",
+      fundo: FUNDO_VIDEO_PALCO,
     },
     entregaveis: [
       {
@@ -195,10 +219,10 @@ export const SERVICOS: readonly Servico[] = [
     promessa: "Sistema de gestão feito pro uso diário",
     tags: ["Dashboard", "Painel admin", "Relatórios", "API"],
     efeito: "feixes",
-    video: {
-      src: "/videos/painel-montando.mp4",
-      poster: "/videos/painel-montando.jpg",
-      opacidade: 0.45,
+    videoPalco: {
+      src: "/videos/painel-sistemas.mp4",
+      poster: "/videos/painel-sistemas.jpg",
+      fundo: FUNDO_VIDEO_PALCO,
     },
     entregaveis: [
       {
@@ -305,13 +329,13 @@ export const SERVICOS: readonly Servico[] = [
     titulo: { antes: "Um app para", destaque: "Android e iOS" },
     resumo:
       "React Native: um código, as duas lojas. Do protótipo à publicação, incluindo a papelada de conta de desenvolvedor e o processo de revisão.",
-    promessa: "Android e iOS a partir de um código só",
+    promessa: "Android e iOS",
     tags: ["React Native", "iOS", "Android", "Publicação nas lojas"],
     efeito: "meteoros",
-    video: {
-      src: "/videos/app-montando.mp4",
-      poster: "/videos/app-montando.jpg",
-      opacidade: 0.45,
+    videoPalco: {
+      src: "/videos/app-duas-lojas.mp4",
+      poster: "/videos/app-duas-lojas.jpg",
+      fundo: FUNDO_VIDEO_PALCO,
     },
     entregaveis: [
       {
@@ -422,6 +446,11 @@ export const SERVICOS: readonly Servico[] = [
     promessa: "Desenho a interface antes da primeira linha",
     tags: ["UI/UX", "Design system", "Protótipo", "Figma"],
     efeito: "blobs",
+    videoPalco: {
+      src: "/videos/design-antes-do-codigo.mp4",
+      poster: "/videos/design-antes-do-codigo.jpg",
+      fundo: FUNDO_VIDEO_PALCO,
+    },
     entregaveis: [
       {
         icone: Compass,

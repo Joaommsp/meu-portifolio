@@ -367,7 +367,7 @@ export function About() {
     >
       <ScrollReveal>
         <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-          01 · Sobre
+          02 · Sobre
         </p>
       </ScrollReveal>
 

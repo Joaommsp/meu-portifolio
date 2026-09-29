@@ -4,6 +4,7 @@ import { ExternalLink } from "lucide-react"
 
 import { ScrollReveal } from "@/components/animations"
 import { PageHero } from "@/components/sections/PageHero"
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
 import { BehanceIcon } from "@/components/icons/brand-icons"
 import {
   fetchBehanceProjects,
@@ -67,61 +68,62 @@ export default async function BehancePage() {
   }, {})
 
   return (
-    <>
-      {/* Hero */}
-      <PageHero
-        rotulo="Behance"
-        icone={<BehanceIcon className="size-4" aria-hidden />}
-        janela="behance"
-        titulo={
-          <>
-            Design <span className="text-gradient-brand-claro">publicado</span>
-          </>
-        }
-        descricao={
-          <>
-            Interfaces, landing pages e peças de social media que publiquei no
-            Behance como{" "}
-            <span className="font-mono text-foreground">{BEHANCE_HANDLE}</span>.
-          </>
-        }
-      >
-        <div className="flex flex-col gap-8">
-          {projects.length > 0 && (
-            <div className="flex flex-wrap gap-8 border-t border-border pt-6">
-              <div>
-                <span className="block font-display text-2xl font-bold tabular-nums tracking-tight">
-                  {projects.length}
-                </span>
-                <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                  Projetos
-                </span>
-              </div>
-              {Object.entries(porCategoria).map(([cat, n]) => (
-                <div key={cat}>
+    <HeroSobreposto
+      hero={
+        <PageHero
+          rotulo="Behance"
+          icone={<BehanceIcon className="size-4" aria-hidden />}
+          janela="behance"
+          titulo={
+            <>
+              Design <span className="text-gradient-brand-claro">publicado</span>
+            </>
+          }
+          descricao={
+            <>
+              Interfaces, landing pages e peças de social media que publiquei no
+              Behance como{" "}
+              <span className="font-mono text-foreground">{BEHANCE_HANDLE}</span>.
+            </>
+          }
+        >
+          <div className="flex flex-col gap-8">
+            {projects.length > 0 && (
+              <div className="flex flex-wrap gap-8 border-t border-border pt-6">
+                <div>
                   <span className="block font-display text-2xl font-bold tabular-nums tracking-tight">
-                    {n}
+                    {projects.length}
                   </span>
                   <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                    {cat}
+                    Projetos
                   </span>
                 </div>
-              ))}
-            </div>
-          )}
+                {Object.entries(porCategoria).map(([cat, n]) => (
+                  <div key={cat}>
+                    <span className="block font-display text-2xl font-bold tabular-nums tracking-tight">
+                      {n}
+                    </span>
+                    <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                      {cat}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
 
-          <a
-            href={BEHANCE_PROFILE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex w-fit items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
-          >
-            <BehanceIcon className="size-4" />
-            Ver perfil no Behance
-          </a>
-        </div>
-      </PageHero>
-
+            <a
+              href={BEHANCE_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-fit items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
+            >
+              <BehanceIcon className="size-4" />
+              Ver perfil no Behance
+            </a>
+          </div>
+        </PageHero>
+      }
+    >
       {/* Projetos */}
       <section className="container mx-auto max-w-6xl px-5 py-12 sm:px-6">
         {ok ? (
@@ -155,6 +157,6 @@ export default async function BehancePage() {
           </ScrollReveal>
         )}
       </section>
-    </>
+    </HeroSobreposto>
   )
 }

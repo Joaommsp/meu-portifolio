@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "motion/react"
-import { ArrowRight, ArrowDown, Mail } from "lucide-react"
+import { ArrowRight, Mail } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -199,16 +199,6 @@ export function Hero() {
             </div>
           </div>
         </WindowFrame>
-      </div>
-
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground"
-      >
-        <span className="font-mono text-xs uppercase tracking-[0.3em]">
-          Role
-        </span>
-        <ArrowDown className="size-4 animate-bounce" />
       </div>
     </section>
   )

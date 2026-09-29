@@ -20,6 +20,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { GithubIcon } from "@/components/icons/brand-icons"
 import { ScrollReveal } from "@/components/animations"
 import { PageHero } from "@/components/sections/PageHero"
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
 import { requireAuth, firebaseConfigured } from "@/lib/firebase/config"
 import {
   signInWithGitHub,
@@ -184,28 +185,29 @@ export default function GuestbookPage() {
   const charsLeft = MAX_MESSAGE_LENGTH - message.length
 
   return (
-    <>
-      {/* Hero */}
-      <PageHero
-        rotulo="Guestbook"
-        icone={<MessageCircle className="size-3.5" aria-hidden />}
-        janela="guestbook"
-        titulo={
-          <>
-            Passou por
-            <br />
-            <span className="text-gradient-brand-claro">aqui?</span>
-          </>
-        }
-        descricao={
-          <>
-            Deixa uma mensagem. Não importa se é &ldquo;oi&rdquo;,
-            comentário sobre algum projeto, ou recomendação aleatória — todo
-            mundo lê.
-          </>
-        }
-      />
-
+    <HeroSobreposto
+      hero={
+        <PageHero
+          rotulo="Guestbook"
+          icone={<MessageCircle className="size-3.5" aria-hidden />}
+          janela="guestbook"
+          titulo={
+            <>
+              Passou por
+              <br />
+              <span className="text-gradient-brand-claro">aqui?</span>
+            </>
+          }
+          descricao={
+            <>
+              Deixa uma mensagem. Não importa se é &ldquo;oi&rdquo;,
+              comentário sobre algum projeto, ou recomendação aleatória — todo
+              mundo lê.
+            </>
+          }
+        />
+      }
+    >
       {/* Form ou Sign-in */}
       <section className="container mx-auto max-w-2xl px-5 sm:px-6 pt-12 pb-12">
         <ScrollReveal>
@@ -440,7 +442,7 @@ export default function GuestbookPage() {
           </div>
         )}
       </section>
-    </>
+    </HeroSobreposto>
   )
 }
 

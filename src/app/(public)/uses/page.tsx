@@ -4,6 +4,7 @@ import { ExternalLink } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { ScrollReveal } from "@/components/animations"
 import { PageHero } from "@/components/sections/PageHero"
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
 import { getUsesCategories } from "@/lib/data/uses"
 import type { UsesItem } from "@/types/uses"
 import { cn } from "@/lib/utils"
@@ -82,35 +83,36 @@ export default async function UsesPage() {
   const totalItens = categorias.reduce((t, c) => t + c.items.length, 0)
 
   return (
-    <>
-      {/* Hero */}
-      <PageHero
-        rotulo="Uses"
-        janela="uses"
-        titulo={
-          <>
-            Hardware, software e{" "}
-            <span className="text-gradient-brand-claro">trampo diário</span>
-          </>
-        }
-        descricao={
-          <>
-            {totalItens > 0 ? `As ${totalItens} ferramentas` : "As ferramentas"}{" "}
-            que uso no dia-a-dia pra construir produtos digitais. Atualizada
-            quando algo muda. Inspirado por{" "}
-            <a
-              href="https://uses.tech"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-brand transition-opacity hover:underline hover:opacity-80"
-            >
-              uses.tech
-            </a>
-            .
-          </>
-        }
-      />
-
+    <HeroSobreposto
+      hero={
+        <PageHero
+          rotulo="Uses"
+          janela="uses"
+          titulo={
+            <>
+              Hardware, software e{" "}
+              <span className="text-gradient-brand-claro">trampo diário</span>
+            </>
+          }
+          descricao={
+            <>
+              {totalItens > 0 ? `As ${totalItens} ferramentas` : "As ferramentas"}{" "}
+              que uso no dia-a-dia pra construir produtos digitais. Atualizada
+              quando algo muda. Inspirado por{" "}
+              <a
+                href="https://uses.tech"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand transition-opacity hover:underline hover:opacity-80"
+              >
+                uses.tech
+              </a>
+              .
+            </>
+          }
+        />
+      }
+    >
       {/* Categorias */}
       {categorias.length > 0 ? (
         <section className="container mx-auto max-w-5xl space-y-16 px-5 py-16 sm:px-6">
@@ -173,6 +175,6 @@ export default async function UsesPage() {
           </div>
         </ScrollReveal>
       </section>
-    </>
+    </HeroSobreposto>
   )
 }

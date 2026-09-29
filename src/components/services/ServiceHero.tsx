@@ -1,12 +1,8 @@
-import Link from "next/link"
-
-import { FadeIn, SlideIn } from "@/components/animations"
 import { GradientOrbs, NoiseTexture } from "@/components/backgrounds"
-import { ContactActions } from "@/components/services/ContactActions"
 import { EFEITOS } from "@/components/services/effects"
+import { CopyDoServico } from "@/components/services/CopyDoServico"
 import { HeroVideo } from "@/components/services/HeroVideo"
-import { DISPONIBILIDADE } from "@/lib/site"
-import { ROTA_SERVICOS } from "@/lib/rotas"
+import { CASCA_HERO_BASE } from "@/components/sections/secao"
 import type { Servico } from "@/lib/servicos-content"
 
 const ORBS = [
@@ -48,6 +44,9 @@ type Props = { servico: Servico }
  * vídeo cai gigante atrás do resumo. Ali vale o efeito do card, como nas
  * páginas sem vídeo.
  *
+ * Ocupa uma tela, o palco do HeroSobreposto (`CASCA_HERO_BASE`, sem o
+ * `isolate` da CASCA_HERO, porque aqui ele quebraria o blend):
+ *
  * A seção NÃO leva `isolate`. Ele criaria um grupo de blending isolado, e o
  * `mix-blend-multiply` do vídeo passaria a compor contra um backdrop
  * transparente em vez do creme do body: o branco do vídeo voltaria a aparecer
@@ -68,7 +67,7 @@ export function ServiceHero({ servico }: Props) {
   )
 
   return (
-    <section className="relative flex min-h-152 items-center overflow-hidden lg:min-h-176">
+    <section className={CASCA_HERO_BASE}>
       {video ? (
         <HeroVideo
           src={video.src}
@@ -92,55 +91,7 @@ export function ServiceHero({ servico }: Props) {
         style={{ background: "oklch(from var(--background) l c h / 0.66)" }}
       />
 
-      <div className="container relative mx-auto flex max-w-3xl flex-col items-center px-5 py-24 text-center sm:px-6 md:py-28">
-        <FadeIn>
-          <nav
-            aria-label="Trilha"
-            className="flex items-center justify-center gap-2.5 font-mono text-xs font-medium uppercase tracking-[0.3em]"
-          >
-            {/* Padding com margem negativa: a área de toque sobe pra 44px sem
-                mexer na linha. */}
-            <Link
-              href={ROTA_SERVICOS}
-              className="-my-3.5 py-3.5 text-muted-foreground hover:text-brand"
-            >
-              Serviços
-            </Link>
-            <span aria-hidden className="text-muted-foreground">
-              /
-            </span>
-            <span className="text-brand">{servico.rotulo}</span>
-          </nav>
-        </FadeIn>
-
-        <SlideIn direction="up" delay={0.1}>
-          {/* 2.5rem no celular: a 3rem o destaque partia ("antes / do código"). */}
-          <h1 className="mt-7 font-display text-[2.5rem] font-bold leading-[0.98] tracking-[-0.04em] text-balance sm:text-5xl md:text-7xl">
-            {servico.titulo.antes}{" "}
-            <span className="text-gradient-brand">{servico.titulo.destaque}</span>
-            {servico.titulo.depois ? ` ${servico.titulo.depois}` : null}
-          </h1>
-        </SlideIn>
-
-        <SlideIn direction="up" delay={0.18}>
-          <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-            {servico.resumo}
-          </p>
-        </SlideIn>
-
-        {/* `w-full` no celular: a coluna centrada encolheria o wrapper até a
-            largura do maior botão, e os botões não chegariam à largura total. */}
-        <SlideIn direction="up" delay={0.26} className="w-full sm:w-auto">
-          <ContactActions className="mt-10 justify-center" />
-        </SlideIn>
-
-        <SlideIn direction="up" delay={0.34}>
-          <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs text-muted-foreground">
-            <li>{DISPONIBILIDADE.resposta}</li>
-            <li>{DISPONIBILIDADE.base}</li>
-          </ul>
-        </SlideIn>
-      </div>
+      <CopyDoServico servico={servico} className="py-24 md:py-28" />
     </section>
   )
 }

@@ -166,6 +166,17 @@ html[data-loaded="true"] {
   --wash-1: oklch(0.925 0.052 350);
   --wash-2: oklch(0.945 0.040 15);
   --wash-3: oklch(0.940 0.034 330);
+  /* As três manchas juntas: usadas pelo body::before e pelo palco do hero
+     preso (fundo-pagina), que precisa repetir o fundo da página. */
+  --wash-pagina:
+    radial-gradient(60% 50% at 12% 0%, var(--wash-1) 0%, transparent 70%),
+    radial-gradient(55% 45% at 92% 18%, var(--wash-2) 0%, transparent 72%),
+    radial-gradient(70% 45% at 50% 108%, var(--wash-3) 0%, transparent 70%);
+  /* Uma tela: o palco do hero preso, a trilha (duas), a margem da folha e o
+     min-h dos heros. Em `svh`, pra não saltar com a barra do navegador. */
+  --altura-palco: 100svh;
+  /* Sombra da folha, projetada pra cima sobre o hero preso. */
+  --sombra-folha: oklch(0.245 0.022 330 / 0.4);
 
   /* Orbs de atmosfera (GradientOrbs). Rosa fixo, um passo mais saturado que
      o wash pra continuar perceptível sob blur de 80px. Fica FORA do accent
@@ -373,10 +384,7 @@ html[data-loaded="true"] {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background:
-      radial-gradient(60% 50% at 12% 0%, var(--wash-1) 0%, transparent 70%),
-      radial-gradient(55% 45% at 92% 18%, var(--wash-2) 0%, transparent 72%),
-      radial-gradient(70% 45% at 50% 108%, var(--wash-3) 0%, transparent 70%);
+    background: var(--wash-pagina);
   }
   /* A página nunca desloca na horizontal.
      `clip` e não `hidden`: `hidden` transforma o elemento em container de
@@ -697,5 +705,27 @@ html.cursor-none-root * {
   input[type="tel"], textarea {
     cursor: text;
   }
+}
+
+/* ─── Hero sobreposto (HeroSobreposto) ─────────────────────────────────── */
+
+/* Fundo da página, opaco, pro palco preso do hero. `sticky` isola a
+   composição, então o palco precisa ser o creme (com o wash) em que o
+   `mix-blend-multiply` do vídeo compõe. O palco tem uma tela e fica em
+   top-0, então o wash rolando com ele coincide com o do body::before. */
+@utility fundo-pagina {
+  background-color: var(--background);
+  background-image: var(--wash-pagina);
+}
+
+/* A folha que sobe sobre o hero preso. Creme sólido: é ela que encobre o
+   hero. Sem o wash de propósito: `background-attachment: fixed` numa folha de
+   milhares de px repinta a cada frame no Android e é ignorado no iOS. */
+@utility folha-conteudo {
+  border-radius: calc(var(--radius) * 2.6) calc(var(--radius) * 2.6) 0 0;
+  background-color: var(--background);
+  box-shadow:
+    0 -40px 90px -40px var(--sombra-folha),
+    0 0 0 1px var(--border);
 }
 
