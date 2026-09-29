@@ -13,6 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { ScrollReveal } from "@/components/animations"
 import { PageHero } from "@/components/sections/PageHero"
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
 import { SpotifyNowPlaying } from "@/components/sections/SpotifyNowPlaying"
 import { getAllPublishedBooks } from "@/lib/data/books"
 import { getAllPublishedGames } from "@/lib/data/games"
@@ -106,47 +107,48 @@ export default async function NowPage() {
   const lastUpdatedDate = new Date(NOW_LAST_UPDATED)
 
   return (
-    <>
-      {/* Hero */}
-      <PageHero
-        rotulo="Agora"
-        icone={<Sparkles className="size-3.5" aria-hidden />}
-        janela="now"
-        titulo={
-          <>
-            O que ando
-            <br />
-            <span className="text-gradient-brand-claro">fazendo</span>
-          </>
-        }
-        descricao={
-          <>
-            Esta página é um snapshot de onde estou — trabalho,
-            estudos, hobbies. Inspirada no movimento{" "}
-            <a
-              href="https://nownownow.com/about"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-brand underline-offset-2 hover:underline"
-            >
-              /now
-            </a>{" "}
-            do Derek Sivers.
-          </>
-        }
-      >
-        <div className="flex flex-wrap items-center gap-4 font-mono text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <MapPin className="size-3.5 text-brand" />
-            {NOW_LOCATION}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Clock className="size-3.5 text-brand" />
-            Atualizado em {dateFormatter.format(lastUpdatedDate)}
-          </span>
-        </div>
-      </PageHero>
-
+    <HeroSobreposto
+      hero={
+        <PageHero
+          rotulo="Agora"
+          icone={<Sparkles className="size-3.5" aria-hidden />}
+          janela="now"
+          titulo={
+            <>
+              O que ando
+              <br />
+              <span className="text-gradient-brand-claro">fazendo</span>
+            </>
+          }
+          descricao={
+            <>
+              Esta página é um snapshot de onde estou — trabalho,
+              estudos, hobbies. Inspirada no movimento{" "}
+              <a
+                href="https://nownownow.com/about"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand underline-offset-2 hover:underline"
+              >
+                /now
+              </a>{" "}
+              do Derek Sivers.
+            </>
+          }
+        >
+          <div className="flex flex-wrap items-center gap-4 font-mono text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <MapPin className="size-3.5 text-brand" />
+              {NOW_LOCATION}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Clock className="size-3.5 text-brand" />
+              Atualizado em {dateFormatter.format(lastUpdatedDate)}
+            </span>
+          </div>
+        </PageHero>
+      }
+    >
       {/* Live snapshot — auto-puxado dos dados */}
       <section className="container mx-auto max-w-4xl px-5 sm:px-6 pt-12 pb-8">
         <ScrollReveal>
@@ -260,6 +262,6 @@ export default async function NowPage() {
           </div>
         </ScrollReveal>
       </section>
-    </>
+    </HeroSobreposto>
   )
 }

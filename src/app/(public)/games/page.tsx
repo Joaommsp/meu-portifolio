@@ -16,6 +16,7 @@ import {
 } from "@/components/listagem/useListagem"
 import { contarRotulos, temAlgumRotulo } from "@/components/listagem/rotulos"
 import { PageHero } from "@/components/sections/PageHero"
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
 import { getAllPublishedGames } from "@/lib/data/games"
 import { GAME_STATUSES, type GameStatus } from "@/types/game"
 
@@ -111,30 +112,31 @@ export default function GamesPage() {
   }
 
   return (
-    <>
-      {/* Hero */}
-      <PageHero
-        rotulo="Games"
-        janela="games"
-        titulo={
-          <>
-            Jogos que
-            <br />
-            <span className="text-gradient-brand-claro">marcaram</span>
-          </>
-        }
-        descricao={
-          <>
-            {/* Sem número enquanto carrega ou com zero: "0 jogos" lia como
-                "O jogos". */}
-            {games.length > 0
-              ? contagem(games.length, "jogo", "jogos")
-              : "Os jogos"}{" "}
-            que ficaram comigo — a história deles e por que me marcaram.
-          </>
-        }
-      />
-
+    <HeroSobreposto
+      hero={
+        <PageHero
+          rotulo="Games"
+          janela="games"
+          titulo={
+            <>
+              Jogos que
+              <br />
+              <span className="text-gradient-brand-claro">marcaram</span>
+            </>
+          }
+          descricao={
+            <>
+              {/* Sem número enquanto carrega ou com zero: "0 jogos" lia como
+                  "O jogos". */}
+              {games.length > 0
+                ? contagem(games.length, "jogo", "jogos")
+                : "Os jogos"}{" "}
+              que ficaram comigo — a história deles e por que me marcaram.
+            </>
+          }
+        />
+      }
+    >
       {/* Filtros + grid */}
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-24">
         <div className="space-y-5 rounded-2xl border border-border bg-card/50 p-6">
@@ -240,6 +242,6 @@ export default function GamesPage() {
           />
         )}
       </section>
-    </>
+    </HeroSobreposto>
   )
 }

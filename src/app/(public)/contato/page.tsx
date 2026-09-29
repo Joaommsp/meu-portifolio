@@ -4,6 +4,7 @@ import { Mail, Clock, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollReveal } from "@/components/animations";
 import { PageHero } from "@/components/sections/PageHero";
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto";
 import { ContactForm } from "@/components/sections/ContactForm";
 import {
   GithubIcon,
@@ -52,30 +53,31 @@ const QUICK_LINKS = [
 
 export default function ContatoPage() {
   return (
-    <>
-      {/* Hero da página */}
-      <PageHero
-        rotulo="Contato"
-        janela="contato"
-        titulo={
-          <>
-            Vamos <span className="text-gradient-brand-claro">conversar?</span>
-          </>
-        }
-        descricao="Tô sempre aberto a novos projetos, parcerias ou só uma boa conversa sobre design e código. Use o formulário ou me chame direto pelos canais — respondo o mais rápido possível."
-      >
-        <div className="flex flex-wrap items-center gap-3">
-          <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">
-            <span className="inline-block size-1.5 rounded-full bg-success" />
-            {DISPONIBILIDADE.status}
-          </Badge>
-          <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">
-            <Clock className="size-3" />
-            {DISPONIBILIDADE.resposta}
-          </Badge>
-        </div>
-      </PageHero>
-
+    <HeroSobreposto
+      hero={
+        <PageHero
+          rotulo="Contato"
+          janela="contato"
+          titulo={
+            <>
+              Vamos <span className="text-gradient-brand-claro">conversar?</span>
+            </>
+          }
+          descricao="Tô sempre aberto a novos projetos, parcerias ou só uma boa conversa sobre design e código. Use o formulário ou me chame direto pelos canais — respondo o mais rápido possível."
+        >
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">
+              <span className="inline-block size-1.5 rounded-full bg-success" />
+              {DISPONIBILIDADE.status}
+            </Badge>
+            <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">
+              <Clock className="size-3" />
+              {DISPONIBILIDADE.resposta}
+            </Badge>
+          </div>
+        </PageHero>
+      }
+    >
       {/* Form + canais diretos */}
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 py-24">
         <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
@@ -143,6 +145,6 @@ export default function ContatoPage() {
           </ScrollReveal>
         </div>
       </section>
-    </>
+    </HeroSobreposto>
   );
 }

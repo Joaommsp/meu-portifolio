@@ -16,6 +16,7 @@ import {
 } from "@/components/listagem/useListagem"
 import { contarRotulos, temAlgumRotulo } from "@/components/listagem/rotulos"
 import { PageHero } from "@/components/sections/PageHero"
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
 import { getAllPublishedBooks } from "@/lib/data/books"
 import { BOOK_STATUSES, type BookStatus } from "@/types/book"
 
@@ -88,29 +89,30 @@ export default function BooksPage() {
   }
 
   return (
-    <>
-      {/* Hero */}
-      <PageHero
-        rotulo="Livros"
-        janela="livros"
-        titulo={
-          <>
-            Estante
-            <br />
-            <span className="text-gradient-brand-claro">pessoal</span>
-          </>
-        }
-        descricao={
-          <>
-            {/* Sem número enquanto carrega ou com zero. */}
-            {books.length > 0
-              ? contagem(books.length, "livro", "livros")
-              : "Os livros"}{" "}
-            que passaram pela mesa — alguns marcaram.
-          </>
-        }
-      />
-
+    <HeroSobreposto
+      hero={
+        <PageHero
+          rotulo="Livros"
+          janela="livros"
+          titulo={
+            <>
+              Estante
+              <br />
+              <span className="text-gradient-brand-claro">pessoal</span>
+            </>
+          }
+          descricao={
+            <>
+              {/* Sem número enquanto carrega ou com zero. */}
+              {books.length > 0
+                ? contagem(books.length, "livro", "livros")
+                : "Os livros"}{" "}
+              que passaram pela mesa — alguns marcaram.
+            </>
+          }
+        />
+      }
+    >
       {/* Filtros + grid */}
       <section className="container mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-24">
         <div className="space-y-5 rounded-2xl border border-border bg-card/50 p-6">
@@ -202,6 +204,6 @@ export default function BooksPage() {
           />
         )}
       </section>
-    </>
+    </HeroSobreposto>
   )
 }

@@ -29,6 +29,7 @@ import {
   CURRENTLY_EMPTY_TEXT,
 } from "@/types/currently"
 import { PageHero } from "@/components/sections/PageHero"
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
 
 export const metadata: Metadata = {
   title: "Sobre",
@@ -208,35 +209,36 @@ const SOFT_SKILLS: SoftSkill[] = [
 export default async function SobrePage() {
   const currently = await getCurrently()
   return (
-    <>
-      {/* Hero da página */}
-      <PageHero
-        rotulo="Sobre mim"
-        janela="sobre"
-        titulo={
-          <>
-            Frontend dev que pensa
-            <br />
-            <span className="text-gradient-brand-claro">como designer</span>
-          </>
-        }
-        acoes={
-          <Button
-            variant="outline"
-            render={
-              <a
-                href="/cv-joaomarcos.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-              />
-            }
-          >
-            <Download className="size-4" data-icon="inline-start" />
-            Baixar CV
-          </Button>
-        }
-      />
-
+    <HeroSobreposto
+      hero={
+        <PageHero
+          rotulo="Sobre mim"
+          janela="sobre"
+          titulo={
+            <>
+              Frontend dev que pensa
+              <br />
+              <span className="text-gradient-brand-claro">como designer</span>
+            </>
+          }
+          acoes={
+            <Button
+              variant="outline"
+              render={
+                <a
+                  href="/cv-joaomarcos.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              }
+            >
+              <Download className="size-4" data-icon="inline-start" />
+              Baixar CV
+            </Button>
+          }
+        />
+      }
+    >
       {/* Bio extendida */}
       <section className="container mx-auto max-w-4xl px-5 sm:px-6 py-16 md:py-24">
         <div className="grid gap-12 md:grid-cols-[280px_1fr] md:items-start">
@@ -453,6 +455,6 @@ export default async function SobrePage() {
           </Button>
         </ScrollReveal>
       </section>
-    </>
+    </HeroSobreposto>
   )
 }

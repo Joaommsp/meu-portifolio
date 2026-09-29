@@ -18,6 +18,7 @@ import {
 } from "@/components/listagem/useListagem"
 import { contarRotulos, temAlgumRotulo } from "@/components/listagem/rotulos"
 import { PageHero } from "@/components/sections/PageHero"
+import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
 import { getAllPublishedPosts } from "@/lib/data/posts"
 import { POST_CATEGORIES, type PostCategory } from "@/types/post"
 import type { Post } from "@/types/post"
@@ -102,30 +103,31 @@ export default function BlogPage() {
   }
 
   return (
-    <>
-      {/* Hero */}
-      <PageHero
-        rotulo="Blog"
-        janela="blog"
-        titulo={
-          <>
-            Pensamentos, tutoriais
-            <br />
-            <span className="text-gradient-brand-claro">e divagações</span>
-          </>
-        }
-        descricao={
-          <>
-            {/* Sem número enquanto carrega ou com zero: "0 posts" lia como
-                "O posts". */}
-            {publishedPosts.length > 0
-              ? contagem(publishedPosts.length, "post", "posts")
-              : "Os posts"}{" "}
-            que escrevi quando quis. Sobre dev, design e o que aparece no meio.
-          </>
-        }
-      />
-
+    <HeroSobreposto
+      hero={
+        <PageHero
+          rotulo="Blog"
+          janela="blog"
+          titulo={
+            <>
+              Pensamentos, tutoriais
+              <br />
+              <span className="text-gradient-brand-claro">e divagações</span>
+            </>
+          }
+          descricao={
+            <>
+              {/* Sem número enquanto carrega ou com zero: "0 posts" lia como
+                  "O posts". */}
+              {publishedPosts.length > 0
+                ? contagem(publishedPosts.length, "post", "posts")
+                : "Os posts"}{" "}
+              que escrevi quando quis. Sobre dev, design e o que aparece no meio.
+            </>
+          }
+        />
+      }
+    >
       {/* Featured */}
       {featured && !hasActiveFilter && (
         <section className="container mx-auto max-w-6xl px-5 sm:px-6">
@@ -225,7 +227,7 @@ export default function BlogPage() {
           />
         )}
       </section>
-    </>
+    </HeroSobreposto>
   )
 }
 
