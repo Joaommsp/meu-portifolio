@@ -5,7 +5,6 @@ import { X, BookMarked } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { BookCard } from "@/components/books/BookCard"
-import { ScrollReveal } from "@/components/animations"
 import { CampoBusca } from "@/components/listagem/CampoBusca"
 import { EstadoListagem } from "@/components/listagem/EstadoListagem"
 import { FilterChip, FiltroGrupo } from "@/components/listagem/filtros"
@@ -92,13 +91,11 @@ export default function BooksPage() {
     <HeroSobreposto
       hero={
         <PageHero
-          rotulo="Livros"
-          janela="livros"
           titulo={
             <>
               Estante
               <br />
-              <span className="text-gradient-brand-claro">pessoal</span>
+              <span>pessoal</span>
             </>
           }
           descricao={
@@ -107,7 +104,7 @@ export default function BooksPage() {
               {books.length > 0
                 ? contagem(books.length, "livro", "livros")
                 : "Os livros"}{" "}
-              que passaram pela mesa — alguns marcaram.
+              que passaram pela mesa.
             </>
           }
         />
@@ -182,10 +179,8 @@ export default function BooksPage() {
         <h2 className="sr-only">Livros da estante</h2>
         {filtered.length > 0 ? (
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-            {filtered.map((book, idx) => (
-              <ScrollReveal key={book.id} delay={Math.min(idx, 5) * 0.05}>
-                <BookCard book={book} />
-              </ScrollReveal>
+            {filtered.map((book) => (
+              <BookCard key={book.id} book={book} />
             ))}
           </div>
         ) : (

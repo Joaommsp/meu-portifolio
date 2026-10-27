@@ -6,7 +6,6 @@ import { X, FolderX } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ProjectCard } from "@/components/projects/ProjectCard"
 import { ProjectCardSkeleton } from "@/components/projects/ProjectCardSkeleton"
-import { ScrollReveal } from "@/components/animations"
 import { CampoBusca } from "@/components/listagem/CampoBusca"
 import { EstadoListagem } from "@/components/listagem/EstadoListagem"
 import { FilterChip, FiltroGrupo } from "@/components/listagem/filtros"
@@ -100,8 +99,6 @@ export default function ProjetosPage() {
     <HeroSobreposto
       hero={
         <PageHero
-          rotulo="Projetos"
-          janela="projetos"
           titulo="O que ando construindo"
           descricao={
             <>
@@ -213,10 +210,8 @@ export default function ProjetosPage() {
           </div>
         ) : filtered.length > 0 ? (
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((project, idx) => (
-              <ScrollReveal key={project.id} delay={Math.min(idx, 5) * 0.05}>
-                <ProjectCard project={project} />
-              </ScrollReveal>
+            {filtered.map((project) => (
+              <ProjectCard key={project.id} project={project} />
             ))}
           </div>
         ) : (

@@ -4,16 +4,14 @@ import { ProfileIntro } from "@/components/sections/ProfileIntro"
 import { About } from "@/components/sections/About"
 import { Services } from "@/components/sections/Services"
 import { Skills } from "@/components/sections/Skills"
-import { GithubSection } from "@/components/sections/GithubSection"
-import { WakatimeStats } from "@/components/sections/WakatimeStats"
 import { FeaturedProjects } from "@/components/sections/FeaturedProjects"
 import { LatestPosts } from "@/components/sections/LatestPosts"
-import { FeaturedGames } from "@/components/sections/FeaturedGames"
 import { ContactCTA } from "@/components/sections/ContactCTA"
 
 /*
-  Cada seção é uma camada que sobe e cobre a anterior (SecaoEmpilhada), no
-  formato da landing do front-barber. As outras páginas usam o HeroSobreposto:
+  No desktop, cada seção é uma camada que sobe e cobre a anterior
+  (SecaoEmpilhada), no formato da landing do front-barber; no celular rolam
+  normalmente. As outras páginas usam o HeroSobreposto:
   só o hero fica preso e o conteúdo sobe inteiro.
 */
 /** Na ordem da pilha: cada uma sobe e cobre a anterior. O hero fica de fora
@@ -24,11 +22,8 @@ const SECOES = [
   { chave: "servicos", Secao: Services },
   { chave: "sobre", Secao: About },
   { chave: "stack", Secao: Skills },
-  { chave: "github", Secao: GithubSection },
-  { chave: "wakatime", Secao: WakatimeStats },
   { chave: "projetos", Secao: FeaturedProjects },
   { chave: "posts", Secao: LatestPosts },
-  { chave: "games", Secao: FeaturedGames },
   { chave: "contato", Secao: ContactCTA },
 ]
 

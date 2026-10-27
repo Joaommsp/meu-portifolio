@@ -4,7 +4,6 @@ import { LinkPreview } from "@/components/layout/LinkPreview"
 import { SocialFloater } from "@/components/sections/SocialFloater"
 import { PageTransition } from "@/components/animations/PageTransition"
 import { CommandPaletteProvider } from "@/components/command/CommandPaletteProvider"
-import { KonamiEasterEgg } from "@/components/misc/KonamiEasterEgg"
 
 export default function PublicLayout({
   children,
@@ -20,7 +19,6 @@ export default function PublicLayout({
       >
         Pular para o conteúdo
       </a>
-      <KonamiEasterEgg />
       <Header />
       <SocialFloater />
       <LinkPreview />

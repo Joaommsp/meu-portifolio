@@ -15,12 +15,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { BOOK_STATUS_COLOR } from "@/components/books/book-status"
 import { BOOK_STATUS_LABEL } from "@/types/book"
-import {
-  DotMesh,
-  GradientOrbs,
-  NoiseTexture,
-} from "@/components/backgrounds"
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
+import { ScrollReveal } from "@/components/animations"
 import { MarkdownContent } from "@/components/markdown/MarkdownContent"
 import { BackToTop } from "@/components/blog/BackToTop"
 import { ReadingProgressBar } from "@/components/blog/ReadingProgressBar"
@@ -67,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const url = `${SITE_URL}/livros/${book.slug}`
 
   return {
-    title: `${book.title} — ${book.author}`,
+    title: `${book.title}, de ${book.author}`,
     description: book.shortDescription,
     alternates: { canonical: url },
     openGraph: {
@@ -162,48 +157,21 @@ export default async function BookDetailPage({ params }: Props) {
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <DotMesh />
-        <GradientOrbs
-          orbs={[
-            {
-              size: 480,
-              x: "10%",
-              y: "20%",
-              color: "var(--orb-1)",
-              duration: 22,
-              delay: 0,
-              opacity: 0.22,
-            },
-            {
-              size: 380,
-              x: "80%",
-              y: "60%",
-              color: "var(--orb-2)",
-              duration: 26,
-              delay: 2,
-              opacity: 0.18,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.04} />
-
-        <div className="container relative mx-auto max-w-6xl px-5 sm:px-6 py-20 md:py-24">
-          <FadeIn>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mb-8"
-              render={<Link href="/livros" />}
-            >
-              <ArrowLeft className="size-4" data-icon="inline-start" />
-              Todos os livros
-            </Button>
-          </FadeIn>
+        <div className="container relative mx-auto max-w-6xl px-5 sm:px-6 py-10 md:py-24">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mb-8"
+            render={<Link href="/livros" />}
+          >
+            <ArrowLeft className="size-4" data-icon="inline-start" />
+            Todos os livros
+          </Button>
 
           <div className="grid gap-10 md:grid-cols-[260px_1fr] lg:grid-cols-[320px_1fr]">
             {/* Cover — 2:3 book proportions */}
             <ScrollReveal>
-              <div className="relative aspect-[2/3] overflow-hidden rounded-xl border border-border shadow-[0_24px_60px_-20px_var(--shadow-elevated),0_0_60px_-30px_var(--brand-glow)]">
+              <div className="relative aspect-[2/3] overflow-hidden rounded-xl border border-border shadow-[0_24px_60px_-20px_var(--shadow-elevated)]">
                 {book.coverImage && (
                   <Image
                     src={book.coverImage}
@@ -219,73 +187,63 @@ export default async function BookDetailPage({ params }: Props) {
 
             {/* Info */}
             <div className="flex flex-col">
-              <FadeIn delay={0.05}>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge
-                    variant="outline"
-                    className={cn(
-                      "font-mono text-xs uppercase",
-                      BOOK_STATUS_COLOR[book.status]
-                    )}
-                  >
-                    {BOOK_STATUS_LABEL[book.status]}
-                  </Badge>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    "font-mono text-xs uppercase",
+                    BOOK_STATUS_COLOR[book.status]
+                  )}
+                >
+                  {BOOK_STATUS_LABEL[book.status]}
+                </Badge>
+                <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
+                  <Calendar className="size-3" />
+                  {book.yearRead}
+                </span>
+                {book.pages != null && (
                   <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
-                    <Calendar className="size-3" />
-                    {book.yearRead}
+                    <BookOpen className="size-3" />
+                    {book.pages} páginas
                   </span>
-                  {book.pages != null && (
-                    <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
-                      <BookOpen className="size-3" />
-                      {book.pages} páginas
-                    </span>
-                  )}
-                  {book.rating != null && (
-                    <span className="flex items-center gap-1 rounded-md border border-brand/40 bg-brand/10 px-2 py-0.5 font-mono text-xs text-brand-texto">
-                      <Star className="size-3 fill-brand" />
-                      {book.rating.toFixed(1)}/10
-                    </span>
-                  )}
-                </div>
-              </FadeIn>
+                )}
+                {book.rating != null && (
+                  <span className="flex items-center gap-1 rounded-md border border-brand/40 bg-brand/10 px-2 py-0.5 font-mono text-xs text-brand-texto">
+                    <Star className="size-3 fill-brand" />
+                    {book.rating.toFixed(1)}/10
+                  </span>
+                )}
+              </div>
 
-              <SlideIn direction="up" delay={0.1}>
-                <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-                  {book.title}
-                </h1>
-              </SlideIn>
+              <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
+                {book.title}
+              </h1>
 
-              <SlideIn direction="up" delay={0.12}>
-                <p className="mt-3 flex items-center gap-2 font-mono text-sm text-muted-foreground">
-                  <UserIcon className="size-3.5" />
-                  por <span className="text-foreground">{book.author}</span>
-                </p>
-              </SlideIn>
+              <p className="mt-3 flex items-center gap-2 font-mono text-sm text-muted-foreground">
+                <UserIcon className="size-3.5" />
+                por <span className="text-foreground">{book.author}</span>
+              </p>
 
-              <SlideIn direction="up" delay={0.15}>
-                <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
-                  {book.shortDescription}
-                </p>
-              </SlideIn>
+              <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
+                {book.shortDescription}
+              </p>
 
               {book.genres.length > 0 && (
-                <SlideIn direction="up" delay={0.2}>
-                  <div className="mt-6">
-                    <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                      Gêneros
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {book.genres.map((g) => (
-                        <span
-                          key={g}
-                          className="font-mono text-xs text-brand"
-                        >
-                          #{g}
-                        </span>
-                      ))}
-                    </div>
+                <div className="mt-6">
+                  <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                    Gêneros
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {book.genres.map((g) => (
+                      <span
+                        key={g}
+                        className="font-mono text-xs text-brand"
+                      >
+                        #{g}
+                      </span>
+                    ))}
                   </div>
-                </SlideIn>
+                </div>
               )}
             </div>
           </div>
@@ -333,19 +291,15 @@ export default async function BookDetailPage({ params }: Props) {
                     Continue lendo
                   </p>
                 </ScrollReveal>
-                <ScrollReveal delay={0.05}>
-                  <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
-                    Livros parecidos
-                  </h2>
-                </ScrollReveal>
+                <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
+                  Livros parecidos
+                </h2>
               </div>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((b, idx) => (
-                <ScrollReveal key={b.id} delay={idx * 0.05}>
-                  <BookCard book={b} />
-                </ScrollReveal>
+              {related.map((b) => (
+                <BookCard key={b.id} book={b} />
               ))}
             </div>
           </div>

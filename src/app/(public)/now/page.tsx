@@ -7,8 +7,7 @@ import {
   Gamepad2,
   BookMarked,
   Music,
-  Sparkles,
-} from "lucide-react"
+  } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { ScrollReveal } from "@/components/animations"
@@ -21,12 +20,13 @@ import { NOW_LAST_UPDATED, NOW_LOCATION } from "@/lib/now-content"
 import { getCurrently } from "@/lib/data/currently"
 import { getPlaying } from "@/lib/data/playing"
 import { PlayingNow } from "@/components/sections/PlayingNow"
-import { CURRENTLY_EMPTY_TEXT } from "@/types/currently"
+import { WakatimeStats } from "@/components/sections/WakatimeStats"
+import { CURRENTLY_EMPTY_TEXT, temItemAtual } from "@/types/currently"
 
 export const metadata: Metadata = {
   title: "Agora",
   description:
-    "O que João Marcos está fazendo agora — trabalho, estudos, jogos, livros e metas do mês.",
+    "O que João Marcos está fazendo agora.",
   alternates: { canonical: "/now" },
 }
 
@@ -110,20 +110,10 @@ export default async function NowPage() {
     <HeroSobreposto
       hero={
         <PageHero
-          rotulo="Agora"
-          icone={<Sparkles className="size-3.5" aria-hidden />}
-          janela="now"
-          titulo={
-            <>
-              O que ando
-              <br />
-              <span className="text-gradient-brand-claro">fazendo</span>
-            </>
-          }
+          titulo="Agora"
           descricao={
             <>
-              Esta página é um snapshot de onde estou — trabalho,
-              estudos, hobbies. Inspirada no movimento{" "}
+              O que estou fazendo neste mês. Formato{" "}
               <a
                 href="https://nownownow.com/about"
                 target="_blank"
@@ -131,8 +121,8 @@ export default async function NowPage() {
                 className="text-brand underline-offset-2 hover:underline"
               >
                 /now
-              </a>{" "}
-              do Derek Sivers.
+              </a>
+              , de Derek Sivers.
             </>
           }
         >
@@ -152,14 +142,8 @@ export default async function NowPage() {
       {/* Live snapshot — auto-puxado dos dados */}
       <section className="container mx-auto max-w-4xl px-5 sm:px-6 pt-12 pb-8">
         <ScrollReveal>
-          <h2 className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            Em tempo real
-          </h2>
-        </ScrollReveal>
-
-        <div className="grid gap-3 sm:grid-cols-3">
-          {/* Spotify (live) */}
-          <ScrollReveal delay={0.05}>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {/* Spotify (live) */}
             <div className="rounded-xl border border-border bg-card p-4">
               <div className="mb-2 flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                 <Music className="size-3 text-brand" />
@@ -170,8 +154,7 @@ export default async function NowPage() {
               <SpotifyNowPlaying
                 className="!flex !max-w-none !border-0 !p-0"
                 fallbackContent={
-                  currently.ouvindo.visible &&
-                  currently.ouvindo.title.trim() ? (
+                  temItemAtual(currently.ouvindo) ? (
                     <CardLinha
                       titulo={currently.ouvindo.title}
                       detalhe={currently.ouvindo.subtitle}
@@ -185,16 +168,14 @@ export default async function NowPage() {
                 }
               />
             </div>
-          </ScrollReveal>
 
-          {/* Livro atual */}
-          <ScrollReveal delay={0.1}>
+            {/* Livro atual */}
             <div className="rounded-xl border border-border bg-card p-4">
               <div className="mb-2 flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                 <BookMarked className="size-3 text-brand" />
                 Lendo
               </div>
-              {currently.lendo.visible && currently.lendo.title.trim() ? (
+              {temItemAtual(currently.lendo) ? (
                 <CardLinha
                   titulo={currently.lendo.title}
                   detalhe={currently.lendo.subtitle}
@@ -214,10 +195,8 @@ export default async function NowPage() {
                 </p>
               )}
             </div>
-          </ScrollReveal>
 
-          {/* Jogo atual */}
-          <ScrollReveal delay={0.15}>
+            {/* Jogo atual */}
             <div className="rounded-xl border border-border bg-card p-4">
               <div className="mb-2 flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                 <Gamepad2 className="size-3 text-brand" />
@@ -242,15 +221,17 @@ export default async function NowPage() {
                 </p>
               )}
             </div>
-          </ScrollReveal>
-        </div>
+          </div>
+        </ScrollReveal>
       </section>
 
       {/* Jogando agora — cards grandes com a capa ao fundo */}
       <PlayingNow jogos={jogando} />
 
+      <WakatimeStats />
+
       {/* Footer hint */}
-      <section className="container mx-auto max-w-3xl px-5 sm:px-6 pt-16 pb-24">
+      <section className="container mx-auto max-w-3xl px-5 sm:px-6 pt-10 pb-24 md:pt-16">
         <ScrollReveal>
           <div className="flex justify-center">
             <Badge
@@ -262,6 +243,7 @@ export default async function NowPage() {
           </div>
         </ScrollReveal>
       </section>
+
     </HeroSobreposto>
   )
 }

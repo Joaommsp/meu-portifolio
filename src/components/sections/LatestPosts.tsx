@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button"
 import { ScrollReveal } from "@/components/animations"
 import { PostCard } from "@/components/blog/PostCard"
 import { getAllPublishedPosts } from "@/lib/data/posts"
-import { SECAO_HOME } from "@/components/sections/secao"
+import { cn } from "@/lib/utils"
+import { CABECALHO_SECAO_HOME, SECAO_HOME, TITULO_SECAO_HOME } from "@/components/sections/secao"
 
 export async function LatestPosts() {
   const posts = await getAllPublishedPosts()
@@ -14,7 +15,7 @@ export async function LatestPosts() {
       (a, b) =>
         (b.publishedAt?.getTime() ?? 0) - (a.publishedAt?.getTime() ?? 0)
     )
-    .slice(0, 3)
+    .slice(0, 2)
 
   if (latest.length === 0) return null
 
@@ -24,34 +25,21 @@ export async function LatestPosts() {
       className="border-t border-border bg-card/30 scroll-mt-20"
     >
       <div className={SECAO_HOME}>
-        <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
-          <div>
-            <ScrollReveal>
-              <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-                07 · Blog
-              </p>
-            </ScrollReveal>
-            <ScrollReveal delay={0.05}>
-              <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-                Posts recentes
-              </h2>
-            </ScrollReveal>
-          </div>
-          <ScrollReveal delay={0.1}>
+        <ScrollReveal>
+          <div className={cn(CABECALHO_SECAO_HOME, "flex items-end justify-between gap-4")}>
+            <h2 className={TITULO_SECAO_HOME}>Blog</h2>
             <Button variant="ghost" render={<Link href="/blog" />}>
               Ver todos
               <ArrowRight className="size-4" data-icon="inline-end" />
             </Button>
-          </ScrollReveal>
-        </div>
+          </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {latest.map((post, idx) => (
-            <ScrollReveal key={post.id} delay={idx * 0.1}>
-              <PostCard post={post} />
-            </ScrollReveal>
-          ))}
-        </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {latest.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   )

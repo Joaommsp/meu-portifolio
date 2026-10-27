@@ -6,8 +6,7 @@ import { ArrowLeft, Clock, Calendar, ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
+import { ScrollReveal } from "@/components/animations"
 import { MarkdownContent } from "@/components/markdown/MarkdownContent"
 import { PostCard } from "@/components/blog/PostCard"
 import { ShareButtons } from "@/components/blog/ShareButtons"
@@ -170,85 +169,50 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <DotMesh />
-        <GradientOrbs
-          orbs={[
-            {
-              size: 480,
-              x: "10%",
-              y: "20%",
-              color: "var(--orb-1)",
-              duration: 22,
-              delay: 0,
-              opacity: 0.25,
-            },
-            {
-              size: 380,
-              x: "75%",
-              y: "60%",
-              color: "var(--orb-2)",
-              duration: 26,
-              delay: 2,
-              opacity: 0.2,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.04} />
+        <div className="container relative mx-auto max-w-3xl px-5 sm:px-6 py-10 md:py-24">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mb-8"
+            render={<Link href="/blog" />}
+          >
+            <ArrowLeft className="size-4" data-icon="inline-start" />
+            Todos os posts
+          </Button>
 
-        <div className="container relative mx-auto max-w-3xl px-5 sm:px-6 py-20 md:py-24">
-          <FadeIn>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mb-8"
-              render={<Link href="/blog" />}
-            >
-              <ArrowLeft className="size-4" data-icon="inline-start" />
-              Todos os posts
-            </Button>
-          </FadeIn>
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline" className="font-mono text-xs uppercase">
+              {CATEGORY_LABEL[post.category]}
+            </Badge>
+            <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
+              <Clock className="size-3" />
+              {post.readingTime} min de leitura
+            </span>
+            <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
+              <Calendar className="size-3" />
+              {dateFormatter.format(date)}
+            </span>
+          </div>
 
-          <FadeIn delay={0.05}>
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="outline" className="font-mono text-xs uppercase">
-                {CATEGORY_LABEL[post.category]}
-              </Badge>
-              <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
-                <Clock className="size-3" />
-                {post.readingTime} min de leitura
-              </span>
-              <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
-                <Calendar className="size-3" />
-                {dateFormatter.format(date)}
-              </span>
-            </div>
-          </FadeIn>
+          <h1 className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl">
+            {post.title}
+          </h1>
 
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl">
-              {post.title}
-            </h1>
-          </SlideIn>
-
-          <SlideIn direction="up" delay={0.15}>
-            <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
-              {post.excerpt}
-            </p>
-          </SlideIn>
+          <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
+            {post.excerpt}
+          </p>
 
           {post.tags.length > 0 && (
-            <SlideIn direction="up" delay={0.2}>
-              <div className="mt-6 flex flex-wrap gap-1.5">
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="font-mono text-xs text-brand"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            </SlideIn>
+            <div className="mt-6 flex flex-wrap gap-1.5">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="font-mono text-xs text-brand"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
           )}
         </div>
       </section>
@@ -297,25 +261,19 @@ export default async function BlogPostPage({ params }: Props) {
                     Continue lendo
                   </p>
                 </ScrollReveal>
-                <ScrollReveal delay={0.05}>
-                  <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
-                    Posts relacionados
-                  </h2>
-                </ScrollReveal>
+                <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
+                  Posts relacionados
+                </h2>
               </div>
-              <ScrollReveal delay={0.1}>
-                <Button variant="ghost" render={<Link href="/blog" />}>
-                  Ver todos
-                  <ArrowRight className="size-4" data-icon="inline-end" />
-                </Button>
-              </ScrollReveal>
+              <Button variant="ghost" render={<Link href="/blog" />}>
+                Ver todos
+                <ArrowRight className="size-4" data-icon="inline-end" />
+              </Button>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-              {related.map((p, idx) => (
-                <ScrollReveal key={p.id} delay={idx * 0.05}>
-                  <PostCard post={p} />
-                </ScrollReveal>
+              {related.map((p) => (
+                <PostCard key={p.id} post={p} />
               ))}
             </div>
           </div>

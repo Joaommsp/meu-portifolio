@@ -37,7 +37,6 @@ export function SocialFloater() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.label}
-              data-cursor-grow
               className="block text-muted-foreground transition-all hover:-translate-y-0.5 hover:text-brand"
             >
               <s.icon className="size-4" />

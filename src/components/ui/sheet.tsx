@@ -27,8 +27,10 @@ function SheetOverlay({ className, ...props }: SheetPrimitive.Backdrop.Props) {
   return (
     <SheetPrimitive.Backdrop
       data-slot="sheet-overlay"
+      /* Sem blur no toque: desfocar a tela inteira sobre a pilha da home
+         estoura a composição no Android e o blur sai pela metade. */
       className={cn(
-        "fixed inset-0 z-50 bg-black/10 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-xs",
+        "fixed inset-0 z-50 bg-black/10 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-xs pointer-coarse:bg-black/30 pointer-coarse:backdrop-blur-none",
         className
       )}
       {...props}

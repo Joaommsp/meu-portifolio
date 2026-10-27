@@ -9,7 +9,6 @@ import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider } from "@/contexts/AuthContext"
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider"
 import { StructuredData } from "@/components/seo/StructuredData"
-import { CustomCursor } from "@/components/misc/CustomCursor"
 import "./globals.css"
 import { SITE_URL } from "@/lib/site"
 
@@ -35,12 +34,12 @@ const CREME_FUNDO = "#fbf5ec"
 
 const SITE_NAME = "João Marcos"
 const SITE_DESCRIPTION =
-  "João Marcos — frontend dev e designer de UI/UX. Construo coisas com React, Next.js e Tailwind. Aqui ficam meus projetos, posts e o resto."
+  "João Marcos, desenvolvedor frontend e designer UI/UX em Paulo Afonso, BA. Projetos, posts e contato."
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Frontend Developer & UI/UX Designer`,
+    default: `${SITE_NAME} · Frontend e UI/UX`,
     template: `%s · ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -65,7 +64,7 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — Frontend Developer & UI/UX Designer`,
+    title: `${SITE_NAME} · Frontend e UI/UX`,
     description: SITE_DESCRIPTION,
   },
   twitter: {
@@ -163,7 +162,6 @@ export default function RootLayout({
               <TooltipProvider delay={150}>
                 {children}
                 <Toaster closeButton />
-                <CustomCursor />
               </TooltipProvider>
             </SmoothScrollProvider>
           </AuthProvider>

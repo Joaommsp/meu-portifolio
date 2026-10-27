@@ -11,8 +11,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
-import { ScrollReveal, FadeIn, SlideIn } from "@/components/animations"
+import { ScrollReveal } from "@/components/animations"
 import { ProjectCard } from "@/components/projects/ProjectCard"
 import { PROJECT_STATUS_COLOR } from "@/components/projects/project-status"
 import { PROJECT_STATUS_LABEL } from "@/types/project"
@@ -157,116 +156,81 @@ export default async function ProjectDetailPage({ params }: Props) {
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <DotMesh />
-        <GradientOrbs
-          orbs={[
-            {
-              size: 500,
-              x: "20%",
-              y: "30%",
-              color: "var(--orb-1)",
-              duration: 20,
-              delay: 0,
-              opacity: 0.3,
-            },
-            {
-              size: 400,
-              x: "70%",
-              y: "60%",
-              color: "var(--orb-2)",
-              duration: 24,
-              delay: 2,
-              opacity: 0.25,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.05} />
+        <div className="container relative mx-auto max-w-5xl px-5 sm:px-6 py-10 md:py-28">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mb-8"
+            render={<Link href="/projetos" />}
+          >
+            <ArrowLeft className="size-4" data-icon="inline-start" />
+            Todos os projetos
+          </Button>
 
-        <div className="container relative mx-auto max-w-5xl px-5 sm:px-6 py-20 md:py-28">
-          <FadeIn>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mb-8"
-              render={<Link href="/projetos" />}
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge
+              variant="outline"
+              className={cn(
+                "font-mono text-xs uppercase tracking-wider",
+                PROJECT_STATUS_COLOR[project.status]
+              )}
             >
-              <ArrowLeft className="size-4" data-icon="inline-start" />
-              Todos os projetos
-            </Button>
-          </FadeIn>
+              {PROJECT_STATUS_LABEL[project.status]}
+            </Badge>
+            <Badge variant="outline" className="font-mono text-xs uppercase">
+              {project.category}
+            </Badge>
+            <Badge variant="outline" className="gap-1 font-mono text-xs">
+              <Calendar className="size-3" />
+              {dateFormatter.format(project.startDate)}
+              {project.endDate && (
+                <>
+                  {" → "}
+                  {dateFormatter.format(project.endDate)}
+                </>
+              )}
+            </Badge>
+          </div>
 
-          <FadeIn delay={0.05}>
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge
-                variant="outline"
-                className={cn(
-                  "font-mono text-xs uppercase tracking-wider",
-                  PROJECT_STATUS_COLOR[project.status]
-                )}
+          <h1 className="mt-6 font-display text-5xl font-bold tracking-tight md:text-7xl">
+            {project.title}
+          </h1>
+
+          <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
+            {project.shortDescription}
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            {project.liveUrl && (
+              <Button
+                render={
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
               >
-                {PROJECT_STATUS_LABEL[project.status]}
-              </Badge>
-              <Badge variant="outline" className="font-mono text-xs uppercase">
-                {project.category}
-              </Badge>
-              <Badge variant="outline" className="gap-1 font-mono text-xs">
-                <Calendar className="size-3" />
-                {dateFormatter.format(project.startDate)}
-                {project.endDate && (
-                  <>
-                    {" → "}
-                    {dateFormatter.format(project.endDate)}
-                  </>
-                )}
-              </Badge>
-            </div>
-          </FadeIn>
-
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="mt-6 font-display text-5xl font-bold tracking-tight md:text-7xl">
-              {project.title}
-            </h1>
-          </SlideIn>
-
-          <SlideIn direction="up" delay={0.15}>
-            <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              {project.shortDescription}
-            </p>
-          </SlideIn>
-
-          <SlideIn direction="up" delay={0.2}>
-            <div className="mt-8 flex flex-wrap gap-3">
-              {project.liveUrl && (
-                <Button
-                  render={
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    />
-                  }
-                >
-                  <Globe className="size-4" data-icon="inline-start" />
-                  Ver site
-                </Button>
-              )}
-              {project.githubUrl && (
-                <Button
-                  variant="outline"
-                  render={
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    />
-                  }
-                >
-                  <GithubIcon className="size-4" />
-                  Ver código
-                </Button>
-              )}
-            </div>
-          </SlideIn>
+                <Globe className="size-4" data-icon="inline-start" />
+                Ver site
+              </Button>
+            )}
+            {project.githubUrl && (
+              <Button
+                variant="outline"
+                render={
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
+              >
+                <GithubIcon className="size-4" />
+                Ver código
+              </Button>
+            )}
+          </div>
         </div>
       </section>
 
@@ -293,71 +257,67 @@ export default async function ProjectDetailPage({ params }: Props) {
       {/* Stack + Conteúdo */}
       <section className="container mx-auto max-w-5xl px-5 sm:px-6 py-20">
         <div className="grid gap-12 md:grid-cols-[200px_1fr] md:items-start">
-          <ScrollReveal direction="left">
-            <aside className="md:sticky md:top-24">
-              <p className="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                Stack
-              </p>
-              <ul className="space-y-2">
-                {project.technologies.map((tech) => {
-                  const Icon = TECH_ICONS[tech as TechName]
-                  return (
-                    <li
-                      key={tech}
-                      className="flex items-center gap-2.5 text-sm"
-                    >
-                      {Icon ? (
-                        <Icon colored className="size-4 shrink-0" />
-                      ) : (
-                        <span className="size-1.5 shrink-0 rounded-full bg-brand" />
-                      )}
-                      <span>{tech}</span>
-                    </li>
-                  )
-                })}
-              </ul>
-            </aside>
-          </ScrollReveal>
+          <aside className="md:sticky md:top-24">
+            <p className="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              Stack
+            </p>
+            <ul className="space-y-2">
+              {project.technologies.map((tech) => {
+                const Icon = TECH_ICONS[tech as TechName]
+                return (
+                  <li
+                    key={tech}
+                    className="flex items-center gap-2.5 text-sm"
+                  >
+                    {Icon ? (
+                      <Icon colored className="size-4 shrink-0" />
+                    ) : (
+                      <span className="size-1.5 shrink-0 rounded-full bg-brand" />
+                    )}
+                    <span>{tech}</span>
+                  </li>
+                )
+              })}
+            </ul>
+          </aside>
 
-          <ScrollReveal direction="right">
-            {/* Teto de medida: o container alargou pra alinhar com o resto da
-                página, mas linha de leitura acima de ~70 caracteres cansa. */}
-            <div className="max-w-[68ch]">
-              {project.fullDescription ? (
-                <MarkdownContent>{project.fullDescription}</MarkdownContent>
+          {/* Teto de medida: o container alargou pra alinhar com o resto da
+              página, mas linha de leitura acima de ~70 caracteres cansa. */}
+          <div className="max-w-[68ch]">
+            {project.fullDescription ? (
+              <MarkdownContent>{project.fullDescription}</MarkdownContent>
+            ) : (
+              <div className="rounded-xl border border-dashed border-border bg-card/30 p-8 text-center text-sm text-muted-foreground">
+                Descrição completa ainda não escrita pra esse projeto.
+              </div>
+            )}
+
+            <div className="mt-12">
+              <p className="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                Galeria
+              </p>
+              {project.gallery.length > 0 ? (
+                <ProjectGallery
+                  images={project.gallery}
+                  title={project.title}
+                />
               ) : (
-                <div className="rounded-xl border border-dashed border-border bg-card/30 p-8 text-center text-sm text-muted-foreground">
-                  Descrição completa ainda não escrita pra esse projeto.
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {[0, 1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className={cn(
+                        PROPORCAO_MOLDURA,
+                        "overflow-hidden rounded-xl border border-border"
+                      )}
+                    >
+                      <PlaceholderCover />
+                    </div>
+                  ))}
                 </div>
               )}
-
-              <div className="mt-12">
-                <p className="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                  Galeria
-                </p>
-                {project.gallery.length > 0 ? (
-                  <ProjectGallery
-                    images={project.gallery}
-                    title={project.title}
-                  />
-                ) : (
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {[0, 1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className={cn(
-                          PROPORCAO_MOLDURA,
-                          "overflow-hidden rounded-xl border border-border"
-                        )}
-                      >
-                        <PlaceholderCover seed={i} />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
 
@@ -371,25 +331,19 @@ export default async function ProjectDetailPage({ params }: Props) {
                     Continue explorando
                   </p>
                 </ScrollReveal>
-                <ScrollReveal delay={0.05}>
-                  <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
-                    Outros projetos
-                  </h2>
-                </ScrollReveal>
+                <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
+                  Outros projetos
+                </h2>
               </div>
-              <ScrollReveal delay={0.1}>
-                <Button variant="ghost" render={<Link href="/projetos" />}>
-                  Ver todos
-                  <ArrowRight className="size-4" data-icon="inline-end" />
-                </Button>
-              </ScrollReveal>
+              <Button variant="ghost" render={<Link href="/projetos" />}>
+                Ver todos
+                <ArrowRight className="size-4" data-icon="inline-end" />
+              </Button>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-              {suggestions.map((p, idx) => (
-                <ScrollReveal key={p.id} delay={idx * 0.05}>
-                  <ProjectCard project={p} />
-                </ScrollReveal>
+              {suggestions.map((p) => (
+                <ProjectCard key={p.id} project={p} />
               ))}
             </div>
           </div>
@@ -399,29 +353,7 @@ export default async function ProjectDetailPage({ params }: Props) {
   )
 }
 
-function PlaceholderCover({ seed = 0 }: { seed?: number }) {
-  const angles = [135, 200, 60, 290]
-  const angle = angles[seed % angles.length]
-  return (
-    <div
-      aria-hidden
-      className="relative size-full"
-      style={{
-        background: `
-          radial-gradient(at 20% 30%, var(--brand-glow) 0%, transparent 60%),
-          radial-gradient(at 80% 70%, var(--brand-hover) 0%, transparent 55%),
-          linear-gradient(${angle}deg, var(--background-secondary) 0%, var(--background-tertiary) 100%)
-        `,
-      }}
-    >
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-25"
-        style={{
-          backgroundImage: `linear-gradient(to right, oklch(from var(--pattern-line) l c h / 0.05) 1px, transparent 1px), linear-gradient(to bottom, oklch(from var(--pattern-line) l c h / 0.05) 1px, transparent 1px)`,
-          backgroundSize: "32px 32px",
-        }}
-      />
-    </div>
-  )
+/** Capa ausente: superfície lisa, sem decoração. */
+function PlaceholderCover() {
+  return <div aria-hidden className="size-full bg-background-secondary" />
 }

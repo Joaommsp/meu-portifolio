@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils"
 export const metadata: Metadata = {
   title: "Uses",
   description:
-    "Hardware, software e ferramentas que João Marcos usa no dia-a-dia pra construir produtos digitais.",
+    "Hardware, software e ferramentas que João Marcos usa no dia a dia pra construir produtos digitais.",
 }
 
 function ItemCard({ item }: { item: UsesItem }) {
@@ -86,19 +86,11 @@ export default async function UsesPage() {
     <HeroSobreposto
       hero={
         <PageHero
-          rotulo="Uses"
-          janela="uses"
-          titulo={
-            <>
-              Hardware, software e{" "}
-              <span className="text-gradient-brand-claro">trampo diário</span>
-            </>
-          }
+          titulo="Ferramentas"
           descricao={
             <>
-              {totalItens > 0 ? `As ${totalItens} ferramentas` : "As ferramentas"}{" "}
-              que uso no dia-a-dia pra construir produtos digitais. Atualizada
-              quando algo muda. Inspirado por{" "}
+              {totalItens > 0 ? `${totalItens} ferramentas` : "Ferramentas"}{" "}
+              que uso no dia a dia. Formato{" "}
               <a
                 href="https://uses.tech"
                 target="_blank"
@@ -115,9 +107,9 @@ export default async function UsesPage() {
     >
       {/* Categorias */}
       {categorias.length > 0 ? (
-        <section className="container mx-auto max-w-5xl space-y-16 px-5 py-16 sm:px-6">
-          {categorias.map((cat, idx) => (
-            <ScrollReveal key={cat.id} delay={Math.min(idx, 6) * 0.05}>
+        <section className="container mx-auto max-w-5xl space-y-16 px-5 py-10 sm:px-6 md:py-16">
+          {categorias.map((cat) => (
+            <ScrollReveal key={cat.id}>
               <div>
                 <header className="mb-8">
                   <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
@@ -144,37 +136,16 @@ export default async function UsesPage() {
           ))}
         </section>
       ) : (
-        <section className="container mx-auto max-w-4xl px-5 py-16 sm:px-6">
+        <section className="container mx-auto max-w-4xl px-5 py-10 sm:px-6 md:py-16">
           <ScrollReveal>
             <div className="rounded-xl border border-dashed border-border bg-card/30 px-6 py-16 text-center">
               <p className="text-muted-foreground">
-                Ainda montando esta lista. Volte em breve.
+                Lista vazia por enquanto.
               </p>
             </div>
           </ScrollReveal>
         </section>
       )}
-
-      {/* Nota de rodapé */}
-      <section className="container mx-auto max-w-4xl px-5 pb-20 sm:px-6">
-        <ScrollReveal>
-          <div className="rounded-xl border border-dashed border-border bg-card/30 p-6 text-sm text-muted-foreground">
-            <p className="font-medium text-foreground">
-              Sentindo falta de algo?
-            </p>
-            <p className="mt-2">
-              Manda no{" "}
-              <a
-                href="/contato"
-                className="text-brand underline-offset-2 hover:underline"
-              >
-                contato
-              </a>
-              . Sempre interessado em ferramentas que outras pessoas amam.
-            </p>
-          </div>
-        </ScrollReveal>
-      </section>
     </HeroSobreposto>
   )
 }

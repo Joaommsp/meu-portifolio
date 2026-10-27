@@ -3,8 +3,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { ExternalLink, Heart, Users } from "lucide-react"
 
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
-import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { FigmaIcon } from "@/components/icons/brand-icons"
 import { getFigmaFiles } from "@/lib/data/figma"
 import {
@@ -93,84 +91,49 @@ export default async function FigmaPage() {
     <>
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <DotMesh />
-        <GradientOrbs
-          orbs={[
-            {
-              size: 380,
-              x: "8%",
-              y: "18%",
-              color: "var(--orb-1)",
-              duration: 18,
-              delay: 0,
-              opacity: 0.22,
-            },
-            {
-              size: 320,
-              x: "78%",
-              y: "62%",
-              color: "var(--orb-2)",
-              duration: 22,
-              delay: 2,
-              opacity: 0.18,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.04} />
-
-        <div className="container relative mx-auto max-w-4xl px-5 py-24 sm:px-6 md:py-32">
+        <div className="container relative mx-auto max-w-4xl px-5 py-10 sm:px-6 md:py-32">
           {/* A página não tinha h1: o topo é um rótulo e um parágrafo. */}
           <h1 className="sr-only">Arquivos de João Marcos na Figma Community</h1>
-          <FadeIn>
-            <p className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              <FigmaIcon className="size-4" />
-              Figma Community · membro desde {FIGMA_MEMBER_SINCE}
-            </p>
-          </FadeIn>
+          <p className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
+            <FigmaIcon className="size-4" />
+            Figma Community · membro desde {FIGMA_MEMBER_SINCE}
+          </p>
 
-          <SlideIn direction="up" delay={0.1}>
-            <p className="max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              {arquivos.length > 0
-                ? `${arquivos.length} arquivo${arquivos.length > 1 ? "s" : ""} público${arquivos.length > 1 ? "s" : ""}, do design system ao protótipo navegável.`
-                : "Design systems, UI kits e protótipos publicados como recursos abertos."}
-            </p>
-          </SlideIn>
+          <p className="max-w-2xl text-xl leading-relaxed text-muted-foreground">
+            {arquivos.length > 0
+              ? `${arquivos.length} arquivo${arquivos.length > 1 ? "s" : ""} público${arquivos.length > 1 ? "s" : ""}, do design system ao protótipo navegável.`
+              : "Design systems, UI kits e protótipos publicados como recursos abertos."}
+          </p>
 
           {arquivos.length > 0 && (
-            <SlideIn direction="up" delay={0.2}>
-              <div className="mt-10 flex flex-wrap gap-8 border-t border-border pt-6">
-                <Numero valor={arquivos.length} rotulo="Arquivos" />
-                <Numero valor={totalCurtidas} rotulo="Curtidas" />
-                <Numero valor={totalUsos} rotulo="Pessoas usaram" />
-              </div>
-            </SlideIn>
+            <div className="mt-10 flex flex-wrap gap-8 border-t border-border pt-6">
+              <Numero valor={arquivos.length} rotulo="Arquivos" />
+              <Numero valor={totalCurtidas} rotulo="Curtidas" />
+              <Numero valor={totalUsos} rotulo="Pessoas usaram" />
+            </div>
           )}
 
-          <SlideIn direction="up" delay={0.3}>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a
-                href={FIGMA_PROFILE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
-              >
-                <FigmaIcon className="size-4" />
-                Ver perfil na Community
-              </a>
-              <Link
-                href="/projetos"
-                className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
-              >
-                Ver os projetos no site
-              </Link>
-            </div>
-          </SlideIn>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <a
+              href={FIGMA_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
+            >
+              <FigmaIcon className="size-4" />
+              Ver perfil na Community
+            </a>
+            <Link
+              href="/projetos"
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
+            >
+              Ver os projetos no site
+            </Link>
+          </div>
 
-          <SlideIn direction="up" delay={0.35}>
-            <p className="mt-6 font-mono text-xs text-muted-foreground">
-              {FIGMA_HANDLE}
-            </p>
-          </SlideIn>
+          <p className="mt-6 font-mono text-xs text-muted-foreground">
+            {FIGMA_HANDLE}
+          </p>
         </div>
       </section>
 
@@ -178,10 +141,8 @@ export default async function FigmaPage() {
       {arquivos.length > 0 && (
         <section className="container mx-auto max-w-6xl px-5 py-12 sm:px-6">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {arquivos.map((arquivo, i) => (
-              <ScrollReveal key={arquivo.id} delay={Math.min(i, 6) * 0.05}>
-                <Arquivo arquivo={arquivo} />
-              </ScrollReveal>
+            {arquivos.map((arquivo) => (
+              <Arquivo key={arquivo.id} arquivo={arquivo} />
             ))}
           </div>
         </section>

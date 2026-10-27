@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ArrowRight, Check, Plus } from "lucide-react"
 
 import { ScrollReveal } from "@/components/animations"
+import { WindowFrame } from "@/components/misc/WindowFrame"
 import { ContactActions } from "@/components/services/ContactActions"
 import { SERVICOS, rotaServico, type Servico } from "@/lib/servicos-content"
 import { cn } from "@/lib/utils"
@@ -231,28 +232,33 @@ export function CtaFinal() {
       <ScrollReveal>
         {/* `superficie-painel` reaponta os tokens: o que cair aqui dentro já
             lê as cores da superfície escura. */}
-        <div className="superficie-painel relative isolate overflow-hidden rounded-3xl border border-[var(--painel-borda)] bg-[var(--painel)] px-8 py-16 text-foreground md:px-16 md:py-20">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-28 -bottom-44 size-140 rounded-full opacity-20"
-            style={{
-              background:
-                "radial-gradient(ellipse, var(--brand) 0%, transparent 68%)",
-            }}
-          />
-          <div className="relative flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <h2 className="max-w-2xl font-display text-3xl font-bold leading-tight tracking-tight text-pretty md:text-[2.75rem]">
-                Me conta o que você precisa construir
-              </h2>
-              <p className="mt-4 max-w-lg leading-relaxed text-muted-foreground md:text-lg">
-                Uma conversa de 20 minutos já é suficiente pra entender o que você
-                precisa e se eu sou a pessoa certa pro seu caso.
-              </p>
+        <WindowFrame
+          secao="contato"
+          className="superficie-painel relative isolate text-foreground"
+        >
+          <div className="relative overflow-hidden px-8 py-14 md:px-16 md:py-18">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-28 -bottom-44 size-140 rounded-full opacity-20"
+              style={{
+                background:
+                  "radial-gradient(ellipse, var(--brand) 0%, transparent 68%)",
+              }}
+            />
+            <div className="relative flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <h2 className="max-w-2xl font-display text-3xl font-bold leading-tight tracking-tight text-pretty md:text-[2.75rem]">
+                  Me conta o que você precisa construir
+                </h2>
+                <p className="mt-4 max-w-lg leading-relaxed text-muted-foreground md:text-lg">
+                  Uma conversa de 20 minutos já é suficiente pra entender o que você
+                  precisa e se eu sou a pessoa certa pro seu caso.
+                </p>
+              </div>
+              <ContactActions className="shrink-0" />
             </div>
-            <ContactActions className="shrink-0" />
           </div>
-        </div>
+        </WindowFrame>
       </ScrollReveal>
     </section>
   )

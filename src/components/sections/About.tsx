@@ -51,19 +51,23 @@ const AI_TOOLS = [
   { name: "Gemini", src: "/icons/google-gemini-icon.svg" },
 ] as const
 
-/** Moldura quadrada com glow brand — compartilhada pelos slides. */
+/**
+ * Moldura quadrada com glow brand, compartilhada pelos slides. No celular vira
+ * uma miniatura de 80px flutuando à esquerda do texto, sem o glow: o quadro de
+ * 256px acima do texto dobrava a altura de cada slide.
+ */
 function VisualFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative mx-auto w-64 md:mx-0">
+    <div className="relative w-20 max-md:float-left max-md:mr-4 max-md:mb-2 md:w-64">
       <div
         aria-hidden
-        className="absolute -inset-4 rounded-2xl opacity-50 blur-2xl"
+        className="absolute -inset-4 rounded-2xl opacity-50 blur-2xl max-md:hidden"
         style={{
           background:
             "radial-gradient(circle, var(--brand-glow) 0%, transparent 70%)",
         }}
       />
-      <div className="relative aspect-square w-64 overflow-hidden rounded-xl border-2 border-brand/30 bg-card">
+      <div className="relative aspect-square w-20 overflow-hidden rounded-xl border-2 border-brand/30 bg-card md:w-64">
         {children}
       </div>
     </div>
@@ -100,8 +104,8 @@ function IconPanel({
           opacity: 0.35,
         }}
       />
-      <Icon className="relative size-20 text-brand" />
-      <span className="absolute bottom-4 right-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+      <Icon className="relative size-9 text-brand md:size-20" />
+      <span className="absolute bottom-4 right-4 font-mono text-xs uppercase tracking-widest text-muted-foreground max-md:hidden">
         {index}
       </span>
     </div>
@@ -142,7 +146,7 @@ function AILogosPanel() {
           </div>
         ))}
       </div>
-      <span className="absolute bottom-4 right-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+      <span className="absolute bottom-4 right-4 font-mono text-xs uppercase tracking-widest text-muted-foreground max-md:hidden">
         02
       </span>
     </div>
@@ -168,7 +172,7 @@ function TechPills({ items }: { items: readonly string[] }) {
 
 function SlideSobre() {
   return (
-    <div className="grid gap-12 md:grid-cols-[280px_1fr] md:items-start">
+    <div className="flow-root md:grid md:grid-cols-[280px_1fr] md:items-start md:gap-12">
       <VisualFrame>
         <Image
           src="https://github.com/Joaommsp.png"
@@ -180,8 +184,8 @@ function SlideSobre() {
         />
       </VisualFrame>
 
-      <div className="space-y-5">
-        <p className="text-lg leading-relaxed text-muted-foreground">
+      <div className="space-y-4 md:space-y-5">
+        <p className="leading-relaxed text-muted-foreground md:text-lg">
           <span className="text-foreground">Desenvolvedor frontend</span> e{" "}
           <span className="text-foreground">designer UI/UX</span>. Crio{" "}
           <span className="text-foreground">
@@ -190,7 +194,7 @@ function SlideSobre() {
           em React, Next.js e TypeScript — pensadas pra atender públicos e
           clientes específicos, não soluções genéricas.
         </p>
-        <p className="text-lg leading-relaxed text-muted-foreground">
+        <p className="leading-relaxed text-muted-foreground md:text-lg">
           Meu foco está na experiência: que a interface seja bonita, fácil de
           usar e resolva de verdade o problema de quem está do outro lado da
           tela.
@@ -216,13 +220,13 @@ function SlideSobre() {
 
 function SlideIA() {
   return (
-    <div className="grid gap-12 md:grid-cols-[280px_1fr] md:items-start">
+    <div className="flow-root md:grid md:grid-cols-[280px_1fr] md:items-start md:gap-12">
       <VisualFrame>
         <AILogosPanel />
       </VisualFrame>
 
-      <div className="space-y-5">
-        <p className="text-lg leading-relaxed text-muted-foreground">
+      <div className="space-y-4 md:space-y-5">
+        <p className="leading-relaxed text-muted-foreground md:text-lg">
           A IA virou parte do meu fluxo de trabalho — não um atalho pra pular
           etapas. Construo{" "}
           <span className="text-foreground">ecossistemas próprios</span> pra
@@ -230,7 +234,9 @@ function SlideIA() {
           boas skills da comunidade e automatizo o repetitivo (scaffolding,
           refactor, revisão).
         </p>
-        <p className="text-lg leading-relaxed text-muted-foreground">
+        {/* No celular os slides ficam com texto de tamanho parecido, pra altura
+            do carrossel não pular na troca: aqui sai o do meio. */}
+        <p className="leading-relaxed text-muted-foreground max-md:hidden md:text-lg">
           O ponto é fazer isso{" "}
           <span className="text-foreground">
             sem perder qualidade nem deixar o produto genérico
@@ -239,7 +245,7 @@ function SlideIA() {
           reviso, testo e adapto cada saída ao padrão do projeto. Continuo
           responsável por cada linha que vai pra produção.
         </p>
-        <p className="text-lg leading-relaxed text-muted-foreground">
+        <p className="leading-relaxed text-muted-foreground md:text-lg">
           No fim, a ferramenta virou commodity. O que separa hoje é a{" "}
           <span className="text-foreground">
             criatividade e a gestão de ideias
@@ -257,13 +263,13 @@ function SlideIA() {
 
 function SlideDiferencial() {
   return (
-    <div className="grid gap-12 md:grid-cols-[280px_1fr] md:items-start">
+    <div className="flow-root md:grid md:grid-cols-[280px_1fr] md:items-start md:gap-12">
       <VisualFrame>
         <IconPanel icon={Target} index="03" />
       </VisualFrame>
 
-      <div className="space-y-5">
-        <p className="text-lg leading-relaxed text-muted-foreground">
+      <div className="space-y-4 md:space-y-5">
+        <p className="leading-relaxed text-muted-foreground md:text-lg">
           Me diferencio{" "}
           <span className="text-foreground">alimentando a criatividade</span>{" "}
           todo dia e buscando expressar minhas ideias pro time. Com a IA,
@@ -271,7 +277,7 @@ function SlideDiferencial() {
           deixa de ser só conversa e vira algo concreto pra apresentar e
           discutir.
         </p>
-        <p className="text-lg leading-relaxed text-muted-foreground">
+        <p className="leading-relaxed text-muted-foreground md:text-lg">
           Procuro me manter sempre ativo, resolvendo problemas de verdade, e
           aprofundar no que{" "}
           <span className="text-foreground">não é commodity</span>: nuvem,
@@ -288,17 +294,20 @@ function SlideDiferencial() {
 
 function SlideStorytelling() {
   return (
-    <div className="grid gap-12 md:grid-cols-[280px_1fr] md:items-start">
+    <div className="flow-root md:grid md:grid-cols-[280px_1fr] md:items-start md:gap-12">
       <VisualFrame>
         <IconPanel icon={TrendingUp} index="04" />
       </VisualFrame>
 
-      <div className="space-y-5">
-        <p className="text-lg leading-relaxed text-muted-foreground">
+      <div className="space-y-4 md:space-y-5">
+        <p className="leading-relaxed text-muted-foreground md:text-lg">
           <span className="text-foreground">Storytelling de dados</span> é o que
           mais venho explorando: transformar números numa narrativa visual que
-          qualquer pessoa entende e usa pra decidir. Aprimoro isso todo dia,
-          inclusive lendo sobre o assunto. Um gráfico não é enfeite, é argumento
+          qualquer pessoa entende e usa pra decidir.{" "}
+          <span className="max-md:hidden">
+            Aprimoro isso todo dia, inclusive lendo sobre o assunto.
+          </span>{" "}
+          Um gráfico não é enfeite, é argumento
           — troque o tipo de visualização e veja:
         </p>
         <DataStoryChart />
@@ -396,18 +405,17 @@ export function About() {
 
       {/* Trilho do carousel.
           Os quatro slides ficam empilhados na mesma célula do grid: o
-          container passa a ter sempre a altura do maior, em vez de encolher
-          e crescer a cada troca. Sem isso a página variava ~210px no mobile,
-          empurrando o conteúdo de baixo e fazendo o header piscar entre os
-          estados de scroll. Altura vem do conteúdo — nada de valor fixo que
-          quebra quando um texto muda. */}
+          container tem sempre a altura do maior e NUNCA muda na troca de
+          slide. Pra não sobrar vão no celular, os textos de lá têm tamanho
+          parecido (parágrafos marcados com max-md:hidden). Altura vem do
+          conteúdo, nada de valor fixo que quebra quando um texto muda. */}
       <div
         role="group"
         aria-roledescription="carrossel"
         aria-label="Sobre João Marcos"
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        className="relative mt-10 grid rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
+        className="relative mt-6 grid rounded-2xl outline-none md:mt-10 focus-visible:ring-2 focus-visible:ring-brand/50"
       >
         {/* Dica do gesto: flutua por cima do slide porque é ali que o olho
             está — embaixo dos controles ninguém via. `pointer-events-none`
@@ -420,7 +428,7 @@ export function About() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, scale: 0.85 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className="pointer-events-none absolute inset-x-0 top-24 z-10 col-start-1 row-start-1 flex justify-center sm:hidden"
+              className="pointer-events-none absolute top-3 left-3 z-10 col-start-1 row-start-1 flex sm:hidden"
             >
               <motion.span
                 animate={

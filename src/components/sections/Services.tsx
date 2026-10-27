@@ -40,7 +40,7 @@ export function Services() {
         </p>
       </ScrollReveal>
 
-      <div className="mt-13 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-8 grid gap-3 sm:grid-cols-2 md:mt-13 md:gap-5 lg:grid-cols-4">
         {SERVICOS.map((servico, i) => (
           <ScrollReveal
             key={servico.slug}

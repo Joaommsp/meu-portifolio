@@ -8,12 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { GAME_STATUS_COLOR } from "@/components/games/game-status"
 import { GAME_STATUS_LABEL } from "@/types/game"
-import {
-  DotMesh,
-  GradientOrbs,
-  NoiseTexture,
-} from "@/components/backgrounds"
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
+import { ScrollReveal } from "@/components/animations"
 import { MarkdownContent } from "@/components/markdown/MarkdownContent"
 import { BackToTop } from "@/components/blog/BackToTop"
 import { ReadingProgressBar } from "@/components/blog/ReadingProgressBar"
@@ -159,48 +154,21 @@ export default async function GameDetailPage({ params }: Props) {
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <DotMesh />
-        <GradientOrbs
-          orbs={[
-            {
-              size: 480,
-              x: "10%",
-              y: "20%",
-              color: "var(--orb-1)",
-              duration: 22,
-              delay: 0,
-              opacity: 0.22,
-            },
-            {
-              size: 380,
-              x: "80%",
-              y: "60%",
-              color: "var(--orb-2)",
-              duration: 26,
-              delay: 2,
-              opacity: 0.18,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.04} />
-
-        <div className="container relative mx-auto max-w-6xl px-5 sm:px-6 py-20 md:py-24">
-          <FadeIn>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mb-8"
-              render={<Link href="/games" />}
-            >
-              <ArrowLeft className="size-4" data-icon="inline-start" />
-              Todos os jogos
-            </Button>
-          </FadeIn>
+        <div className="container relative mx-auto max-w-6xl px-5 sm:px-6 py-10 md:py-24">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mb-8"
+            render={<Link href="/games" />}
+          >
+            <ArrowLeft className="size-4" data-icon="inline-start" />
+            Todos os jogos
+          </Button>
 
           <div className="grid gap-10 md:grid-cols-[280px_1fr] lg:grid-cols-[340px_1fr]">
             {/* Cover */}
             <ScrollReveal>
-              <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-border shadow-[0_24px_60px_-20px_var(--shadow-elevated),0_0_60px_-30px_var(--brand-glow)]">
+              <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-border shadow-[0_24px_60px_-20px_var(--shadow-elevated)]">
                 {game.coverImage && (
                   <Image
                     src={game.coverImage}
@@ -216,86 +184,76 @@ export default async function GameDetailPage({ params }: Props) {
 
             {/* Info */}
             <div className="flex flex-col">
-              <FadeIn delay={0.05}>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge
-                    variant="outline"
-                    className={cn(
-                      "font-mono text-xs uppercase",
-                      GAME_STATUS_COLOR[game.status]
-                    )}
-                  >
-                    {GAME_STATUS_LABEL[game.status]}
-                  </Badge>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    "font-mono text-xs uppercase",
+                    GAME_STATUS_COLOR[game.status]
+                  )}
+                >
+                  {GAME_STATUS_LABEL[game.status]}
+                </Badge>
+                <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
+                  <Calendar className="size-3" />
+                  {game.yearPlayed}
+                </span>
+                {game.hoursPlayed != null && (
                   <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
-                    <Calendar className="size-3" />
-                    {game.yearPlayed}
+                    <Clock className="size-3" />
+                    {game.hoursPlayed}h
                   </span>
-                  {game.hoursPlayed != null && (
-                    <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
-                      <Clock className="size-3" />
-                      {game.hoursPlayed}h
-                    </span>
-                  )}
-                  {game.rating != null && (
-                    <span className="flex items-center gap-1 rounded-md border border-brand/40 bg-brand/10 px-2 py-0.5 font-mono text-xs text-brand-texto">
-                      <Star className="size-3 fill-brand" />
-                      {game.rating.toFixed(1)}/10
-                    </span>
-                  )}
-                </div>
-              </FadeIn>
+                )}
+                {game.rating != null && (
+                  <span className="flex items-center gap-1 rounded-md border border-brand/40 bg-brand/10 px-2 py-0.5 font-mono text-xs text-brand-texto">
+                    <Star className="size-3 fill-brand" />
+                    {game.rating.toFixed(1)}/10
+                  </span>
+                )}
+              </div>
 
-              <SlideIn direction="up" delay={0.1}>
-                <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-                  {game.title}
-                </h1>
-              </SlideIn>
+              <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
+                {game.title}
+              </h1>
 
-              <SlideIn direction="up" delay={0.15}>
-                <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
-                  {game.shortDescription}
-                </p>
-              </SlideIn>
+              <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
+                {game.shortDescription}
+              </p>
 
               {game.platforms.length > 0 && (
-                <SlideIn direction="up" delay={0.2}>
-                  <div className="mt-6">
-                    <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                      Plataformas
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {game.platforms.map((p) => (
-                        <span
-                          key={p}
-                          className="rounded-md border border-border/60 bg-muted/30 px-2 py-1 font-mono text-xs text-foreground/80"
-                        >
-                          {p}
-                        </span>
-                      ))}
-                    </div>
+                <div className="mt-6">
+                  <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                    Plataformas
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {game.platforms.map((p) => (
+                      <span
+                        key={p}
+                        className="rounded-md border border-border/60 bg-muted/30 px-2 py-1 font-mono text-xs text-foreground/80"
+                      >
+                        {p}
+                      </span>
+                    ))}
                   </div>
-                </SlideIn>
+                </div>
               )}
 
               {game.genres.length > 0 && (
-                <SlideIn direction="up" delay={0.25}>
-                  <div className="mt-4">
-                    <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                      Gêneros
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {game.genres.map((g) => (
-                        <span
-                          key={g}
-                          className="font-mono text-xs text-brand"
-                        >
-                          #{g}
-                        </span>
-                      ))}
-                    </div>
+                <div className="mt-4">
+                  <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                    Gêneros
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {game.genres.map((g) => (
+                      <span
+                        key={g}
+                        className="font-mono text-xs text-brand"
+                      >
+                        #{g}
+                      </span>
+                    ))}
                   </div>
-                </SlideIn>
+                </div>
               )}
             </div>
           </div>
@@ -342,17 +300,15 @@ export default async function GameDetailPage({ params }: Props) {
           </ScrollReveal>
           <div className="grid gap-4 sm:grid-cols-2">
             {game.gallery.map((src, idx) => (
-              <ScrollReveal key={src} delay={idx * 0.05}>
-                <div className="relative aspect-[16/9] overflow-hidden rounded-xl border border-border">
-                  <Image
-                    src={src}
-                    alt={`${game.title} screenshot ${idx + 1}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                </div>
-              </ScrollReveal>
+              <div key={src} className="relative aspect-[16/9] overflow-hidden rounded-xl border border-border">
+                <Image
+                  src={src}
+                  alt={`${game.title} screenshot ${idx + 1}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
             ))}
           </div>
         </section>
@@ -369,19 +325,15 @@ export default async function GameDetailPage({ params }: Props) {
                     Jogos parecidos
                   </p>
                 </ScrollReveal>
-                <ScrollReveal delay={0.05}>
-                  <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
-                    Continue explorando
-                  </h2>
-                </ScrollReveal>
+                <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
+                  Continue explorando
+                </h2>
               </div>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((g, idx) => (
-                <ScrollReveal key={g.id} delay={idx * 0.05}>
-                  <GameCard game={g} />
-                </ScrollReveal>
+              {related.map((g) => (
+                <GameCard key={g.id} game={g} />
               ))}
             </div>
           </div>

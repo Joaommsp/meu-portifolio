@@ -5,7 +5,6 @@ import { X, Gamepad2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { GameCard } from "@/components/games/GameCard"
-import { ScrollReveal } from "@/components/animations"
 import { CampoBusca } from "@/components/listagem/CampoBusca"
 import { EstadoListagem } from "@/components/listagem/EstadoListagem"
 import { FilterChip, FiltroGrupo } from "@/components/listagem/filtros"
@@ -115,13 +114,11 @@ export default function GamesPage() {
     <HeroSobreposto
       hero={
         <PageHero
-          rotulo="Games"
-          janela="games"
           titulo={
             <>
               Jogos que
               <br />
-              <span className="text-gradient-brand-claro">marcaram</span>
+              <span>marcaram</span>
             </>
           }
           descricao={
@@ -131,7 +128,7 @@ export default function GamesPage() {
               {games.length > 0
                 ? contagem(games.length, "jogo", "jogos")
                 : "Os jogos"}{" "}
-              que ficaram comigo — a história deles e por que me marcaram.
+              que ficaram comigo, e por que me marcaram.
             </>
           }
         />
@@ -220,10 +217,8 @@ export default function GamesPage() {
         <h2 className="sr-only">Jogos</h2>
         {filtered.length > 0 ? (
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filtered.map((game, idx) => (
-              <ScrollReveal key={game.id} delay={Math.min(idx, 5) * 0.05}>
-                <GameCard game={game} />
-              </ScrollReveal>
+            {filtered.map((game) => (
+              <GameCard key={game.id} game={game} />
             ))}
           </div>
         ) : (

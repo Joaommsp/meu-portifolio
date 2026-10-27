@@ -2,8 +2,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import { ExternalLink, MapPin, Building2, CalendarDays, Star, GitFork } from "lucide-react"
 
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
-import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
+import { ScrollReveal } from "@/components/animations"
 import { GithubIcon } from "@/components/icons/brand-icons"
 import { GithubReadme } from "@/components/sections/GithubReadme"
 import { GithubContributions } from "@/components/sections/GithubContributions"
@@ -47,7 +46,7 @@ function CartaoRepo({ repo }: { repo: GithubRepo }) {
       href={repo.html_url}
       target="_blank"
       rel="noopener noreferrer"
-      // h-full + o wrapper esticado: sem isso cada card fica da altura da
+      // h-full: sem isso cada card fica da altura da
       // própria descrição e a grade vira um serrilhado.
       className="group flex h-full flex-col gap-2 rounded-xl border border-border bg-card p-4 transition-all hover:-translate-y-0.5 hover:border-brand/40"
     >
@@ -116,118 +115,77 @@ export default async function GithubPage() {
 
   return (
     <section className="relative isolate">
-      {/* A malha fica FORA do wrapper abaixo: ela escuta pointermove no
-          próprio pai, e um pai `pointer-events-none` nunca recebe evento —
-          a malha ficaria inerte. Pendurada na seção, que é ancestral do
-          conteúdo, o hover chega; a altura repete a do wrapper. */}
-      <DotMesh className="h-[80vh]" />
-
-      {/* Os fundos ficam presos ao topo: soltos na seção inteira, os orbs se
-          espalhariam por toda a página, que aqui é bem alta. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[80vh] overflow-hidden"
-      >
-        <GradientOrbs
-          orbs={[
-            {
-              size: 380,
-              x: "8%",
-              y: "18%",
-              color: "var(--orb-1)",
-              duration: 18,
-              delay: 0,
-              opacity: 0.22,
-            },
-            {
-              size: 320,
-              x: "78%",
-              y: "55%",
-              color: "var(--orb-2)",
-              duration: 22,
-              delay: 2,
-              opacity: 0.18,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.04} />
-      </div>
-
-      <div className="container relative mx-auto max-w-6xl px-5 py-24 sm:px-6 md:py-28">
-        <FadeIn>
-          <p className="mb-10 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
-            <GithubIcon className="size-3.5" />
-            GitHub
-          </p>
-        </FadeIn>
+      <div className="container relative mx-auto max-w-6xl px-5 py-10 sm:px-6 md:py-28">
+        <p className="mb-10 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.3em] text-brand">
+          <GithubIcon className="size-3.5" />
+          GitHub
+        </p>
 
         {/* Duas colunas a partir de lg, como o próprio GitHub: identidade fixa
             à esquerda, conteúdo rolando à direita. */}
         <div className="lg:grid lg:grid-cols-[19rem_minmax(0,1fr)] lg:gap-14">
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <SlideIn direction="up" delay={0.1}>
-              <Image
-                src={`${PERFIL_URL}.png`}
-                alt=""
-                width={160}
-                height={160}
-                className="size-28 rounded-full border border-border object-cover sm:size-36"
-                priority
-              />
+            <Image
+              src={`${PERFIL_URL}.png`}
+              alt=""
+              width={160}
+              height={160}
+              className="size-28 rounded-full border border-border object-cover sm:size-36"
+              priority
+            />
 
-              <h1 className="mt-6 font-display text-3xl font-bold tracking-tight">
-                {perfil?.name ?? "João Marcos"}
-              </h1>
-              <p className="mt-1 font-mono text-muted-foreground">
-                @{perfil?.login ?? "Joaommsp"}
+            <h1 className="mt-6 font-display text-3xl font-bold tracking-tight">
+              {perfil?.name ?? "João Marcos"}
+            </h1>
+            <p className="mt-1 font-mono text-muted-foreground">
+              @{perfil?.login ?? "Joaommsp"}
+            </p>
+
+            {perfil?.bio && (
+              <p className="mt-5 whitespace-pre-line leading-relaxed text-muted-foreground">
+                {perfil.bio.trim()}
               </p>
+            )}
 
-              {perfil?.bio && (
-                <p className="mt-5 whitespace-pre-line leading-relaxed text-muted-foreground">
-                  {perfil.bio.trim()}
-                </p>
+            <div className="mt-5 flex flex-col gap-2 text-sm text-muted-foreground">
+              {perfil?.company && (
+                <span className="flex items-start gap-2">
+                  <Building2 className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden />
+                  {perfil.company.trim()}
+                </span>
               )}
+              {perfil?.location && (
+                <span className="flex items-start gap-2">
+                  <MapPin className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden />
+                  {perfil.location.trim()}
+                </span>
+              )}
+              {desde && (
+                <span className="flex items-start gap-2">
+                  <CalendarDays className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden />
+                  No GitHub desde {desde}
+                </span>
+              )}
+            </div>
 
-              <div className="mt-5 flex flex-col gap-2 text-sm text-muted-foreground">
-                {perfil?.company && (
-                  <span className="flex items-start gap-2">
-                    <Building2 className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden />
-                    {perfil.company.trim()}
-                  </span>
-                )}
-                {perfil?.location && (
-                  <span className="flex items-start gap-2">
-                    <MapPin className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden />
-                    {perfil.location.trim()}
-                  </span>
-                )}
-                {desde && (
-                  <span className="flex items-start gap-2">
-                    <CalendarDays className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden />
-                    No GitHub desde {desde}
-                  </span>
-                )}
+            {perfil && (
+              <div className="mt-6 grid grid-cols-2 gap-5 border-t border-border pt-5">
+                <Numero valor={perfil.public_repos} rotulo="Repositórios" />
+                <Numero valor={contarEstrelas(repos)} rotulo="Estrelas" />
+                <Numero valor={perfil.followers} rotulo="Seguidores" />
+                <Numero valor={perfil.following} rotulo="Seguindo" />
               </div>
+            )}
 
-              {perfil && (
-                <div className="mt-6 grid grid-cols-2 gap-5 border-t border-border pt-5">
-                  <Numero valor={perfil.public_repos} rotulo="Repositórios" />
-                  <Numero valor={contarEstrelas(repos)} rotulo="Estrelas" />
-                  <Numero valor={perfil.followers} rotulo="Seguidores" />
-                  <Numero valor={perfil.following} rotulo="Seguindo" />
-                </div>
-              )}
-
-              <a
-                href={PERFIL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
-              >
-                <GithubIcon className="size-4" />
-                Ver perfil no GitHub
-              </a>
-            </SlideIn>
+            <a
+              href={PERFIL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
+            >
+              <GithubIcon className="size-4" />
+              Ver perfil no GitHub
+            </a>
           </aside>
 
           <div className="mt-16 space-y-16 lg:mt-0">
@@ -251,11 +209,9 @@ export default async function GithubPage() {
               <ScrollReveal>
                 <Rotulo>Contribuições</Rotulo>
               </ScrollReveal>
-              <ScrollReveal delay={0.05}>
-                <div className="overflow-x-auto overscroll-x-contain rounded-2xl border border-border bg-card p-5">
-                  <GithubContributions username="Joaommsp" />
-                </div>
-              </ScrollReveal>
+              <div className="github-calendar-wrap overflow-x-auto overscroll-x-contain rounded-2xl border border-border bg-card p-5">
+                <GithubContributions username="Joaommsp" />
+              </div>
             </div>
 
             {repos.length > 0 && (
@@ -269,14 +225,8 @@ export default async function GithubPage() {
                   className="grid gap-4 sm:grid-cols-2"
                   inicial={REPOS_VISIVEIS}
                   nomeItens="repositórios"
-                  itens={repos.map((repo, i) => (
-                    <ScrollReveal
-                      key={repo.id}
-                      delay={Math.min(i, 6) * 0.04}
-                      className="h-full"
-                    >
-                      <CartaoRepo repo={repo} />
-                    </ScrollReveal>
+                  itens={repos.map((repo) => (
+                    <CartaoRepo key={repo.id} repo={repo} />
                   ))}
                 />
               </div>

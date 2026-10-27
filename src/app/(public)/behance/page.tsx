@@ -71,12 +71,9 @@ export default async function BehancePage() {
     <HeroSobreposto
       hero={
         <PageHero
-          rotulo="Behance"
-          icone={<BehanceIcon className="size-4" aria-hidden />}
-          janela="behance"
           titulo={
             <>
-              Design <span className="text-gradient-brand-claro">publicado</span>
+              Design <span>publicado</span>
             </>
           }
           descricao={
@@ -128,10 +125,8 @@ export default async function BehancePage() {
       <section className="container mx-auto max-w-6xl px-5 py-12 sm:px-6">
         {ok ? (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((projeto, i) => (
-              <ScrollReveal key={projeto.id} delay={Math.min(i, 6) * 0.05}>
-                <Cartao projeto={projeto} />
-              </ScrollReveal>
+            {projects.map((projeto) => (
+              <Cartao key={projeto.id} projeto={projeto} />
             ))}
           </div>
         ) : (

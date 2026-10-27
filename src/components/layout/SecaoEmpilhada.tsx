@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "motion/react"
 import { IndicadorRolagem } from "@/components/layout/IndicadorRolagem"
 import { useRolarPara } from "@/components/providers/SmoothScrollProvider"
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
+import { useToque } from "@/hooks/useToque"
 import { useTopoFixo } from "@/hooks/useTopoFixo"
 import { cn } from "@/lib/utils"
 
@@ -25,7 +26,7 @@ type Props = {
    * primeira, o hero, não cobre nada.
    */
   cobre?: boolean
-  /** "Role" + seta no pé da camada (o hero da home). */
+  /** Seta no pé da camada (o hero da home). */
   comIndicador?: boolean
 }
 
@@ -65,7 +66,14 @@ function posicaoNoFluxo(alvo: Element): number | null {
  *   cima por onde aparecia a seção de baixo.
  * - Movimento reduzido: a sobreposição continua (é layout, não animação);
  *   saem a escala e o escurecimento, e o CSS garante isso antes da hidratação.
- * - Seção que não renderiza nada (sem posts, sem jogos) some com a camada
+ * - Toque (celular, tablet): idem. Escalar camadas de milhares de px a cada
+ *   frame estoura a memória de composição do Android: o scroll trava e
+ *   pedaços da tela ficam sem pintar.
+ * - Celular (abaixo de `md`): sem pilha nenhuma. As seções rolam no fluxo
+ *   (`max-md:static`, o `top` inline não vale sem sticky), sem escala, sem a
+ *   camada de escurecimento e sem o topo arredondado nem a sombra da folha,
+ *   que não combinam numa tela estreita.
+ * - Seção que não renderiza nada (sem posts) some com a camada
  *   (`has-[[data-conteudo]:empty]:hidden`), em vez de virar folha em branco.
  * - Marcador, camada e sentinela são irmãos, SEM wrapper: o sticky só prende
  *   dentro do pai, e um pai do tamanho da própria camada nunca deixaria ela
@@ -77,6 +85,8 @@ export function SecaoEmpilhada({ children, cobre = true, comIndicador = false }:
   const sentinela = React.useRef<HTMLDivElement>(null)
   const topo = useTopoFixo(camada, sonda)
   const reduzido = usePrefersReducedMotion()
+  const toque = useToque()
+  const semEfeito = reduzido || toque
   const rolarPara = useRolarPara()
 
   const { scrollYProgress } = useScroll({
@@ -101,10 +111,11 @@ export function SecaoEmpilhada({ children, cobre = true, comIndicador = false }:
         ref={camada}
         data-camada
         onFocusCapture={revelarFoco}
-        style={reduzido ? { top: topo } : { top: topo, scale }}
+        style={semEfeito ? { top: topo } : { top: topo, scale }}
         className={cn(
-          "sticky origin-top motion-reduce:transform-none! has-[[data-conteudo]:empty]:hidden",
-          cobre ? "folha-conteudo overflow-clip" : "fundo-pagina"
+          "sticky origin-top motion-reduce:transform-none! pointer-coarse:transform-none! has-[[data-conteudo]:empty]:hidden",
+          "max-md:static max-md:transform-none!",
+          cobre ? "folha-conteudo overflow-clip max-md:rounded-none max-md:shadow-none" : "fundo-pagina"
         )}
       >
         <div
@@ -112,15 +123,23 @@ export function SecaoEmpilhada({ children, cobre = true, comIndicador = false }:
           aria-hidden
           className="pointer-events-none invisible absolute top-0 h-(--altura-palco) w-px"
         />
-        <div data-conteudo>{children}</div>
+        {/* No desktop toda camada tem pelo menos uma tela: seção mais baixa
+            que a tela prendia no topo e deixava a anterior aparecendo por
+            baixo dela. O conteúdo curto fica centrado na vertical. */}
+        <div
+          data-conteudo
+          className="md:flex md:min-h-(--altura-palco) md:flex-col md:justify-center"
+        >
+          {children}
+        </div>
         {comIndicador && <IndicadorRolagem />}
         {/* Sempre no DOM: o HTML do servidor e o do cliente têm a mesma
             estrutura; só a opacidade muda. */}
         <motion.div
           aria-hidden
-          style={reduzido ? undefined : { opacity }}
+          style={semEfeito ? undefined : { opacity }}
           className={cn(
-            "pointer-events-none absolute inset-0 bg-foreground opacity-0 motion-reduce:hidden",
+            "pointer-events-none absolute inset-0 bg-foreground opacity-0 motion-reduce:hidden pointer-coarse:hidden max-md:hidden",
             cobre && "rounded-t-[inherit]"
           )}
         />

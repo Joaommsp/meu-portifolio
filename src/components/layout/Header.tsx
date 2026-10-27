@@ -34,7 +34,9 @@ export function Header() {
         // Fundo desde o topo, não só depois do scroll. Os links são tinta
         // escura; transparentes sobre o vídeo do hero eles ficam ilegíveis.
         // A borda continua só no scroll, pra não riscar a tela em repouso.
-        "bg-background/70 backdrop-blur-xl",
+        // No toque o fundo é sólido: blur fixo sobre a pilha rolando repinta
+        // a cada frame e trava o scroll no celular.
+        "bg-background/70 backdrop-blur-xl pointer-coarse:bg-background pointer-coarse:backdrop-blur-none",
         "data-[scrolled=true]:border-b data-[scrolled=true]:border-border"
       )}
     >

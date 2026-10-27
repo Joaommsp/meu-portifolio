@@ -11,8 +11,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { useAuth } from "@/hooks/useAuth"
-import { DotMesh } from "@/components/backgrounds/DotMesh"
-import { GradientOrbs } from "@/components/backgrounds/GradientOrbs"
 
 type LoginForm = {
   email: string
@@ -62,9 +60,6 @@ export default function AdminLoginPage() {
 
   return (
     <main className="relative isolate flex min-h-screen items-center justify-center px-6">
-      <DotMesh espacamento={36} />
-      <GradientOrbs />
-
       <Card className="relative w-full max-w-sm">
         <CardContent className="space-y-6 p-8">
           <div className="flex flex-col items-center gap-3 text-center">

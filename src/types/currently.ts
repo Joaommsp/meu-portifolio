@@ -54,3 +54,8 @@ export const EMPTY_CURRENTLY: Currently = {
  * fosse atual — este é um portfólio, e o visitante lê tudo como verdade.
  */
 export const CURRENTLY_EMPTY_TEXT = "Nada no momento"
+
+/** Ligado e com título de verdade (só espaços conta como vazio). */
+export function temItemAtual(item: CurrentlyItem): boolean {
+  return item.visible && item.title.trim() !== ""
+}

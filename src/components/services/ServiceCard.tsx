@@ -12,6 +12,9 @@ import { rotaServico, type Servico } from "@/lib/servicos-content"
  * `superficie-painel` reaponta os tokens do tema pra superfície escura, então
  * `text-brand`, `text-muted-foreground` e `border-border` aqui dentro já saem
  * nas cores do painel.
+ *
+ * No celular a altura cai pra caber o conteúdo (`min-h-52`): quatro cards de
+ * 440px empilhados davam mais de duas telas só nesta seção.
  */
 export function ServiceCard({ servico }: { servico: Servico }) {
   const Efeito = EFEITOS[servico.efeito]
@@ -19,7 +22,7 @@ export function ServiceCard({ servico }: { servico: Servico }) {
   return (
     <Link
       href={rotaServico(servico.slug)}
-      className="superficie-painel group relative flex h-full min-h-110 flex-col justify-end overflow-hidden rounded-2xl border border-[var(--painel-borda)] bg-[var(--painel)] text-foreground shadow-[0_26px_60px_-30px_var(--shadow-elevated)] transition-colors hover:border-brand/45"
+      className="superficie-painel group relative flex h-full min-h-52 flex-col md:min-h-110 justify-end overflow-hidden rounded-2xl border border-[var(--painel-borda)] bg-[var(--painel)] text-foreground shadow-[0_26px_60px_-30px_var(--shadow-elevated)] transition-colors hover:border-brand/45"
     >
       <Efeito />
 
@@ -47,7 +50,7 @@ export function ServiceCard({ servico }: { servico: Servico }) {
         className="absolute top-5 right-5 size-4.5 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand"
       />
 
-      <div className="relative p-5.5">
+      <div className="relative p-5.5 max-md:pt-14">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-brand">
           {servico.categoria}
         </p>

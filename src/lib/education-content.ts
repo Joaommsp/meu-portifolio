@@ -10,6 +10,8 @@
 
 export type Degree = {
   title: string
+  /** Só o curso, sem o grau: o card já diz "Bacharelado". */
+  curso: string
   institution: string
   /** Rótulo curto exibido no card. */
   issued: string
@@ -33,8 +35,9 @@ export type Course = {
 
 export const DEGREE: Degree = {
   title: "Bacharelado em Sistemas de Informação",
+  curso: "Sistemas de Informação",
   institution: "Centro Universitário do Rio São Francisco · UniRios",
-  issued: "ago 2026",
+  issued: "2025",
   credentialId: "109664",
   credentialUrl: "https://view.pok.tech/c/9e80b81b-1441-472b-bbd7-0120ec370042",
   registry: "0x3641…d669",

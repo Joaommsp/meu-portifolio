@@ -13,6 +13,7 @@ import {
   oklchParaRgba,
 } from "@/lib/color"
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
+import { MIDIA_TOQUE } from "@/hooks/useMediaQuery"
 
 /* Defaults da malha — todos ajustáveis por prop. */
 const ESPACAMENTO = 26 // px entre pontos
@@ -247,7 +248,7 @@ export function DotMesh({
       if (dentro) acordar()
     }
 
-    const semMouse = window.matchMedia("(hover: none), (pointer: coarse)").matches
+    const semMouse = window.matchMedia(MIDIA_TOQUE).matches
     const interativo = !reduzido && !semMouse
 
     if (interativo) {

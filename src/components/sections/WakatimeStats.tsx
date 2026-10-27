@@ -7,9 +7,8 @@ import {
   fetchWakatimeToday,
   getLangColor,
 } from "@/lib/wakatime"
-import { SECAO_HOME } from "@/components/sections/secao"
-import { cn } from "@/lib/utils"
 
+/** Horas de código da semana, na /now. Some se a API falhar ou o perfil for privado. */
 export async function WakatimeStats() {
   const [stats, today] = await Promise.all([
     fetchWakatimeStats("last_7_days"),
@@ -24,65 +23,42 @@ export async function WakatimeStats() {
   const topOs = stats.operating_systems[0]
 
   return (
-    <section
-      id="wakatime"
-      className={cn(SECAO_HOME, "scroll-mt-20")}
-    >
-      <div className="mb-12 flex items-end justify-between gap-4">
-        <div>
-          <ScrollReveal>
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              05 · Coding stats
-            </p>
-          </ScrollReveal>
-          <ScrollReveal delay={0.05}>
-            <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Onde tô gastando teclado
-            </h2>
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <p className="mt-4 max-w-xl text-muted-foreground">
-              Tempo real de código rastreado pelo{" "}
-              <a
-                href="https://wakatime.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-brand underline-offset-2 hover:underline"
-              >
-                WakaTime
-              </a>{" "}
-              · {stats.human_readable_range}.
-            </p>
-          </ScrollReveal>
-        </div>
-      </div>
+    <section id="wakatime" className="container mx-auto max-w-4xl scroll-mt-20 px-5 py-12 sm:px-6">
+      <ScrollReveal>
+        <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+          Horas de código
+        </h2>
+        <p className="mt-2 mb-6 text-muted-foreground">
+          Últimos 7 dias, via{" "}
+          <a
+            href="https://wakatime.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand underline-offset-2 hover:underline"
+          >
+            WakaTime
+          </a>
+          .
+        </p>
 
-      {!hasData ? (
-        <ScrollReveal>
+        {!hasData ? (
           <EmptyState />
-        </ScrollReveal>
-      ) : (
-        <div className="space-y-8">
-          {/* Big stats */}
-          <ScrollReveal>
+        ) : (
+          <div className="space-y-8">
             <div className="grid gap-3 sm:grid-cols-2">
               <BigStat
                 icon={<Clock className="size-4" />}
-                label="Total nos últimos 7 dias"
+                label="Semana"
                 value={stats.human_readable_total}
               />
               <BigStat
                 icon={<Zap className="size-4" />}
-                label="Tempo de hoje"
+                label="Hoje"
                 value={today?.human_readable ?? "Sem dados"}
-                isLive={!!today && today.total_seconds > 0}
               />
             </div>
-          </ScrollReveal>
 
-          {/* Languages bars */}
-          {stats.languages.length > 0 && (
-            <ScrollReveal delay={0.05}>
+            {stats.languages.length > 0 && (
               <div className="rounded-xl border border-border bg-card p-6">
                 <h3 className="mb-5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                   Linguagens
@@ -99,15 +75,12 @@ export async function WakatimeStats() {
                   ))}
                 </ul>
               </div>
-            </ScrollReveal>
-          )}
+            )}
 
-          {/* Editor + OS */}
-          <ScrollReveal delay={0.1}>
             <div className="grid gap-3 sm:grid-cols-2">
               {topEditor && (
                 <RankCard
-                  label="Editor mais usado"
+                  label="Editor"
                   name={topEditor.name}
                   percent={topEditor.percent}
                   text={topEditor.text}
@@ -115,16 +88,16 @@ export async function WakatimeStats() {
               )}
               {topOs && (
                 <RankCard
-                  label="Sistema operacional"
+                  label="Sistema"
                   name={topOs.name}
                   percent={topOs.percent}
                   text={topOs.text}
                 />
               )}
             </div>
-          </ScrollReveal>
-        </div>
-      )}
+          </div>
+        )}
+      </ScrollReveal>
     </section>
   )
 }
@@ -135,24 +108,16 @@ function BigStat({
   icon,
   label,
   value,
-  isLive = false,
 }: {
   icon: React.ReactNode
   label: string
   value: string
-  isLive?: boolean
 }) {
   return (
     <div className="relative rounded-xl border border-border bg-card p-6">
       <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {icon}
         {label}
-        {isLive && (
-          <span className="ml-auto inline-flex items-center gap-1 text-brand">
-            <span className="size-1.5 animate-pulse rounded-full bg-brand shadow-[0_0_8px_var(--brand-glow)]" />
-            <span className="text-xs">ao vivo</span>
-          </span>
-        )}
       </p>
       <p className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
         {value}
@@ -236,9 +201,7 @@ function EmptyState() {
         Iniciando rastreamento
       </Badge>
       <p className="text-sm text-muted-foreground">
-        Plugin WakaTime acabou de ser instalado. Stats aparecem aqui
-        conforme o tempo de código for sendo registrado — basta codar
-        normalmente, é tudo automático.
+        Os números aparecem aqui conforme o tempo de código é registrado.
       </p>
       <p className="font-mono text-xs text-muted-foreground/70">
         Atualiza a cada 30min ↻

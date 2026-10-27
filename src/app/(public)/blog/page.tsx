@@ -2,12 +2,11 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { X, FileX, Clock, ArrowUpRight, Sparkles } from "lucide-react"
+import { X, FileX, Clock, ArrowUpRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { PostCard } from "@/components/blog/PostCard"
-import { ScrollReveal } from "@/components/animations"
 import { CampoBusca } from "@/components/listagem/CampoBusca"
 import { EstadoListagem } from "@/components/listagem/EstadoListagem"
 import { FilterChip, FiltroGrupo } from "@/components/listagem/filtros"
@@ -106,13 +105,11 @@ export default function BlogPage() {
     <HeroSobreposto
       hero={
         <PageHero
-          rotulo="Blog"
-          janela="blog"
           titulo={
             <>
               Pensamentos, tutoriais
               <br />
-              <span className="text-gradient-brand-claro">e divagações</span>
+              <span>e divagações</span>
             </>
           }
           descricao={
@@ -131,9 +128,7 @@ export default function BlogPage() {
       {/* Featured */}
       {featured && !hasActiveFilter && (
         <section className="container mx-auto max-w-6xl px-5 sm:px-6">
-          <ScrollReveal>
-            <FeaturedCard post={featured} />
-          </ScrollReveal>
+          <FeaturedCard post={featured} />
         </section>
       )}
 
@@ -205,10 +200,8 @@ export default function BlogPage() {
         <h2 className="sr-only">Posts</h2>
         {filtered.length > 0 ? (
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((post, idx) => (
-              <ScrollReveal key={post.id} delay={Math.min(idx, 5) * 0.05}>
-                <PostCard post={post} />
-              </ScrollReveal>
+            {filtered.map((post) => (
+              <PostCard key={post.id} post={post} />
             ))}
           </div>
         ) : (
@@ -241,22 +234,9 @@ function FeaturedCard({ post }: { post: Post }) {
       href={`/blog/${post.slug}`}
       className="group relative isolate flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-brand/50 md:flex-row"
     >
-      {/* Cover gradient */}
-      <div className="relative aspect-[16/9] w-full overflow-hidden md:aspect-auto md:w-2/5">
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(at 30% 30%, var(--brand-glow) 0%, transparent 60%),
-              radial-gradient(at 70% 70%, var(--brand-hover) 0%, transparent 55%),
-              linear-gradient(135deg, var(--background-secondary) 0%, var(--background-tertiary) 100%)
-            `,
-          }}
-        />
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-background-secondary md:aspect-auto md:w-2/5">
         <div className="absolute left-3 top-3">
-          <Badge className="gap-1 bg-brand text-brand-foreground">
-            <Sparkles className="size-3" />
+          <Badge className="bg-brand text-brand-foreground">
             Destaque
           </Badge>
         </div>

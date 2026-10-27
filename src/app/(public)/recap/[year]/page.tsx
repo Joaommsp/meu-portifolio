@@ -16,12 +16,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import {
-  DotMesh,
-  GradientOrbs,
-  NoiseTexture,
-} from "@/components/backgrounds"
-import { FadeIn, SlideIn, ScrollReveal } from "@/components/animations"
+import { ScrollReveal } from "@/components/animations"
 import { getAllPublishedPosts } from "@/lib/data/posts"
 import { getAllProjects } from "@/lib/data/projects"
 import { getAllPublishedGames } from "@/lib/data/games"
@@ -46,7 +41,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { year } = await params
   return {
-    title: `${year} — Recap`,
+    title: `Recap ${year}`,
     description: `Resumo de ${year} de João Marcos: posts publicados, jogos, livros, projetos e horas de código.`,
     alternates: { canonical: `/recap/${year}` },
   }
@@ -113,45 +108,33 @@ export default async function RecapPage({ params }: Props) {
     <>
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <DotMesh />
-        <GradientOrbs />
-        <NoiseTexture opacity={0.05} />
+        <div className="container relative mx-auto max-w-5xl px-5 sm:px-6 py-10 md:py-28">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mb-8"
+            render={<Link href="/" />}
+          >
+            <ArrowLeft className="size-4" data-icon="inline-start" />
+            Voltar
+          </Button>
 
-        <div className="container relative mx-auto max-w-5xl px-5 sm:px-6 py-24 md:py-28">
-          <FadeIn>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mb-8"
-              render={<Link href="/" />}
-            >
-              <ArrowLeft className="size-4" data-icon="inline-start" />
-              Voltar
-            </Button>
-          </FadeIn>
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
+            Recap {isCurrentYear ? "(em andamento)" : "anual"}
+          </p>
 
-          <FadeIn delay={0.05}>
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              Recap {isCurrentYear ? "(em andamento)" : "anual"}
-            </p>
-          </FadeIn>
+          <h1 className="mt-4 font-display text-[clamp(4rem,18vw,14rem)] font-bold leading-none tracking-tighter">
+            <span className="text-foreground">{String(year).slice(0, 2)}</span>
+            <span className="text-brand">
+              {String(year).slice(2)}
+            </span>
+          </h1>
 
-          <SlideIn direction="up" delay={0.1}>
-            <h1 className="mt-4 font-display text-[clamp(4rem,18vw,14rem)] font-bold leading-none tracking-tighter">
-              <span className="text-foreground">{String(year).slice(0, 2)}</span>
-              <span className="text-brand drop-shadow-[0_0_30px_var(--brand-glow)]">
-                {String(year).slice(2)}
-              </span>
-            </h1>
-          </SlideIn>
-
-          <SlideIn direction="up" delay={0.2}>
-            <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              {isCurrentYear
-                ? `Snapshot do ano até aqui — atualiza conforme novos posts, jogos e livros entram.`
-                : `Tudo que aconteceu em ${year} — posts, jogos, livros e horas de código.`}
-            </p>
-          </SlideIn>
+          <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
+            {isCurrentYear
+              ? `O ano até aqui. Atualiza com cada post, jogo e livro novo.`
+              : `Posts, jogos, livros e horas de código de ${year}.`}
+          </p>
         </div>
       </section>
 
@@ -204,33 +187,31 @@ export default async function RecapPage({ params }: Props) {
               </ScrollReveal>
               <div className="grid gap-3 rounded-2xl border border-border bg-card p-6">
                 {wakatime.languages.slice(0, 6).map((lang) => (
-                  <ScrollReveal key={lang.name} delay={0.03}>
-                    <div>
-                      <div className="mb-1.5 flex items-baseline justify-between gap-3 text-sm">
-                        <span className="flex items-center gap-2 font-medium">
-                          <span
-                            aria-hidden
-                            className="inline-block size-2.5 shrink-0 rounded-full"
-                            style={{ background: getLangColor(lang.name) }}
-                          />
-                          {lang.name}
-                        </span>
-                        <span className="font-mono text-xs text-muted-foreground">
-                          {lang.percent.toFixed(1)}% ·{" "}
-                          {Math.round(lang.total_seconds / 3600)}h
-                        </span>
-                      </div>
-                      <div className="h-1.5 overflow-hidden rounded-full bg-muted">
-                        <div
-                          className="h-full rounded-full"
-                          style={{
-                            width: `${lang.percent}%`,
-                            background: getLangColor(lang.name),
-                          }}
+                  <div key={lang.name}>
+                    <div className="mb-1.5 flex items-baseline justify-between gap-3 text-sm">
+                      <span className="flex items-center gap-2 font-medium">
+                        <span
+                          aria-hidden
+                          className="inline-block size-2.5 shrink-0 rounded-full"
+                          style={{ background: getLangColor(lang.name) }}
                         />
-                      </div>
+                        {lang.name}
+                      </span>
+                      <span className="font-mono text-xs text-muted-foreground">
+                        {lang.percent.toFixed(1)}% ·{" "}
+                        {Math.round(lang.total_seconds / 3600)}h
+                      </span>
                     </div>
-                  </ScrollReveal>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${lang.percent}%`,
+                          background: getLangColor(lang.name),
+                        }}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
               {wakatime.days_coded > 0 && (
@@ -257,39 +238,33 @@ export default async function RecapPage({ params }: Props) {
 
               <div className="grid gap-4 lg:grid-cols-3">
                 {topGame && (
-                  <ScrollReveal>
-                    <HighlightCard
-                      type="Top jogo"
-                      title={topGame.title}
-                      subtitle={topGame.shortDescription}
-                      coverImage={topGame.coverImage}
-                      rating={topGame.rating}
-                      href={`/games/${topGame.slug}`}
-                    />
-                  </ScrollReveal>
+                  <HighlightCard
+                    type="Top jogo"
+                    title={topGame.title}
+                    subtitle={topGame.shortDescription}
+                    coverImage={topGame.coverImage}
+                    rating={topGame.rating}
+                    href={`/games/${topGame.slug}`}
+                  />
                 )}
                 {topBook && (
-                  <ScrollReveal delay={0.05}>
-                    <HighlightCard
-                      type="Top livro"
-                      title={topBook.title}
-                      subtitle={topBook.author}
-                      coverImage={topBook.coverImage}
-                      rating={topBook.rating}
-                      href={`/livros/${topBook.slug}`}
-                    />
-                  </ScrollReveal>
+                  <HighlightCard
+                    type="Top livro"
+                    title={topBook.title}
+                    subtitle={topBook.author}
+                    coverImage={topBook.coverImage}
+                    rating={topBook.rating}
+                    href={`/livros/${topBook.slug}`}
+                  />
                 )}
                 {featuredPost && (
-                  <ScrollReveal delay={0.1}>
-                    <HighlightCard
-                      type="Post em destaque"
-                      title={featuredPost.title}
-                      subtitle={featuredPost.excerpt}
-                      coverImage={featuredPost.coverImage}
-                      href={`/blog/${featuredPost.slug}`}
-                    />
-                  </ScrollReveal>
+                  <HighlightCard
+                    type="Post em destaque"
+                    title={featuredPost.title}
+                    subtitle={featuredPost.excerpt}
+                    coverImage={featuredPost.coverImage}
+                    href={`/blog/${featuredPost.slug}`}
+                  />
                 )}
               </div>
             </section>
@@ -304,15 +279,13 @@ export default async function RecapPage({ params }: Props) {
                 </h2>
               </ScrollReveal>
               <div className="flex flex-wrap gap-3">
-                {topGenres.map(([genre, count], idx) => (
-                  <ScrollReveal key={genre} delay={idx * 0.03}>
-                    <div className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/[0.06] px-4 py-2">
-                      <span className="font-display text-2xl font-bold text-brand">
-                        {count}
-                      </span>
-                      <span className="text-sm">{genre}</span>
-                    </div>
-                  </ScrollReveal>
+                {topGenres.map(([genre, count]) => (
+                  <div key={genre} className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/[0.06] px-4 py-2">
+                    <span className="font-display text-2xl font-bold text-brand">
+                      {count}
+                    </span>
+                    <span className="text-sm">{genre}</span>
+                  </div>
                 ))}
               </div>
             </section>
@@ -369,16 +342,12 @@ function BigNumber({
       </p>
     </>
   )
-  return (
-    <ScrollReveal>
-      {href ? (
-        <Link href={href} className={className}>
-          {content}
-        </Link>
-      ) : (
-        <div className={className}>{content}</div>
-      )}
-    </ScrollReveal>
+  return href ? (
+    <Link href={href} className={className}>
+      {content}
+    </Link>
+  ) : (
+    <div className={className}>{content}</div>
   )
 }
 

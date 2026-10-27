@@ -188,21 +188,16 @@ export default function GuestbookPage() {
     <HeroSobreposto
       hero={
         <PageHero
-          rotulo="Guestbook"
-          icone={<MessageCircle className="size-3.5" aria-hidden />}
-          janela="guestbook"
           titulo={
             <>
               Passou por
               <br />
-              <span className="text-gradient-brand-claro">aqui?</span>
+              <span>aqui?</span>
             </>
           }
           descricao={
             <>
-              Deixa uma mensagem. Não importa se é &ldquo;oi&rdquo;,
-              comentário sobre algum projeto, ou recomendação aleatória — todo
-              mundo lê.
+              Deixe uma mensagem. Todo mundo lê.
             </>
           }
         />
@@ -315,8 +310,8 @@ export default function GuestbookPage() {
                 <div className="space-y-4 text-center">
                   <Sparkles className="mx-auto size-6 text-brand" />
                   <p className="text-sm text-muted-foreground">
-                    Loga com GitHub ou Google pra deixar sua marca. Só uma
-                    mensagem por pessoa — pode editar depois.
+                    Entre com GitHub ou Google. Uma mensagem por pessoa,
+                    editável depois.
                   </p>
                   <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
                     <Button
@@ -381,12 +376,12 @@ export default function GuestbookPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {entries.map((entry, idx) => {
+            {entries.map((entry) => {
               const provider = PROVIDER_LABEL[entry.providerId]
               const isOwn = user?.uid === entry.userId
               return (
-                <ScrollReveal key={entry.id} delay={Math.min(idx, 8) * 0.03}>
                   <div
+                    key={entry.id}
                     className={cn(
                       "rounded-xl border p-4 transition-colors",
                       isOwn
@@ -436,7 +431,6 @@ export default function GuestbookPage() {
                       </div>
                     </div>
                   </div>
-                </ScrollReveal>
               )
             })}
           </div>

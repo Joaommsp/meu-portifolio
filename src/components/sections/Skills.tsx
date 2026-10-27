@@ -9,12 +9,12 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
 import { useEdgeMask } from "@/hooks/useEdgeMask"
 import { useDragScroll } from "@/hooks/useDragScroll"
 import { cn } from "@/lib/utils"
+import { TITULO_SECAO_HOME } from "@/components/sections/secao"
 import { STACK, STACK_COUNT } from "@/lib/stack-content"
 
 /**
- * Cover-flow da stack: cada tecnologia é uma carta, e a carta em foco tinge
- * o fundo da seção com a cor da própria marca. Navegação por scroll-snap —
- * o swipe no toque vem do browser, sem JS de drag.
+ * Cover-flow da stack: cada tecnologia é uma carta, e a em foco cresce.
+ * Navegação por scroll-snap: o swipe no toque vem do browser, sem JS de drag.
  */
 export function Skills() {
   const reduced = usePrefersReducedMotion()
@@ -73,35 +73,11 @@ export function Skills() {
   return (
     <section
       id="skills"
-      className="relative overflow-hidden border-y border-border bg-card/30 py-16 select-none md:py-24"
+      className="relative overflow-hidden border-y border-border bg-card/30 py-10 select-none md:py-24"
     >
-      {/* Wash: assume a cor da marca em foco. Mais lento que a carta, pra cor
-          chegar depois do movimento em vez de competir com ele. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 transition-[background] duration-500 ease-out"
-        style={{
-          background: `radial-gradient(600px 320px at 40% 38%, ${corAtiva}22, transparent 70%)`,
-        }}
-      />
-
-      <div className="relative">
+      <ScrollReveal className="relative">
         <div className="container mx-auto max-w-6xl px-5 sm:px-6">
-          <ScrollReveal>
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              03 · Stack
-            </p>
-          </ScrollReveal>
-          <ScrollReveal delay={0.05}>
-            <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Tecnologias do dia-a-dia
-            </h2>
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <p className="mt-4 max-w-xl text-muted-foreground">
-              As ferramentas que eu uso pra entregar projeto em produção.
-            </p>
-          </ScrollReveal>
+          <h2 className={TITULO_SECAO_HOME}>Stack</h2>
         </div>
 
         {/* Trilho.
@@ -113,7 +89,7 @@ export function Skills() {
           aria-label="Tecnologias que eu uso"
           tabIndex={0}
           className={cn(
-            "mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-4 select-none",
+            "mt-6 flex snap-x md:mt-12 snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-4 select-none",
             "px-[calc(50%-75px)] sm:px-[calc(50%-85px)]",
             "outline-none focus-visible:ring-2 focus-visible:ring-brand/50",
             "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -122,7 +98,6 @@ export function Skills() {
         >
           {STACK.map((name, i) => {
             const Icon = TECH_ICONS[name]
-            const cor = TECH_COLORS[name]
             const on = i === active
             return (
               <button
@@ -142,16 +117,6 @@ export function Skills() {
                     : "border-border bg-card/60 opacity-80 sm:scale-[0.9] sm:opacity-70"
                 )}
               >
-                {/* glow da marca, só na carta em foco */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-0 -top-16 h-36 transition-opacity duration-[400ms]"
-                  style={{
-                    background: `radial-gradient(circle, ${cor}, transparent 70%)`,
-                    opacity: on ? 0.3 : 0,
-                  }}
-                />
-
                 <Icon
                   colored
                   className={cn(
@@ -224,7 +189,7 @@ export function Skills() {
               aria-hidden="true"
               className="flex items-center gap-1 font-mono text-xs uppercase tracking-widest text-muted-foreground sm:hidden"
             >
-              Arrasta
+              Arraste
               <ChevronRight className="size-3" />
             </span>
           )}
@@ -250,7 +215,7 @@ export function Skills() {
             </button>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   )
 }

@@ -1,20 +1,10 @@
-"use client"
-
-import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "motion/react"
-import { ArrowUpRight, Globe } from "lucide-react"
+import { Globe } from "lucide-react"
 
 import { GithubIcon } from "@/components/icons/brand-icons"
 import { PROJECT_STATUS_COLOR } from "@/components/projects/project-status"
 import { Badge } from "@/components/ui/badge"
-import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
 import { cn } from "@/lib/utils"
 import { PROJECT_STATUS_LABEL, type Project } from "@/types/project"
 
@@ -23,80 +13,13 @@ type Props = {
 }
 
 /**
- * Card de projeto com tilt 3D no hover (mouse-tracking).
- * Sem imagem? Usa gradient brand como cover decorativo.
+ * Card de projeto. No hover só a borda muda de cor.
+ * Sem imagem, a capa fica numa superfície lisa.
  */
 export function ProjectCard({ project }: Props) {
-  const reduced = usePrefersReducedMotion()
-  const ref = React.useRef<HTMLDivElement>(null)
-
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), {
-    stiffness: 200,
-    damping: 25,
-  })
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), {
-    stiffness: 200,
-    damping: 25,
-  })
-
-  function handleMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (reduced || !ref.current) return
-    const rect = ref.current.getBoundingClientRect()
-    const xv = (e.clientX - rect.left) / rect.width - 0.5
-    const yv = (e.clientY - rect.top) / rect.height - 0.5
-    x.set(xv)
-    y.set(yv)
-  }
-
-  function handleLeave() {
-    x.set(0)
-    y.set(0)
-  }
-
   return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      style={
-        reduced
-          ? undefined
-          : {
-              rotateX,
-              rotateY,
-              transformPerspective: 1200,
-              transformStyle: "preserve-3d",
-            }
-      }
-      className="group relative isolate flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-brand/50"
-    >
-      {/*
-        Cover area. O gradiente e a grade abaixo são a reserva para projeto sem
-        capa; quando há `coverImage`, a imagem cobre os dois.
-      */}
-      <div className="relative aspect-[16/9] w-full overflow-hidden">
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(at 20% 30%, var(--brand-glow) 0%, transparent 60%),
-              radial-gradient(at 80% 70%, var(--brand-hover) 0%, transparent 55%),
-              linear-gradient(135deg, var(--background-secondary) 0%, var(--background-tertiary) 100%)
-            `,
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: `linear-gradient(to right, oklch(from var(--pattern-line) l c h / 0.05) 1px, transparent 1px), linear-gradient(to bottom, oklch(from var(--pattern-line) l c h / 0.05) 1px, transparent 1px)`,
-            backgroundSize: "24px 24px",
-          }}
-        />
-
+    <div className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-brand/50">
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-background-secondary">
         {project.coverImage ? (
           <>
             {/*
@@ -140,10 +63,9 @@ export function ProjectCard({ project }: Props) {
       <div className="flex flex-1 flex-col gap-3 p-5">
         <Link
           href={`/projetos/${project.slug}`}
-          className="inline-flex items-center gap-1.5 font-display text-xl font-semibold tracking-tight transition-colors hover:text-brand"
+          className="font-display text-xl font-semibold tracking-tight transition-colors hover:text-brand"
         >
           {project.title}
-          <ArrowUpRight className="size-4 opacity-0 transition-opacity group-hover:opacity-100" />
         </Link>
 
         <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">
@@ -191,15 +113,6 @@ export function ProjectCard({ project }: Props) {
         )}
       </div>
 
-      {/* Brand glow no hover */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{
-          background: `radial-gradient(circle at 50% 0%, var(--brand-glow) 0%, transparent 70%)`,
-          opacity: 0,
-        }}
-      />
-    </motion.div>
+    </div>
   )
 }

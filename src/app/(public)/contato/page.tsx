@@ -17,7 +17,7 @@ import { DISPONIBILIDADE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contato",
   description:
-    "Mande uma mensagem para João Marcos — frontend dev e UI/UX designer em Paulo Afonso, BA.",
+    "Fale com João Marcos, frontend e UI/UX em Paulo Afonso, BA.",
 };
 
 const QUICK_LINKS = [
@@ -33,14 +33,14 @@ const QUICK_LINKS = [
     handle: "joaomarcos10oficial",
     href: SOCIAL_LINKS.find((s) => s.label === "LinkedIn")?.href ?? "#",
     Icon: LinkedinIcon,
-    description: "Pra conversas profissionais e networking",
+    description: "Trabalho",
   },
   {
     label: "GitHub",
     handle: "@Joaommsp",
     href: SOCIAL_LINKS.find((s) => s.label === "GitHub")?.href ?? "#",
     Icon: GithubIcon,
-    description: "Open-source, código de exemplo, contribuições",
+    description: "Código",
   },
   {
     label: "Instagram",
@@ -56,18 +56,11 @@ export default function ContatoPage() {
     <HeroSobreposto
       hero={
         <PageHero
-          rotulo="Contato"
-          janela="contato"
-          titulo={
-            <>
-              Vamos <span className="text-gradient-brand-claro">conversar?</span>
-            </>
-          }
-          descricao="Tô sempre aberto a novos projetos, parcerias ou só uma boa conversa sobre design e código. Use o formulário ou me chame direto pelos canais — respondo o mais rápido possível."
+          titulo="Contato"
+          descricao="Projetos, vagas ou parcerias. Respondo em até 24h úteis."
         >
           <div className="flex flex-wrap items-center gap-3">
-            <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">
-              <span className="inline-block size-1.5 rounded-full bg-success" />
+            <Badge variant="outline" className="px-3 py-1 font-mono text-xs">
               {DISPONIBILIDADE.status}
             </Badge>
             <Badge variant="outline" className="gap-1.5 px-3 py-1 font-mono text-xs">
@@ -79,30 +72,25 @@ export default function ContatoPage() {
       }
     >
       {/* Form + canais diretos */}
-      <section className="container mx-auto max-w-6xl px-5 sm:px-6 py-24">
-        <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
-          {/* Form */}
-          <ScrollReveal direction="left">
+      <section className="container mx-auto max-w-6xl px-5 sm:px-6 py-10 md:py-24">
+        <ScrollReveal>
+          <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
+            {/* Form */}
             <div>
               <h2 className="mb-2 font-display text-2xl font-bold tracking-tight">
-                Mande uma mensagem
+                Mensagem
               </h2>
               <p className="mb-6 text-sm text-muted-foreground">
-                Abre seu cliente de email com tudo preenchido.
+                Abre no seu app de email.
               </p>
               <ContactForm />
             </div>
-          </ScrollReveal>
 
-          {/* Quick links */}
-          <ScrollReveal direction="right">
+            {/* Quick links */}
             <div>
-              <h2 className="mb-2 font-display text-2xl font-bold tracking-tight">
-                Ou pelos canais diretos
+              <h2 className="mb-6 font-display text-2xl font-bold tracking-tight">
+                Canais
               </h2>
-              <p className="mb-6 text-sm text-muted-foreground">
-                Escolha o que combina melhor com o assunto.
-              </p>
               <ul className="space-y-3">
                 {QUICK_LINKS.map(
                   ({ label, handle, href, Icon, description }) => (
@@ -142,8 +130,8 @@ export default function ContatoPage() {
                 )}
               </ul>
             </div>
-          </ScrollReveal>
-        </div>
+          </div>
+        </ScrollReveal>
       </section>
     </HeroSobreposto>
   );

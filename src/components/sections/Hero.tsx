@@ -11,7 +11,6 @@ import {
   GradientOrbs,
   NoiseTexture,
   ParticlesBackground,
-  SpotlightGrid,
 } from "@/components/backgrounds"
 import { SlideIn, TextReveal, MagneticButton } from "@/components/animations"
 import { WindowFrame } from "@/components/misc/WindowFrame"
@@ -19,6 +18,7 @@ import { TerminalOverlay } from "@/components/misc/TerminalOverlay"
 import { CASCA_HERO } from "@/components/sections/secao"
 import { CONTACT_EMAIL } from "@/lib/nav"
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
+import { useToque } from "@/hooks/useToque"
 import { cn } from "@/lib/utils"
 
 /**
@@ -45,6 +45,9 @@ const RETRATO = {
  */
 export function Hero() {
   const reduced = usePrefersReducedMotion()
+  // No toque o ramo desktop fica escondido (ou num tablet, sem mouse pra
+  // grade reagir): o fundo animado nem monta, pra não rodar JS invisível.
+  const toque = useToque()
   const Envoltorio = reduced ? "span" : motion.span
 
   return (
@@ -56,8 +59,8 @@ export function Hero() {
       className={cn(CASCA_HERO, "py-24 select-none lg:py-28")}
     >
       <div className="pointer-events-none absolute inset-0 z-0 opacity-50">
-        <GradientOrbs />
-        <ParticlesBackground count={20} />
+        {!toque && <GradientOrbs />}
+        {!toque && <ParticlesBackground count={20} />}
       </div>
       <div className="pointer-events-none absolute inset-0 z-0">
         <DotPattern opacity={0.06} />
@@ -70,7 +73,11 @@ export function Hero() {
           {/* Corpo: texto | retrato. `isolate` prende o z-index do holofote
               dentro do painel. */}
           <div className="relative isolate grid lg:grid-cols-[1fr_0.84fr]">
-            <SpotlightGrid />
+            {/* Terminal atrás do texto, no lado esquerdo do card, bem
+                transparente pra não brigar com o contraste do texto. */}
+            {!toque && (
+              <TerminalOverlay className="right-auto z-0 w-[55%] opacity-25 max-lg:hidden" />
+            )}
             {/* Esmaecimento da BASE DO PAINEL, não da imagem. Preso à coluna
                 da foto ele terminava numa aresta vertical no meio da janela —
                 dava pra ver onde o overlay acabava. Aqui atravessa a largura
@@ -174,13 +181,11 @@ export function Hero() {
                   </MagneticButton>
                 </div>
               </SlideIn>
+
             </div>
 
-            {/* Retrato + terminal. O terminal corre por trás da figura; o
-                recorte é ancorado à DIREITA pra sobrar a faixa da esquerda,
-                senão a figura tapava as linhas quase todas. */}
+            {/* Retrato. O terminal fica atrás do texto, não da figura. */}
             <div className="relative z-10 h-80 sm:h-96 lg:h-auto lg:min-h-104">
-              <TerminalOverlay className="z-0" />
               <Image
                 src={RETRATO.src}
                 alt={RETRATO.alt}

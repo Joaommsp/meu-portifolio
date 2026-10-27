@@ -1,8 +1,7 @@
 import Link from "next/link"
-import { ArrowLeft, Home, Search, FolderGit2, BookOpen } from "lucide-react"
+import { ArrowLeft, Home, FolderGit2, BookOpen } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { DotMesh, GradientOrbs, NoiseTexture } from "@/components/backgrounds"
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 import { CommandPaletteProvider } from "@/components/command/CommandPaletteProvider"
@@ -13,31 +12,6 @@ export default function NotFound() {
     <CommandPaletteProvider>
       <Header />
       <main className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pt-20">
-        <DotMesh espacamento={36} />
-        <GradientOrbs
-          orbs={[
-            {
-              size: 540,
-              x: "20%",
-              y: "30%",
-              color: "var(--orb-1)",
-              duration: 24,
-              delay: 0,
-              opacity: 0.3,
-            },
-            {
-              size: 420,
-              x: "75%",
-              y: "70%",
-              color: "var(--orb-2)",
-              duration: 28,
-              delay: 2,
-              opacity: 0.25,
-            },
-          ]}
-        />
-        <NoiseTexture opacity={0.05} />
-
         <div className="relative z-10 mx-auto flex max-w-2xl flex-col items-center text-center">
           {/* Tag */}
           <span className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
@@ -50,18 +24,11 @@ export default function NotFound() {
             aria-label="404"
           >
             <span className="text-foreground">4</span>
-            <span className="text-brand drop-shadow-[0_0_24px_var(--brand-glow)]">
+            <span className="text-brand">
               0
             </span>
             <span className="text-foreground">4</span>
           </h1>
-
-          {/* Glitch line */}
-          <div className="mt-2 flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-            <span className="h-px w-8 bg-brand" />
-            <span>signal lost</span>
-            <span className="h-px w-8 bg-brand" />
-          </div>
 
           {/* Mensagem */}
           <h2 className="mt-8 font-display text-2xl font-semibold tracking-tight md:text-3xl">
@@ -106,7 +73,7 @@ export default function NotFound() {
               <Link
                 key={card.href}
                 href={card.href}
-                className="group relative flex flex-col items-start gap-2 rounded-xl border border-border/60 bg-card/40 p-4 text-left backdrop-blur-sm transition-colors hover:border-brand/50 hover:bg-card/60"
+                className="group relative flex flex-col items-start gap-2 rounded-xl border border-border/60 bg-card p-4 text-left transition-colors hover:border-brand/50"
               >
                 <span className="flex size-9 items-center justify-center rounded-lg bg-brand/10 text-brand transition-transform group-hover:-translate-y-0.5">
                   <card.icon className="size-4" />

@@ -133,7 +133,7 @@ export function DataStoryChart() {
 
       {/* -mx-2/-mb-2 devolvem o padding do card pro gráfico; a altura sobe
           porque aqui o gráfico É o conteúdo. */}
-      <div className="-mx-2 -mb-2 h-[230px] w-full sm:h-[300px]">
+      <div className="-mx-2 -mb-2 h-[140px] w-full sm:h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           {type === "bar" ? (
             <BarChart data={DATA} margin={MARGIN}>

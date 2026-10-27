@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ScrollReveal } from "@/components/animations"
 import { ProjectCard } from "@/components/projects/ProjectCard"
 import { getAllProjects } from "@/lib/data/projects"
-import { SECAO_HOME } from "@/components/sections/secao"
+import { CABECALHO_SECAO_HOME, SECAO_HOME, TITULO_SECAO_HOME } from "@/components/sections/secao"
 import { cn } from "@/lib/utils"
 
 export async function FeaturedProjects() {
@@ -23,34 +23,21 @@ export async function FeaturedProjects() {
       id="featured-projects"
       className={cn(SECAO_HOME, "scroll-mt-20")}
     >
-      <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
-        <div>
-          <ScrollReveal>
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
-              06 · Projetos
-            </p>
-          </ScrollReveal>
-          <ScrollReveal delay={0.05}>
-            <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Em destaque
-            </h2>
-          </ScrollReveal>
-        </div>
-        <ScrollReveal delay={0.1}>
+      <ScrollReveal>
+        <div className={cn(CABECALHO_SECAO_HOME, "flex items-end justify-between gap-4")}>
+          <h2 className={TITULO_SECAO_HOME}>Projetos</h2>
           <Button variant="ghost" render={<Link href="/projetos" />}>
             Ver todos
             <ArrowRight className="size-4" data-icon="inline-end" />
           </Button>
-        </ScrollReveal>
-      </div>
+        </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {featured.map((project, idx) => (
-          <ScrollReveal key={project.id} delay={idx * 0.1}>
-            <ProjectCard project={project} />
-          </ScrollReveal>
-        ))}
-      </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {featured.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </div>
+      </ScrollReveal>
     </section>
   )
 }

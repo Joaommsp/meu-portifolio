@@ -147,7 +147,7 @@ function CourseCard({ course }: { course: Course }) {
       href={course.credentialUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`Ver credencial: ${course.title} — ${course.issuer}`}
+      aria-label={`Ver credencial: ${course.title}, ${course.issuer}`}
       className={cn(
         base,
         "outline-none transition-colors hover:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/50"
@@ -220,15 +220,10 @@ export function Education() {
   }
 
   return (
-    <section className="container mx-auto max-w-5xl px-5 py-16 sm:px-6 md:py-24">
+    <section className="container mx-auto max-w-5xl px-5 py-10 sm:px-6 md:py-24">
       <ScrollReveal>
-        <p className="font-mono text-xs uppercase tracking-[0.3em] text-brand">
+        <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
           Formação
-        </p>
-      </ScrollReveal>
-      <ScrollReveal delay={0.05}>
-        <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-          Formação acadêmica e cursos
         </h2>
       </ScrollReveal>
 
@@ -415,21 +410,12 @@ function DegreeCard() {
       href={DEGREE.credentialUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`Ver credencial: ${DEGREE.title} — ${DEGREE.institution}`}
+      aria-label={`Ver credencial: ${DEGREE.title}, ${DEGREE.institution}`}
       className={cn(
         base,
         "outline-none transition-colors hover:border-brand/60 focus-visible:ring-2 focus-visible:ring-brand/50"
       )}
     >
-      {/* glow sutil atrás do conteúdo */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-10 -top-24 size-64 rounded-full opacity-40 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, var(--brand-glow) 0%, transparent 70%)",
-        }}
-      />
       {conteudo}
     </a>
   )
