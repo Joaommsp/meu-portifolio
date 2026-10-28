@@ -219,26 +219,20 @@ html[data-loaded="true"] {
      sobre o escuro — sem elas, esses tokens ficariam como cor crua no TSX. */
   --painel-superficie: oklch(0.99 0 0 / 0.08);
   --painel-superficie-forte: oklch(0.99 0 0 / 0.18);
-  /* Sombra DENTRO do painel. A --shadow-elevated é feita da tinta do tema e
-     serve pra elevar coisa sobre o creme; no escuro ela simplesmente some. */
-  --painel-sombra: oklch(0.10 0.015 320 / 0.62);
   /* Paradas do gradiente sobre o recorte. São TRÊS, não uma: com duas paradas
      a rampa é linear no alfa e o olho enxerga uma faixa no meio do
      esmaecimento. Alfa pré-cozido em vez de oklch(from var(--painel) …):
      onde a relative color syntax não é suportada a declaração inteira cai, e
      o corte reto do recorte reapareceria. */
   --painel-veu-1: oklch(0.205 0.020 320 / 0.88);
-  --painel-veu-2: oklch(0.205 0.020 320 / 0.62);
   --painel-veu-3: oklch(0.205 0.020 320 / 0.30);
 
-  /* Terminal esmaecido sobre o retrato do hero. Creme translúcido (a foto
-     por baixo é escura). O prompt e o "ok" usam --brand-glow, não --brand:
-     glow é o passo claro da escala, o único legível sobre a foto — e por ser
-     token do accent, o terminal acompanha a cor que o visitante escolher. */
-  --terminal-texto: oklch(0.972 0.014 78 / 0.78);
-  --terminal-dim: oklch(0.972 0.014 78 / 0.5);
-  --terminal-prompt: var(--brand-glow);
-  --terminal-ok: var(--brand-glow);
+  /* Terminal translúcido atrás do texto do hero, sobre o vidro claro: tinta
+     do tema e o accent, então acompanha a cor que o visitante escolher. */
+  --terminal-texto: oklch(from var(--foreground) l c h / 0.7);
+  --terminal-dim: oklch(from var(--foreground) l c h / 0.45);
+  --terminal-prompt: var(--brand);
+  --terminal-ok: var(--brand);
 
   /* Véus da seção de perfil (ProfileIntro). O de cima é fraco porque a cabeça
      da ilustração encosta no topo; o de baixo é forte, e é ele que dissolve
@@ -499,17 +493,6 @@ html[data-loaded="true"] {
 /* Irmão do text-gradient-brand para superfícies ESCURAS: lá os stops são
    --brand/--brand-hover (L ~0.5), que somem sobre o painel. Aqui o gradiente
    anda entre --brand-glow e o passo claro da mesma escala. */
-@utility text-gradient-brand-claro {
-  background: linear-gradient(
-    120deg,
-    var(--brand-glow) 0%,
-    oklch(from var(--brand-glow) calc(l + 0.12) c h) 50%,
-    var(--brand-glow) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
 
 @utility glow-brand {
   box-shadow:
@@ -636,4 +619,130 @@ label[for], select {
    então andar metade dele volta ao mesmo desenho, sem emenda. */
 @keyframes faixa-passa {
   to { transform: translateX(-50%); }
+}
+
+/* =============================================================
+   VIDRO E LUZ
+   Vidro sem backdrop-filter: gradiente branco translúcido, um fio de luz
+   em cima e sombra longa. O desfoque de fundo foi o que travou o scroll no
+   Android (sheet e header sobre a pilha); este vidro custa o mesmo que um
+   card comum, no celular inclusive.
+   ============================================================= */
+:root {
+  --vidro-topo: oklch(1 0 0 / 0.74);
+  --vidro-base: oklch(1 0 0 / 0.36);
+  --vidro-brilho: oklch(1 0 0 / 0.92);
+  --vidro-fio: oklch(from var(--foreground) l c h / 0.08);
+  --vidro-sombra: oklch(0.3 0.03 330 / 0.16);
+  /* Faixa de vidro mais opaca (barra da janela, chips, hover das redes). */
+  --vidro-faixa: oklch(1 0 0 / 0.5);
+  --raio-vidro: 20px;
+}
+
+@utility vidro {
+  background: linear-gradient(160deg, var(--vidro-topo), var(--vidro-base));
+  box-shadow:
+    inset 0 1px 0 var(--vidro-brilho),
+    inset 0 0 0 1px var(--vidro-fio),
+    0 1px 2px var(--vidro-sombra),
+    0 24px 48px -28px var(--vidro-sombra);
+}
+
+/* Vidro leve: chips e hovers pequenos, sem a sombra longa. */
+@utility vidro-leve {
+  background: var(--vidro-faixa);
+  box-shadow: inset 0 1px 0 var(--vidro-brilho), inset 0 0 0 1px var(--vidro-fio);
+}
+
+/* Card de vidro clicável: sobe 3px no hover, com a mola do estilo. */
+@utility vidro-sobe {
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  &:hover { transform: translateY(-3px); }
+}
+
+/* Traço de luz no accent correndo a borda. Usar em no máximo dois elementos
+   por tela: é o destaque, não a textura. O elemento precisa de `relative` e
+   de raio próprio (o traço herda). */
+@property --luz-angulo {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes luz-gira {
+  to { --luz-angulo: 360deg; }
+}
+@utility luz-borda {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: conic-gradient(
+      from var(--luz-angulo),
+      transparent 0 70%,
+      oklch(from var(--brand) l c h / 0.85) 82%,
+      transparent 92%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: luz-gira 6s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &::before { animation: none; }
+  }
+}
+
+/* Rede de segurança da Abertura: se o JS não tirar a camada (hidratação
+   quebrada, chunk que não carregou), ela some sozinha depois de 6s. */
+@keyframes abertura-sai {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+/* =============================================================
+   PAINÉIS DE DADOS (WireframesDeDados)
+   Cada painel remonta quando o slide fica ativo, então estas animações
+   tocam de novo a cada visita. Só transform, opacidade e traço de SVG.
+   ============================================================= */
+@keyframes wf-entra {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); filter: blur(4px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes wf-cresce {
+  from { transform: scaleY(0.04); }
+}
+@keyframes wf-enche {
+  from { transform: scaleX(0); }
+}
+@keyframes wf-traco {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes wf-digita {
+  from { width: 0; }
+}
+@keyframes wf-cursor {
+  50% { opacity: 0; }
+}
+@keyframes wf-pulso {
+  0% { box-shadow: 0 0 0 0 oklch(from var(--brand) l c h / 0.55); }
+  70%, 100% { box-shadow: 0 0 0 6px transparent; }
+}
+@keyframes wf-desliza {
+  from { transform: translateX(0); }
+  to { transform: translateX(var(--ate, 0)); }
+}
+@keyframes aurora-deriva {
+  from { transform: translate3d(-6%, 2%, 0) rotate(-4deg); }
+  to { transform: translate3d(6%, -3%, 0) rotate(5deg); }
+}
+@utility wf-anima {
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  animation-fill-mode: both;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none !important;
+  }
 }

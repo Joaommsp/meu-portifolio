@@ -37,8 +37,10 @@ function offsetFor(direction: Direction, distance: number) {
 }
 
 /**
- * Revela elementos quando entram no viewport. Use para seções
- * de página que aparecem conforme o usuário scrolla.
+ * Revela elementos quando entram no viewport: chegam fora de foco e assentam
+ * (opacidade, deslocamento e desfoque juntos). Use para seções de página que
+ * aparecem conforme o usuário rola. Ao terminar, o filtro sai de vez: um
+ * `blur(0px)` parado ainda criaria stacking context e prenderia `fixed`.
  */
 export function ScrollReveal({
   direction = "up",
@@ -58,10 +60,10 @@ export function ScrollReveal({
   return (
     <motion.div
       className={cn("min-w-0", className)}
-      initial={{ opacity: 0, ...offset }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      initial={{ opacity: 0, filter: "blur(6px)", ...offset }}
+      whileInView={{ opacity: 1, filter: "blur(0px)", x: 0, y: 0, transitionEnd: { filter: "none" } }}
       viewport={{ once, amount }}
-      transition={{ delay, duration, ease: [0.25, 0.4, 0.25, 1] }}
+      transition={{ delay, duration: duration + 0.2, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>

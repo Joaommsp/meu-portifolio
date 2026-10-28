@@ -98,6 +98,13 @@ export function SmoothScrollProvider({
     lenisRef.current = lenis
     lenis.on("scroll", () => anotar(lenis.scroll))
 
+    // O Lenis mede o fim da página observando o <html>, que aqui tem altura
+    // fixa (h-full): quando o conteúdo cresce depois de montar (seções,
+    // imagens, dados), ele não percebia e travava a rolagem no fim antigo.
+    // Observa o <body>, que cresce de verdade, e recalcula.
+    const aoMudarAltura = new ResizeObserver(() => lenis.resize())
+    aoMudarAltura.observe(document.body)
+
     let rafId = 0
     const raf = (time: number) => {
       lenis.raf(time)
@@ -107,6 +114,7 @@ export function SmoothScrollProvider({
 
     return () => {
       cancelAnimationFrame(rafId)
+      aoMudarAltura.disconnect()
       lenis.destroy()
       lenisRef.current = null
     }

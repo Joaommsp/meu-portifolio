@@ -9,7 +9,6 @@ import {
   Music,
   } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
 import { ScrollReveal } from "@/components/animations"
 import { PageHero } from "@/components/sections/PageHero"
 import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
@@ -46,7 +45,7 @@ function CardLinha({
   const conteudo = (
     <>
       {imagem && (
-        <div className="relative size-12 shrink-0 overflow-hidden rounded">
+        <div className="relative size-12 shrink-0 overflow-hidden rounded-lg">
           <Image src={imagem} alt="" fill sizes="48px" className="object-cover" />
         </div>
       )}
@@ -140,11 +139,11 @@ export default async function NowPage() {
       }
     >
       {/* Live snapshot — auto-puxado dos dados */}
-      <section className="container mx-auto max-w-4xl px-5 sm:px-6 pt-12 pb-8">
+      <section className="container mx-auto max-w-5xl px-5 pt-12 pb-8 sm:px-6">
         <ScrollReveal>
           <div className="grid gap-3 sm:grid-cols-3">
             {/* Spotify (live) */}
-            <div className="rounded-xl border border-border bg-card p-4">
+            <div className="vidro vidro-sobe rounded-(--raio-vidro) p-4">
               <div className="mb-2 flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                 <Music className="size-3 text-brand" />
                 Tocando
@@ -170,7 +169,7 @@ export default async function NowPage() {
             </div>
 
             {/* Livro atual */}
-            <div className="rounded-xl border border-border bg-card p-4">
+            <div className="vidro vidro-sobe rounded-(--raio-vidro) p-4">
               <div className="mb-2 flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                 <BookMarked className="size-3 text-brand" />
                 Lendo
@@ -197,7 +196,7 @@ export default async function NowPage() {
             </div>
 
             {/* Jogo atual */}
-            <div className="rounded-xl border border-border bg-card p-4">
+            <div className="vidro vidro-sobe rounded-(--raio-vidro) p-4">
               <div className="mb-2 flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                 <Gamepad2 className="size-3 text-brand" />
                 Jogando
@@ -231,15 +230,17 @@ export default async function NowPage() {
       <WakatimeStats />
 
       {/* Footer hint */}
-      <section className="container mx-auto max-w-3xl px-5 sm:px-6 pt-10 pb-24 md:pt-16">
+      <section className="container mx-auto max-w-5xl px-5 pt-10 pb-24 sm:px-6 md:pt-16">
         <ScrollReveal>
           <div className="flex justify-center">
-            <Badge
-              variant="outline"
-              className="font-mono text-xs uppercase"
+            <a
+              href="https://nownownow.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vidro-leve rounded-full px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-brand"
             >
               Movimento /now · nownownow.com
-            </Badge>
+            </a>
           </div>
         </ScrollReveal>
       </section>

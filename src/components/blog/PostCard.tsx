@@ -27,7 +27,7 @@ export function PostCard({ post }: Props) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:border-brand/50 hover:bg-card/80"
+      className="vidro group flex h-full flex-col gap-3 rounded-(--raio-vidro) p-5 vidro-sobe"
     >
       <div className="flex items-center gap-2">
         <Badge variant="outline" className="font-mono text-xs uppercase">

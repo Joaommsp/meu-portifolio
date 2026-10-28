@@ -52,6 +52,8 @@ export function Header() {
             // -ml-1 compensa o padding extra pra logo não parecer deslocada da margem.
             className="-ml-1 inline-flex size-11 items-center justify-center transition-opacity hover:opacity-80 sm:ml-0 sm:size-auto"
             aria-label="João Marcos · página inicial"
+            // destino do anel da Abertura
+            data-logo
           >
             <Image
               src={LOGO_SRC}

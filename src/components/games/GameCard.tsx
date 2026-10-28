@@ -15,7 +15,7 @@ export function GameCard({ game }: Props) {
   return (
     <Link
       href={`/games/${game.slug}`}
-      className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-brand/50"
+      className="vidro group relative flex h-full flex-col overflow-hidden rounded-(--raio-vidro) vidro-sobe"
     >
       {/* Cover */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted/30">

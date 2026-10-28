@@ -49,7 +49,9 @@ export function ProfileIntro() {
       className="scroll-mt-20 pt-20 pb-10 select-none md:pt-28 md:pb-14"
     >
       <div className="container mx-auto max-w-6xl px-5 sm:px-6">
-        <div className="relative isolate overflow-hidden rounded-[18px] border border-border bg-background">
+        <div // vidro + luz-borda: o traço de luz sobe para z-40 (o padrão dele, z-3,
+          // ficaria embaixo da arte e do véu, que encostam na borda).
+          className="vidro luz-borda relative isolate overflow-hidden rounded-(--raio-vidro) before:z-40!">
           {/* Wash rosa próprio do card — mesma família do fundo da página, mas
               recortado pelos cantos arredondados. */}
           <div
@@ -95,7 +97,7 @@ export function ProfileIntro() {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="-ml-3 inline-flex w-fit items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-brand-tint hover:text-brand-hover"
+                    className="-ml-3 inline-flex w-fit items-center gap-3 rounded-xl px-3 py-2.5 transition-[background-color,box-shadow,color] hover:vidro-leve hover:text-brand-hover"
                   >
                     <Icon className="size-4.75 shrink-0" />
                     <span className="flex flex-col leading-[1.28]">

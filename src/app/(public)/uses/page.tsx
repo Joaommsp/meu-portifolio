@@ -1,13 +1,12 @@
 import type { Metadata } from "next"
-import { ExternalLink } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
 import { ScrollReveal } from "@/components/animations"
 import { PageHero } from "@/components/sections/PageHero"
 import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
+import { Bancada } from "@/components/uses/Bancada"
+import { CartaoUso } from "@/components/uses/CartaoUso"
 import { getUsesCategories } from "@/lib/data/uses"
-import type { UsesItem } from "@/types/uses"
-import { cn } from "@/lib/utils"
+import type { UsesCategory } from "@/types/uses"
 
 export const metadata: Metadata = {
   title: "Uses",
@@ -15,66 +14,9 @@ export const metadata: Metadata = {
     "Hardware, software e ferramentas que João Marcos usa no dia a dia pra construir produtos digitais.",
 }
 
-function ItemCard({ item }: { item: UsesItem }) {
-  // Item sem link não vira âncora — um <a href=""> recarrega a própria página.
-  const temLink = item.url.trim() !== "" && item.url.trim() !== "#"
-  const externo = temLink && /^https?:/i.test(item.url)
-
-  const conteudo = (
-    <>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <h3
-            className={cn(
-              "font-display text-base font-semibold tracking-tight transition-colors",
-              temLink && "group-hover:text-brand"
-            )}
-          >
-            {item.name}
-          </h3>
-          {item.starred && (
-            <Badge
-              variant="outline"
-              className="border-brand/40 bg-brand/10 px-1.5 font-mono text-xs uppercase text-brand-texto"
-            >
-              fav
-            </Badge>
-          )}
-        </div>
-        {item.description && (
-          /* `whitespace-pre-line`: a descrição vem de um textarea do admin, e
-             uma ficha técnica em linhas separadas virava um bloco corrido. */
-          <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
-            {item.description}
-          </p>
-        )}
-      </div>
-      {temLink && (
-        <ExternalLink className="size-3.5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
-      )}
-    </>
-  )
-
-  const classes = cn(
-    "group flex h-full items-start gap-3 rounded-xl border bg-card p-4 transition-colors",
-    item.starred
-      ? "border-brand/40 hover:border-brand"
-      : "border-border hover:border-brand/40"
-  )
-
-  if (!temLink) return <div className={classes}>{conteudo}</div>
-
-  return (
-    <a
-      href={item.url}
-      {...(externo
-        ? { target: "_blank", rel: "noopener noreferrer" }
-        : {})}
-      className={cn(classes, "cursor-pointer")}
-    >
-      {conteudo}
-    </a>
-  )
+/** A categoria de hardware vira a mesa; as outras ficam em cartões. */
+function ehHardware(cat: UsesCategory) {
+  return /hardware|setup|mesa/i.test(cat.title)
 }
 
 export default async function UsesPage() {
@@ -105,31 +47,29 @@ export default async function UsesPage() {
         />
       }
     >
-      {/* Categorias */}
       {categorias.length > 0 ? (
-        <section className="container mx-auto max-w-5xl space-y-16 px-5 py-10 sm:px-6 md:py-16">
+        <section className="container mx-auto max-w-6xl space-y-16 px-5 py-10 sm:px-6 md:py-16">
           {categorias.map((cat) => (
             <ScrollReveal key={cat.id}>
-              <div>
-                <header className="mb-8">
-                  <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
-                    {cat.title}
-                  </h2>
-                  {cat.description && (
-                    <p className="mt-2 text-muted-foreground">
-                      {cat.description}
-                    </p>
+              <div id={cat.id} className="scroll-mt-28">
+                <header className="mb-6 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">{cat.title}</h2>
+                  {cat.description && !ehHardware(cat) && (
+                    <p className="text-sm text-muted-foreground">{cat.description}</p>
                   )}
                 </header>
-
-                {cat.items.length > 0 && (
-                  <ul className="grid gap-3 md:grid-cols-2">
+                {ehHardware(cat) && cat.items.length > 0 ? (
+                  <Bancada categoria={cat} />
+                ) : cat.items.length > 0 ? (
+                  <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                     {cat.items.map((item) => (
                       <li key={item.name}>
-                        <ItemCard item={item} />
+                        <CartaoUso item={item} />
                       </li>
                     ))}
                   </ul>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Nada nesta categoria ainda.</p>
                 )}
               </div>
             </ScrollReveal>
@@ -137,13 +77,9 @@ export default async function UsesPage() {
         </section>
       ) : (
         <section className="container mx-auto max-w-4xl px-5 py-10 sm:px-6 md:py-16">
-          <ScrollReveal>
-            <div className="rounded-xl border border-dashed border-border bg-card/30 px-6 py-16 text-center">
-              <p className="text-muted-foreground">
-                Lista vazia por enquanto.
-              </p>
-            </div>
-          </ScrollReveal>
+          <div className="vidro rounded-(--raio-vidro) px-6 py-16 text-center">
+            <p className="text-muted-foreground">Lista vazia por enquanto.</p>
+          </div>
         </section>
       )}
     </HeroSobreposto>

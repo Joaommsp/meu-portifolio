@@ -1,104 +1,114 @@
 import Link from "next/link"
 import Image from "next/image"
-import { NAV_ITEMS, SOCIAL_LINKS, CONTACT_EMAIL, LOGO_SRC } from "@/lib/nav"
+import { ArrowRight } from "lucide-react"
+
+import { NAV_GROUPS, SOCIAL_LINKS, CONTACT_EMAIL } from "@/lib/nav"
 import { SpotifyNowPlaying } from "@/components/sections/SpotifyNowPlaying"
 
+/** Logo claro, pro fundo escuro do rodapé. */
+const LOGO_CLARO = "/logo-light.png"
+
+/** Colunas de links: os grupos do menu; o link solto ("Início") entra na primeira. */
+const COLUNAS = NAV_GROUPS.filter((e) => e.kind === "group")
+
+/**
+ * Rodapé escuro atrás do conteúdo: a página (a folha no layout público) tem
+ * cantos arredondados embaixo e sombra. A partir de md o rodapé fica preso no
+ * fundo da tela e a folha sobe e o revela. No celular ele é mais alto que a
+ * tela, e preso o topo dele nunca aparecia: ali ele rola normal, encaixado
+ * sob a curva da folha (margem negativa). O nome gigante no pé é decoração.
+ *
+ * `superficie-painel` reaponta os tokens pra superfície escura.
+ */
 export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="mt-32 border-t border-border">
-      <div className="container mx-auto max-w-6xl px-5 sm:px-6 py-12">
-        <div className="grid gap-10 md:grid-cols-3 mb-10">
-          {/* Brand + tagline */}
-          <div className="space-y-3">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 transition-opacity hover:opacity-80"
-              aria-label="João Marcos"
-            >
-              <Image
-                src={LOGO_SRC}
-                alt="João Marcos"
-                width={32}
-                height={32}
-                className="size-8"
-              />
-              <span className="font-display text-base font-semibold tracking-tight">
+    <footer className="superficie-painel relative z-0 -mt-12 overflow-hidden bg-[var(--painel)] pt-12 text-foreground md:sticky md:bottom-0 md:-mt-16 md:pt-16">
+      <div className="container relative z-10 mx-auto max-w-6xl px-5 pt-16 pb-8 sm:px-6 md:pt-20">
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_1.9fr]">
+          <div className="space-y-5">
+            <Link href="/" className="inline-flex items-center gap-2.5 transition-opacity hover:opacity-80" aria-label="João Marcos">
+              <Image src={LOGO_CLARO} alt="" width={36} height={36} className="size-9" />
+              <span className="font-display text-2xl font-semibold tracking-tight">
                 joão<span className="text-brand">.</span>marcos
               </span>
             </Link>
-            <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Frontend dev & designer. React, Next.js e atenção ao detalhe.
-              De Paulo Afonso, BA.
+            <p className="max-w-sm leading-relaxed text-muted-foreground">
+              Frontend e UI/UX. Interfaces para sistemas de gestão, sites e apps.
             </p>
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="inline-block text-sm text-muted-foreground transition-colors hover:text-brand"
+            <Link
+              href="/contato"
+              className="group inline-flex h-11 items-center gap-2 rounded-full bg-foreground px-5 text-sm font-medium text-[var(--painel)] transition-transform active:scale-[0.97]"
             >
+              Começar um projeto
+              <span className="grid size-6 place-items-center rounded-full bg-[var(--painel)] text-foreground transition-transform duration-300 group-hover:translate-x-0.5">
+                <ArrowRight className="size-3.5" />
+              </span>
+            </Link>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="block text-sm text-muted-foreground transition-colors hover:text-brand">
               {CONTACT_EMAIL}
             </a>
           </div>
 
-          {/* Nav */}
-          {/* O espaço entre links vem do `py-2` de cada um, não do `gap`: assim
-              ele vira área de toque em vez de vão morto entre alvos de 20px.
-              Duas colunas abaixo de md: numa só, os 15 links davam ~570px. */}
-          <nav aria-label="Rodapé">
-            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-              Navegação
-            </p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-0.5 md:grid-cols-1">
-              {NAV_ITEMS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="w-fit py-2 text-sm text-foreground/80 transition-colors hover:text-brand"
-                >
-                  {item.label}
-                </Link>
-              ))}
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-5">
+            {COLUNAS.map((grupo) =>
+              grupo.kind === "group" ? (
+                <nav key={grupo.label} aria-label={grupo.label}>
+                  <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                    {grupo.label}
+                  </p>
+                  <ul className="grid gap-0.5">
+                    {grupo.items.map((item) => (
+                      <li key={item.href}>
+                        <Link href={item.href} className="inline-block py-1.5 text-sm text-foreground/85 transition-colors hover:text-brand">
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              ) : null
+            )}
+            <div>
+              <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Redes</p>
+              <ul className="grid gap-0.5">
+                {SOCIAL_LINKS.map((s) => (
+                  <li key={s.label}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 py-1.5 text-sm text-foreground/85 transition-colors hover:text-brand"
+                    >
+                      <s.icon className="size-3.5" />
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </nav>
-
-          {/* Socials */}
-          <div className="flex flex-col gap-0.5">
-            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-              Conecte-se
-            </p>
-            {SOCIAL_LINKS.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex w-fit items-center gap-2.5 py-2 text-sm text-foreground/80 transition-colors hover:text-brand"
-              >
-                <s.icon className="size-3.5" />
-                <span>{s.handle}</span>
-              </a>
-            ))}
           </div>
         </div>
 
-        {/* Spotify widget */}
-        <div className="mb-6">
-          {/* fallbackContent={null}: sem Spotify ao vivo o widget some, em vez
-              de anunciar uma faixa fictícia como se estivesse tocando. */}
+        <div className="mt-10">
+          {/* sem Spotify ao vivo o widget some, em vez de inventar faixa */}
           <SpotifyNowPlaying fallbackContent={null} />
         </div>
 
-        {/* Bottom bar */}
-        <div className="flex flex-col items-start gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} João Marcos · Paulo Afonso, BA
-          </p>
-          <p>
-            Construído com Next.js, Tailwind CSS, Firebase e{" "}
-            <span className="text-brand">muito café</span> ☕
-          </p>
+        <div className="mt-10 flex flex-col gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:justify-between">
+          <p>© {year} João Marcos</p>
+          <p>Feito com Next.js, Tailwind e Firebase.</p>
         </div>
       </div>
+
+      {/* nome gigante no pé, quase da cor do fundo */}
+      <p
+        aria-hidden
+        className="pointer-events-none -mt-[0.32em] text-center font-display text-[17vw] leading-[0.8] font-bold tracking-[-0.05em] whitespace-nowrap text-foreground/[0.06] select-none"
+      >
+        joão marcos
+      </p>
     </footer>
   )
 }

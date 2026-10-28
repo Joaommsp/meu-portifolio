@@ -23,7 +23,7 @@ export async function WakatimeStats() {
   const topOs = stats.operating_systems[0]
 
   return (
-    <section id="wakatime" className="container mx-auto max-w-4xl scroll-mt-20 px-5 py-12 sm:px-6">
+    <section id="wakatime" className="container mx-auto max-w-5xl scroll-mt-20 px-5 py-12 sm:px-6">
       <ScrollReveal>
         <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
           Horas de código
@@ -59,7 +59,7 @@ export async function WakatimeStats() {
             </div>
 
             {stats.languages.length > 0 && (
-              <div className="rounded-xl border border-border bg-card p-6">
+              <div className="vidro rounded-(--raio-vidro) p-6">
                 <h3 className="mb-5 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                   Linguagens
                 </h3>
@@ -114,7 +114,7 @@ function BigStat({
   value: string
 }) {
   return (
-    <div className="relative rounded-xl border border-border bg-card p-6">
+    <div className="vidro luz-borda relative rounded-(--raio-vidro) p-6">
       <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {icon}
         {label}
@@ -152,7 +152,7 @@ function LanguageBar({
           {percent.toFixed(1)}% · {text}
         </span>
       </div>
-      <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+      <div className="h-1.5 overflow-hidden rounded-full bg-foreground/8">
         <div
           className="h-full rounded-full"
           style={{
@@ -177,7 +177,7 @@ function RankCard({
   text: string
 }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
+    <div className="vidro rounded-(--raio-vidro) p-5">
       <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
@@ -193,7 +193,7 @@ function RankCard({
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border bg-card/30 p-12 text-center">
+    <div className="vidro flex flex-col items-center gap-3 rounded-(--raio-vidro) p-12 text-center">
       <Badge
         variant="outline"
         className="font-mono text-xs uppercase"

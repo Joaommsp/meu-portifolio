@@ -1,6 +1,5 @@
 export { FadeIn } from "./FadeIn"
 export { SlideIn } from "./SlideIn"
 export { ScrollReveal } from "./ScrollReveal"
-export { MagneticButton } from "./MagneticButton"
 export { TextReveal } from "./TextReveal"
 export { PageTransition } from "./PageTransition"

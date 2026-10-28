@@ -8,7 +8,8 @@ import { BASE, TRAJETORIA } from "@/lib/sobre-content"
 import { CURRENTLY_EMPTY_TEXT, temItemAtual, type CurrentlyItem } from "@/types/currently"
 import { cn } from "@/lib/utils"
 
-const CARTAO = "relative flex min-w-0 flex-col gap-3 overflow-hidden rounded-2xl border border-border bg-card p-4 md:p-5"
+const CARTAO =
+  "vidro relative flex min-w-0 flex-col gap-3 overflow-hidden rounded-(--raio-vidro) p-4 vidro-sobe md:p-5"
 
 function Etiqueta({ icone: Icone, children }: { icone: typeof Code; children: React.ReactNode }) {
   return (
@@ -135,7 +136,8 @@ export async function BentoAgora() {
           <Agora item={agora.estudando} />
         </div>
 
-        <div className={CARTAO}>
+        {/* O destaque do bento: único cartão com luz-borda. */}
+        <div className={cn(CARTAO, "luz-borda")}>
           <Etiqueta icone={Code}>Código na semana</Etiqueta>
           {horas ? (
             <>

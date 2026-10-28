@@ -41,7 +41,7 @@ export function PageHero({
       <FadeIn
         className={cn(
           "container relative mx-auto max-w-6xl px-5 py-10 sm:px-6 md:py-24",
-          lateral && "md:grid md:grid-cols-[1fr_auto] md:items-end md:gap-10"
+          lateral && "md:grid md:grid-cols-[1fr_auto] md:items-center md:gap-10"
         )}
       >
         <div>

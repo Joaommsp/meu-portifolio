@@ -5,7 +5,7 @@ import { HeroSobreposto } from "@/components/layout/HeroSobreposto"
 import { ContactCTA } from "@/components/sections/ContactCTA"
 import { Education } from "@/components/sections/Education"
 import { PageHero } from "@/components/sections/PageHero"
-import { AcoesSobre } from "@/components/sobre/AcoesSobre"
+import { CrachaSobre } from "@/components/sobre/CrachaSobre"
 import { BentoAgora } from "@/components/sobre/BentoAgora"
 import { Especialidade } from "@/components/sobre/Especialidade"
 import { FaixaPassando } from "@/components/sobre/FaixaPassando"
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 }
 
 /*
-  O hero padrão das internas, com foto, CV e conversar à direita. Depois: o
+  O hero padrão das internas, com o crachá de vidro à direita (foto, CV e conversar). Depois: o
   que faço (faixa), o que estou fazendo agora (bento), a especialidade
   (wireframes de dados), com o que construo (stack), a formação e o contato.
 
@@ -30,8 +30,8 @@ export default function SobrePage() {
       hero={
         <PageHero
           titulo="Sobre mim"
-          descricao="Frontend e UI/UX na GFI, em Paulo Afonso, BA."
-          lateral={<AcoesSobre />}
+          descricao="Desenho e construo interfaces para sistemas de gestão, sites e apps."
+          lateral={<CrachaSobre />}
         />
       }
     >

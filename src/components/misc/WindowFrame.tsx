@@ -9,7 +9,7 @@ const LUZES = [
   { cor: "#28c840", nome: "maximizar" },
 ] as const
 
-/** Usuário e geometria do terminal — os mesmos em toda janela do site. */
+/** Usuário e geometria do terminal, os mesmos em toda janela do site. */
 const USUARIO = "joao-marcos"
 const GEOMETRIA = "120×32"
 
@@ -19,31 +19,28 @@ type Props = {
    * forma da home, onde a janela é a do próprio shell.
    */
   secao?: string
-  /** Vai na moldura — é por aqui que o PageHero aplica `superficie-painel`. */
+  /** Vai na moldura (ex.: `luz-borda relative` pra correr o traço de luz). */
   className?: string
   children: React.ReactNode
 }
 
 /**
- * Moldura de janela de sistema: barra de título com os três botões e o
- * conteúdo embaixo, sobre o painel escuro.
+ * Moldura de janela de sistema em vidro: barra de título com os três botões
+ * e o conteúdo embaixo. O vidro é o utilitário `vidro` do globals.css, sem
+ * backdrop-filter.
  *
- * A moldura não é enfeite — é o que faz um bloco escuro ler como conteúdo
- * emoldurado em vez de retângulo órfão no meio do creme. Vive em dois lugares:
- * o hero da home (`Hero`) e o hero padrão das internas (`PageHero`), que é a
- * duplicação que este componente existe pra evitar.
- *
- * DEPENDE dos tokens `--painel-*`.
+ * Vive no hero da home e nos dois contatos (o da home e o fecho das páginas
+ * de serviço).
  */
 export function WindowFrame({ secao, className, children }: Props) {
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-[15px] border border-[var(--painel-borda)] bg-[var(--painel)] shadow-[0_30px_70px_-28px_var(--shadow-elevated)]",
+        "vidro overflow-hidden rounded-[18px]",
         className
       )}
     >
-      <div className="flex h-9.5 items-center gap-2 border-b border-[var(--painel-borda)] bg-[var(--painel-2)] px-3.5">
+      <div className="flex h-9.5 items-center gap-2 border-b border-[var(--vidro-fio)] bg-(--vidro-faixa) px-3.5">
         <div className="flex gap-1.75">
           {LUZES.map(({ cor, nome }) => (
             <span
@@ -54,16 +51,16 @@ export function WindowFrame({ secao, className, children }: Props) {
             />
           ))}
         </div>
-        <span className="mx-auto truncate font-mono text-[11.5px] text-[var(--painel-texto-2)]">
+        <span className="mx-auto truncate font-mono text-[11.5px] text-muted-foreground">
           {secao ? (
             <>
-              <span className="font-medium text-[var(--painel-texto)]">{secao}</span>
-              {` — ${USUARIO} — ${GEOMETRIA}`}
+              <span className="font-medium text-foreground">{secao}</span>
+              {` · ${USUARIO} · ${GEOMETRIA}`}
             </>
           ) : (
             <>
-              <span className="font-medium text-[var(--painel-texto)]">{USUARIO}</span>
-              {` — zsh — ${GEOMETRIA}`}
+              <span className="font-medium text-foreground">{USUARIO}</span>
+              {` · zsh · ${GEOMETRIA}`}
             </>
           )}
         </span>

@@ -28,6 +28,11 @@ type Props = {
   cobre?: boolean
   /** Seta no pé da camada (o hero da home). */
   comIndicador?: boolean
+  /**
+   * A última camada da pilha: nada sobe por cima dela, só o rodapé aparece
+   * por trás da página. Sem isso ela encolhia e escurecia no fim da rolagem.
+   */
+  ultima?: boolean
 }
 
 /**
@@ -79,14 +84,14 @@ function posicaoNoFluxo(alvo: Element): number | null {
  *   dentro do pai, e um pai do tamanho da própria camada nunca deixaria ela
  *   prender.
  */
-export function SecaoEmpilhada({ children, cobre = true, comIndicador = false }: Props) {
+export function SecaoEmpilhada({ children, cobre = true, comIndicador = false, ultima = false }: Props) {
   const camada = React.useRef<HTMLDivElement>(null)
   const sonda = React.useRef<HTMLDivElement>(null)
   const sentinela = React.useRef<HTMLDivElement>(null)
   const topo = useTopoFixo(camada, sonda)
   const reduzido = usePrefersReducedMotion()
   const toque = useToque()
-  const semEfeito = reduzido || toque
+  const semEfeito = reduzido || toque || ultima
   const rolarPara = useRolarPara()
 
   const { scrollYProgress } = useScroll({

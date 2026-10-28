@@ -13,7 +13,7 @@ export function ContactCTA() {
   return (
     <section id="contact-cta" className={cn(SECAO_HOME, "max-w-3xl scroll-mt-20 text-center")}>
       <ScrollReveal>
-        <WindowFrame secao="contato" className="superficie-painel text-foreground">
+        <WindowFrame secao="contato" className="luz-borda relative">
           <div className="px-6 py-12 md:px-12 md:py-16">
             <h2 className={TITULO_SECAO_HOME}>Contato</h2>
 

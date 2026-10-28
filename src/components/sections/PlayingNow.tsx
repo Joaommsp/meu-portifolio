@@ -2,73 +2,66 @@ import Image from "next/image"
 import { Gamepad2 } from "lucide-react"
 
 import { ScrollReveal } from "@/components/animations"
-import { cn } from "@/lib/utils"
 import { PLAYING_STATUS_LABEL, type Playing } from "@/types/playing"
 
 /**
- * "Jogando agora" na /agora: card grande com a capa do jogo ao fundo.
- *
- * O gradiente não é enfeite — é o que garante contraste do texto sobre uma
- * imagem que pode ser clara, escura ou colorida demais. Vai de opaco embaixo
- * (onde o texto vive) a transparente em cima, deixando a arte respirar.
+ * "Jogando agora" na /now, no mesmo desenho do card de projeto: moldura de
+ * vidro com a capa 16:9 dentro, selos sobre a capa e o texto embaixo. No
+ * hover o card sobe 3px e a capa um pouco mais.
  */
 function PlayingCard({ jogo }: { jogo: Playing }) {
   return (
-    <article className="group relative isolate overflow-hidden rounded-2xl border border-border bg-card">
-      {jogo.coverImage ? (
-        <Image
-          src={jogo.coverImage}
-          alt=""
-          fill
-          sizes="(min-width: 768px) 50vw, 100vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-        />
-      ) : (
-        <div aria-hidden className="absolute inset-0 bg-muted" />
-      )}
-
-      {/* Gradiente de leitura: opaco onde o texto começa. */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-background/25"
-      />
-
-      <div
-        className={cn(
-          "relative flex flex-col justify-end gap-3 p-6",
-          // A altura só existe pra dar espaço à arte. Sem capa ela viraria
-          // um vazio no topo do card.
-          jogo.coverImage && "min-h-[320px] sm:min-h-[360px]"
+    <article className="vidro vidro-sobe group relative flex h-full flex-col overflow-hidden rounded-(--raio-vidro) p-2.5">
+      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-background-secondary transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-0.5">
+        {jogo.coverImage ? (
+          <>
+            <Image
+              src={jogo.coverImage}
+              alt=""
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
+            />
+            {/* Véu no topo pros selos seguirem legíveis sobre capa clara. */}
+            <div
+              aria-hidden
+              className="absolute inset-x-0 top-0 h-16 bg-linear-to-b from-foreground/30 to-transparent"
+            />
+          </>
+        ) : (
+          <div aria-hidden className="absolute inset-0 grid place-items-center text-muted-foreground">
+            <Gamepad2 className="size-8" />
+          </div>
         )}
-      >
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/40 bg-brand/10 px-2.5 py-1 font-mono text-xs uppercase tracking-widest text-brand-texto">
-            <Gamepad2 className="size-3" />
-            {PLAYING_STATUS_LABEL[jogo.status]}
-          </span>
+
+        <div className="absolute top-3 right-3 flex items-center gap-1.5">
           {jogo.platform && (
-            <span className="rounded-full border border-border bg-background/60 px-2.5 py-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+            <span className="vidro-leve rounded-full px-2.5 py-0.5 font-mono text-xs uppercase tracking-wider text-foreground">
               {jogo.platform}
             </span>
           )}
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/40 bg-background/85 px-2.5 py-0.5 font-mono text-xs uppercase tracking-wider text-brand-texto">
+            <Gamepad2 className="size-3" />
+            {PLAYING_STATUS_LABEL[jogo.status]}
+          </span>
         </div>
+      </div>
 
-        <h3 className="font-display text-2xl font-bold leading-tight tracking-tight md:text-3xl">
-          {jogo.title}
-        </h3>
+      <div className="flex flex-1 flex-col gap-3 px-2.5 pt-4 pb-2.5">
+        <h3 className="font-display text-xl font-semibold tracking-tight">{jogo.title}</h3>
 
         {jogo.synopsis && (
-          <p className="max-w-prose text-sm leading-relaxed text-muted-foreground">
+          <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">
             {jogo.synopsis}
           </p>
         )}
 
         {jogo.genres.length > 0 && (
-          <ul className="flex flex-wrap gap-1.5 pt-1">
+          <ul className="flex flex-wrap gap-1.5">
             {jogo.genres.map((g) => (
               <li
                 key={g}
-                className="rounded-md border border-border bg-background/60 px-2 py-0.5 font-mono text-xs uppercase tracking-wide text-muted-foreground"
+                className="rounded-md border border-border px-2 py-0.5 font-mono text-xs text-muted-foreground"
               >
                 {g}
               </li>

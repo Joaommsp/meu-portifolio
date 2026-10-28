@@ -230,11 +230,10 @@ export function CtaFinal() {
   return (
     <section className={SECAO}>
       <ScrollReveal>
-        {/* `superficie-painel` reaponta os tokens: o que cair aqui dentro já
-            lê as cores da superfície escura. */}
+        {/* Janela de vidro com o traço de luz correndo a borda. */}
         <WindowFrame
           secao="contato"
-          className="superficie-painel relative isolate text-foreground"
+          className="luz-borda relative isolate"
         >
           <div className="relative overflow-hidden px-8 py-14 md:px-16 md:py-18">
             <div

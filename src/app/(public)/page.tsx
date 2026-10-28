@@ -34,8 +34,8 @@ export default function Home() {
       <SecaoEmpilhada cobre={false} comIndicador>
         <Hero />
       </SecaoEmpilhada>
-      {SECOES.map(({ chave, Secao }) => (
-        <SecaoEmpilhada key={chave}>
+      {SECOES.map(({ chave, Secao }, i) => (
+        <SecaoEmpilhada key={chave} ultima={i === SECOES.length - 1}>
           <Secao />
         </SecaoEmpilhada>
       ))}

@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Globe } from "lucide-react"
+import { ArrowRight, Globe } from "lucide-react"
 
 import { GithubIcon } from "@/components/icons/brand-icons"
 import { PROJECT_STATUS_COLOR } from "@/components/projects/project-status"
@@ -13,13 +13,14 @@ type Props = {
 }
 
 /**
- * Card de projeto. No hover só a borda muda de cor.
- * Sem imagem, a capa fica numa superfície lisa.
+ * Card de projeto em moldura de vidro, com a capa dentro dela. No hover o
+ * card sobe 3px, a capa sobe um pouco mais e a seta do título gira para o
+ * accent. Sem imagem, a capa fica numa superfície lisa.
  */
 export function ProjectCard({ project }: Props) {
   return (
-    <div className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-brand/50">
-      <div className="relative aspect-[16/9] w-full overflow-hidden bg-background-secondary">
+    <div className="vidro group relative flex h-full flex-col overflow-hidden rounded-(--raio-vidro) p-2.5 vidro-sobe">
+      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-background-secondary transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-0.5">
         {project.coverImage ? (
           <>
             {/*
@@ -60,12 +61,16 @@ export function ProjectCard({ project }: Props) {
       </div>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col gap-3 p-5">
+      <div className="flex flex-1 flex-col gap-3 px-2.5 pt-4 pb-2.5">
         <Link
           href={`/projetos/${project.slug}`}
-          className="font-display text-xl font-semibold tracking-tight transition-colors hover:text-brand"
+          className="inline-flex items-center justify-between gap-3 font-display text-xl font-semibold tracking-tight transition-colors hover:text-brand"
         >
           {project.title}
+          <ArrowRight
+            aria-hidden
+            className="size-4.5 shrink-0 text-muted-foreground transition-[rotate,color] duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:-rotate-45 group-hover:text-brand"
+          />
         </Link>
 
         <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">

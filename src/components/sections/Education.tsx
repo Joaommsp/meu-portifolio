@@ -136,7 +136,7 @@ function CourseCard({ course }: { course: Course }) {
   )
 
   const base =
-    "group flex h-full min-w-0 snap-start flex-col gap-2 rounded-xl border border-border bg-card p-5"
+    "vidro group flex h-full min-w-0 snap-start flex-col gap-2 rounded-(--raio-vidro) p-5"
 
   if (!course.credentialUrl) {
     return <div className={base}>{conteudo}</div>
@@ -150,7 +150,7 @@ function CourseCard({ course }: { course: Course }) {
       aria-label={`Ver credencial: ${course.title}, ${course.issuer}`}
       className={cn(
         base,
-        "outline-none transition-colors hover:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/50"
+        "outline-none vidro-sobe focus-visible:ring-2 focus-visible:ring-brand/50"
       )}
     >
       {conteudo}
@@ -249,7 +249,9 @@ export function Education() {
           aria-label="Cursos e certificações"
           tabIndex={0}
           className={cn(
-            "mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-2 select-none",
+            // pt/pb maiores: o overflow-x-auto recorta também no eixo y, e cortaria a
+            // subida do hover e a sombra longa do vidro. O -mb devolve o espaço.
+            "mt-3 -mb-4 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pt-1 pb-6 select-none",
             "outline-none focus-visible:ring-2 focus-visible:ring-brand/50",
             // esconde a barra nativa sem perder o scroll
             "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -399,7 +401,7 @@ function DegreeCard() {
   )
 
   const base =
-    "group relative mt-10 grid gap-6 overflow-hidden rounded-2xl border border-brand/25 bg-card p-6 md:grid-cols-[1fr_220px] md:p-8"
+    "vidro luz-borda group relative mt-10 grid gap-6 overflow-hidden rounded-(--raio-vidro) p-6 md:grid-cols-[1fr_220px] md:p-8"
 
   if (!DEGREE.credentialUrl) {
     return <div className={base}>{conteudo}</div>
@@ -413,7 +415,7 @@ function DegreeCard() {
       aria-label={`Ver credencial: ${DEGREE.title}, ${DEGREE.institution}`}
       className={cn(
         base,
-        "outline-none transition-colors hover:border-brand/60 focus-visible:ring-2 focus-visible:ring-brand/50"
+        "outline-none vidro-sobe focus-visible:ring-2 focus-visible:ring-brand/50"
       )}
     >
       {conteudo}

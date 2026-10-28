@@ -5,7 +5,7 @@ export function PostCardSkeleton() {
     <div
       role="status"
       aria-label="Carregando post"
-      className="flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-5"
+      className="vidro flex h-full flex-col gap-3 rounded-(--raio-vidro) p-5"
     >
       <div className="flex items-center gap-2">
         <Skeleton className="h-4 w-16" />
