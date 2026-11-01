@@ -4,6 +4,7 @@ import { ArrowLeft, Home, FolderGit2, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
+import { FolhaDaPagina } from "@/components/layout/FolhaDaPagina"
 import { CommandPaletteProvider } from "@/components/command/CommandPaletteProvider"
 import { NotFoundActions } from "@/components/sections/NotFoundActions"
 
@@ -11,6 +12,7 @@ export default function NotFound() {
   return (
     <CommandPaletteProvider>
       <Header />
+      <FolhaDaPagina>
       <main className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pt-20">
         <div className="relative z-10 mx-auto flex max-w-2xl flex-col items-center text-center">
           {/* Tag */}
@@ -101,6 +103,7 @@ export default function NotFound() {
           </p>
         </div>
       </main>
+      </FolhaDaPagina>
       <Footer />
     </CommandPaletteProvider>
   )

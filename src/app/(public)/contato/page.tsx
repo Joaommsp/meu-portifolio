@@ -57,7 +57,7 @@ export default function ContatoPage() {
       hero={
         <PageHero
           titulo="Contato"
-          descricao="Projetos, vagas ou parcerias. Respondo em até 24h úteis."
+          descricao="Projetos ou parcerias. Respondo em até 24h úteis."
         >
           <div className="flex flex-wrap items-center gap-3">
             <Badge variant="outline" className="px-3 py-1 font-mono text-xs">

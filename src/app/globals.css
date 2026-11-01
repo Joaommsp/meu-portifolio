@@ -746,3 +746,10 @@ label[for], select {
     animation: none !important;
   }
 }
+
+/* Entrada de cada rota (PageTransition). Termina sem transform nem opacidade,
+   pra não virar containing block dos `sticky`/`fixed` da página. */
+@keyframes pagina-entra {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
