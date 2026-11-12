@@ -1,7 +1,6 @@
 import "server-only"
 
 import { cert, getApps, initializeApp, type App } from "firebase-admin/app"
-import { getAuth, type Auth } from "firebase-admin/auth"
 import { getFirestore, type Firestore } from "firebase-admin/firestore"
 
 /**
@@ -56,8 +55,4 @@ function obterApp(): App {
 
 export function obterFirestore(): Firestore {
   return getFirestore(obterApp())
-}
-
-export function obterAuth(): Auth {
-  return getAuth(obterApp())
 }

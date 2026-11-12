@@ -1,8 +1,8 @@
 import "server-only"
 
-import { obterAuth } from "@/server/firebase-admin"
 import { repositorioConteudoFirestore } from "@/server/conteudo/repositorio"
 import { criarServicoConteudo, type ServicoConteudo } from "@/server/conteudo/servico"
+import { verificarIdTokenFirebase } from "@/server/id-token"
 import { subirImagem } from "@/server/imagem"
 
 import { repositorioAcessosFirestore } from "./acessos/repositorio"
@@ -27,6 +27,6 @@ export function obterDependencias(): DependenciasMcp {
     acessos: criarServicoAcessos(repositorioAcessosFirestore()),
     conteudo: criarServicoConteudo(repositorioConteudoFirestore()),
     subirImagem,
-    verificarIdToken: async (token) => (await obterAuth().verifyIdToken(token)).uid,
+    verificarIdToken: (token) => verificarIdTokenFirebase(token),
   }
 }
