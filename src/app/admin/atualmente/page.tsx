@@ -8,7 +8,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import { Contador } from "@/components/admin/Contador"
 import { getCurrently, saveCurrently } from "@/lib/firebase/currently"
+import { LIMITES_ATUALMENTE } from "@/lib/validations"
+import { atualmente } from "@/lib/conteudo/atualmente"
+import { primeiroErro } from "@/lib/conteudo/validacao"
 import {
   CURRENTLY_SLOTS,
   CURRENTLY_LABELS,
@@ -79,6 +83,12 @@ export default function AtualmenteAdminPage() {
   }
 
   async function salvar() {
+    // `dados` carrega também updatedAt e exists; o schema olha só os slots.
+    const erro = primeiroErro(atualmente.schema, atualmente.deDocumento(dados))
+    if (erro) {
+      toast.error(erro.mensagem)
+      return
+    }
     setSalvando(true)
     try {
       await saveCurrently(dados)
@@ -160,8 +170,10 @@ export default function AtualmenteAdminPage() {
                     id={`${slot}-title`}
                     value={item.title}
                     placeholder={EXEMPLOS[slot].title}
+                    maxLength={LIMITES_ATUALMENTE.titulo}
                     onChange={(e) => atualizar(slot, "title", e.target.value)}
                   />
+                  <Contador atual={item.title.length} max={LIMITES_ATUALMENTE.titulo} />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor={`${slot}-subtitle`}>Subtítulo</Label>
@@ -169,8 +181,10 @@ export default function AtualmenteAdminPage() {
                     id={`${slot}-subtitle`}
                     value={item.subtitle}
                     placeholder={EXEMPLOS[slot].subtitle}
+                    maxLength={LIMITES_ATUALMENTE.subtitulo}
                     onChange={(e) => atualizar(slot, "subtitle", e.target.value)}
                   />
+                  <Contador atual={item.subtitle.length} max={LIMITES_ATUALMENTE.subtitulo} />
                 </div>
                 <div className="space-y-1.5 sm:col-span-2">
                   <Label htmlFor={`${slot}-link`}>Link (opcional)</Label>

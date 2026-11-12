@@ -27,6 +27,7 @@ import { bookFormSchema, type BookFormValues } from "@/lib/validations"
 import { BOOK_STATUS_LABEL, BOOK_STATUSES } from "@/types/book"
 import { slugify } from "@/lib/utils"
 import { createBook, updateBook, isSlugTaken } from "@/lib/firebase/books"
+import { livros } from "@/lib/conteudo/livros"
 
 type Props = {
   bookId?: string
@@ -100,11 +101,12 @@ export function BookForm({ bookId, initialValues }: Props) {
 
     setSubmitting(true)
     try {
+      const payload = livros.paraEntrada(finalValues)
       if (isEdit && bookId) {
-        await updateBook(bookId, finalValues)
+        await updateBook(bookId, payload)
         toast.success("Livro atualizado")
       } else {
-        const newId = await createBook(finalValues)
+        const newId = await createBook(payload)
         toast.success(
           finalValues.published ? "Livro publicado" : "Rascunho salvo"
         )

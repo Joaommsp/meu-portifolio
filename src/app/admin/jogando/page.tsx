@@ -9,14 +9,18 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
+import { Contador } from "@/components/admin/Contador"
 import { ImageUploader } from "@/components/admin/ImageUploader"
 import { TagsInput } from "@/components/admin/TagsInput"
+import { LIMITES_JOGANDO } from "@/lib/validations"
 import {
   listPlaying,
   createPlaying,
   updatePlaying,
   deletePlaying,
 } from "@/lib/firebase/playing"
+import { jogando } from "@/lib/conteudo/jogando"
+import { primeiroErro } from "@/lib/conteudo/validacao"
 import {
   EMPTY_PLAYING,
   PLAYING_STATUS,
@@ -85,14 +89,18 @@ export default function JogandoAdminPage() {
 
   async function salvar(idx: number) {
     const item = itens[idx]!
-    if (!item.title.trim()) {
-      toast.error("Falta o título", {
-        description: "O card precisa ao menos do nome do jogo.",
+    const { id, ...dados } = item
+    const erro = primeiroErro(jogando.schema, dados)
+    if (erro) {
+      toast.error(erro.mensagem, {
+        description:
+          erro.campo === "title"
+            ? "O card precisa ao menos do nome do jogo."
+            : undefined,
       })
       return
     }
-    setSalvandoId(item.id ?? `novo-${idx}`)
-    const { id, ...dados } = item
+    setSalvandoId(id ?? `novo-${idx}`)
     try {
       if (id) {
         await updatePlaying(id, dados)
@@ -218,8 +226,10 @@ export default function JogandoAdminPage() {
                       id={`titulo-${idx}`}
                       value={item.title}
                       placeholder="Nome do jogo"
+                      maxLength={LIMITES_JOGANDO.titulo}
                       onChange={(e) => alterar(idx, "title", e.target.value)}
                     />
+                    <Contador atual={item.title.length} max={LIMITES_JOGANDO.titulo} />
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor={`plataforma-${idx}`}>Plataforma</Label>
@@ -227,8 +237,10 @@ export default function JogandoAdminPage() {
                       id={`plataforma-${idx}`}
                       value={item.platform}
                       placeholder="PS5, PC, Switch…"
+                      maxLength={LIMITES_JOGANDO.plataforma}
                       onChange={(e) => alterar(idx, "platform", e.target.value)}
                     />
+                    <Contador atual={item.platform.length} max={LIMITES_JOGANDO.plataforma} />
                   </div>
                 </div>
 
@@ -239,8 +251,10 @@ export default function JogandoAdminPage() {
                     value={item.synopsis}
                     rows={3}
                     placeholder="Do que se trata, ou o que te prendeu nele."
+                    maxLength={LIMITES_JOGANDO.sinopse}
                     onChange={(e) => alterar(idx, "synopsis", e.target.value)}
                   />
+                  <Contador atual={item.synopsis.length} max={LIMITES_JOGANDO.sinopse} />
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -250,6 +264,7 @@ export default function JogandoAdminPage() {
                       value={item.genres}
                       onChange={(tags) => alterar(idx, "genres", tags)}
                       placeholder="RPG, ação…"
+                      maxTags={LIMITES_JOGANDO.generos}
                     />
                   </div>
                   <div className="space-y-1.5">

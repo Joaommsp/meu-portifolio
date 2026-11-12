@@ -8,13 +8,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import { Contador } from "@/components/admin/Contador"
 import { ImageUploader } from "@/components/admin/ImageUploader"
+import { LIMITES_FIGMA } from "@/lib/validations"
 import {
   listFigmaFiles,
   createFigmaFile,
   updateFigmaFile,
   deleteFigmaFile,
 } from "@/lib/firebase/figma"
+import { figma } from "@/lib/conteudo/figma"
+import { primeiroErro } from "@/lib/conteudo/validacao"
 import {
   EMPTY_FIGMA_FILE,
   FIGMA_PROFILE_URL,
@@ -86,14 +90,18 @@ export default function FigmaAdminPage() {
 
   async function salvar(idx: number) {
     const item = itens[idx]!
-    if (!item.title.trim()) {
-      toast.error("Falta o título", {
-        description: "O card precisa ao menos do nome do arquivo.",
+    const { id, ...dados } = item
+    const erro = primeiroErro(figma.schema, dados)
+    if (erro) {
+      toast.error(erro.mensagem, {
+        description:
+          erro.campo === "title"
+            ? "O card precisa ao menos do nome do arquivo."
+            : undefined,
       })
       return
     }
-    setSalvandoId(item.id ?? `novo-${idx}`)
-    const { id, ...dados } = item
+    setSalvandoId(id ?? `novo-${idx}`)
     try {
       if (id) {
         await updateFigmaFile(id, dados)
@@ -225,8 +233,10 @@ export default function FigmaAdminPage() {
                     id={`titulo-${idx}`}
                     value={item.title}
                     placeholder="Nome do arquivo na Community"
+                    maxLength={LIMITES_FIGMA.titulo}
                     onChange={(e) => alterar(idx, "title", e.target.value)}
                   />
+                  <Contador atual={item.title.length} max={LIMITES_FIGMA.titulo} />
                 </div>
 
                 <div className="space-y-1.5">

@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { GameForm } from "@/components/admin/GameForm"
 import { getGame } from "@/lib/firebase/games"
-import type { Game, GameInput } from "@/types/game"
+import type { Game } from "@/types/game"
+import { games } from "@/lib/conteudo/games"
 
 export default function EditarGamePage() {
   const params = useParams<{ id: string }>()
@@ -60,23 +61,7 @@ export default function EditarGamePage() {
     )
   }
 
-  const initialValues: GameInput = {
-    slug: game.slug,
-    title: game.title,
-    shortDescription: game.shortDescription,
-    history: game.history,
-    whyILikeIt: game.whyILikeIt,
-    coverImage: game.coverImage,
-    gallery: game.gallery,
-    platforms: game.platforms,
-    genres: game.genres,
-    status: game.status,
-    yearPlayed: game.yearPlayed,
-    hoursPlayed: game.hoursPlayed,
-    rating: game.rating,
-    featured: game.featured,
-    published: game.published,
-  }
+  const initialValues = games.deDocumento(game)
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">

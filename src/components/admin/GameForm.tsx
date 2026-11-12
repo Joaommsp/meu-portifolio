@@ -28,6 +28,7 @@ import { gameFormSchema, type GameFormValues } from "@/lib/validations"
 import { GAME_STATUS_LABEL, GAME_STATUSES } from "@/types/game"
 import { slugify } from "@/lib/utils"
 import { createGame, updateGame, isSlugTaken } from "@/lib/firebase/games"
+import { games } from "@/lib/conteudo/games"
 
 type Props = {
   gameId?: string
@@ -103,11 +104,12 @@ export function GameForm({ gameId, initialValues }: Props) {
 
     setSubmitting(true)
     try {
+      const payload = games.paraEntrada(finalValues)
       if (isEdit && gameId) {
-        await updateGame(gameId, finalValues)
+        await updateGame(gameId, payload)
         toast.success("Jogo atualizado")
       } else {
-        const newId = await createGame(finalValues)
+        const newId = await createGame(payload)
         toast.success(
           finalValues.published ? "Jogo publicado" : "Rascunho salvo"
         )

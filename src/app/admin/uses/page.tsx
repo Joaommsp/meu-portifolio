@@ -23,6 +23,10 @@ import {
   updateUsesCategory,
   deleteUsesCategory,
 } from "@/lib/firebase/uses"
+import { Contador } from "@/components/admin/Contador"
+import { uses } from "@/lib/conteudo/uses"
+import { primeiroErro } from "@/lib/conteudo/validacao"
+import { LIMITES_USES } from "@/lib/validations"
 import {
   EMPTY_USES_CATEGORY,
   EMPTY_USES_ITEM,
@@ -59,8 +63,10 @@ function ItemEditor({
                 id={`${prefixo}-nome`}
                 value={item.name}
                 placeholder="VS Code"
+                maxLength={LIMITES_USES.nomeDoItem}
                 onChange={(e) => onAlterar("name", e.target.value)}
               />
+              <Contador atual={item.name.length} max={LIMITES_USES.nomeDoItem} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor={`${prefixo}-url`} className="text-xs">
@@ -94,8 +100,10 @@ function ItemEditor({
             value={item.description}
             rows={2}
             placeholder="Por que você usa, e pra quê."
+            maxLength={LIMITES_USES.descricaoDoItem}
             onChange={(e) => onAlterar("description", e.target.value)}
           />
+          <Contador atual={item.description.length} max={LIMITES_USES.descricaoDoItem} />
         </div>
 
         {/* <div>, não <label>: o Switch já trata o clique, e um <label> em
@@ -222,19 +230,21 @@ export default function UsesAdminPage() {
 
   async function salvar(idx: number) {
     const cat = categorias[idx]!
-    if (!cat.title.trim()) {
-      toast.error("Falta o título", {
-        description: "A categoria precisa de um nome.",
-      })
-      return
-    }
-    setSalvandoId(cat.id ?? `nova-${idx}`)
     const { id, ...dados } = cat
     // Item sem nome não vai pro banco: seria uma linha em branco na página.
     const limpo = {
       ...dados,
       items: dados.items.filter((i) => i.name.trim() !== ""),
     }
+    const erro = primeiroErro(uses.schema, limpo)
+    if (erro) {
+      toast.error(erro.mensagem, {
+        description:
+          erro.campo === "title" ? "A categoria precisa de um nome." : undefined,
+      })
+      return
+    }
+    setSalvandoId(id ?? `nova-${idx}`)
     try {
       if (id) {
         await updateUsesCategory(id, limpo)
@@ -388,10 +398,12 @@ export default function UsesAdminPage() {
                           id={`cat-titulo-${idx}`}
                           value={cat.title}
                           placeholder="Hardware"
+                          maxLength={LIMITES_USES.titulo}
                           onChange={(e) =>
                             alterarCategoria(idx, "title", e.target.value)
                           }
                         />
+                        <Contador atual={cat.title.length} max={LIMITES_USES.titulo} />
                       </div>
                       <div className="space-y-1.5">
                         <Label htmlFor={`cat-ordem-${idx}`}>Ordem</Label>
@@ -416,10 +428,12 @@ export default function UsesAdminPage() {
                         id={`cat-desc-${idx}`}
                         value={cat.description}
                         placeholder="O que tem em cima da mesa enquanto codo."
+                        maxLength={LIMITES_USES.descricao}
                         onChange={(e) =>
                           alterarCategoria(idx, "description", e.target.value)
                         }
                       />
+                      <Contador atual={cat.description.length} max={LIMITES_USES.descricao} />
                     </div>
 
                     <div className="space-y-3">

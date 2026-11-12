@@ -1,12 +1,8 @@
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore"
 
 import { requireDb } from "./config"
-import {
-  CURRENTLY_SLOTS,
-  EMPTY_CURRENTLY,
-  type Currently,
-  type CurrentlyItem,
-} from "@/types/currently"
+import { CURRENTLY_SLOTS, EMPTY_CURRENTLY, type Currently } from "@/types/currently"
+import { atualmente, normalizarItemAtual } from "@/lib/conteudo/atualmente"
 
 /**
  * Escrita e leitura autenticada do "O que tá rolando" (admin, no browser).
@@ -16,18 +12,9 @@ import {
  * fixas. Coleção só faria sentido se a lista fosse variável.
  */
 
-const COLLECTION = "site"
-const DOC_ID = "currently"
-
-function normalizarItem(raw: unknown): CurrentlyItem {
-  const o = (raw ?? {}) as Partial<CurrentlyItem>
-  return {
-    title: typeof o.title === "string" ? o.title : "",
-    subtitle: typeof o.subtitle === "string" ? o.subtitle : "",
-    link: typeof o.link === "string" ? o.link : "",
-    visible: Boolean(o.visible),
-  }
-}
+const COLLECTION = atualmente.colecao
+// Documento único: a definição sempre traz o id.
+const DOC_ID = atualmente.idDoDocumentoUnico!
 
 /** Leitura para o admin — sempre devolve a estrutura completa. */
 export async function getCurrently(): Promise<Currently> {
@@ -38,7 +25,7 @@ export async function getCurrently(): Promise<Currently> {
   const data = snap.data()
   const out = { ...EMPTY_CURRENTLY, exists: true } as Currently
   for (const slot of CURRENTLY_SLOTS) {
-    out[slot] = normalizarItem(data[slot])
+    out[slot] = normalizarItemAtual(data[slot])
   }
   const ts = data.updatedAt
   out.updatedAt =
@@ -54,7 +41,7 @@ export async function saveCurrently(valor: Currently): Promise<void> {
   const db = requireDb()
   const payload: Record<string, unknown> = { updatedAt: serverTimestamp() }
   for (const slot of CURRENTLY_SLOTS) {
-    payload[slot] = normalizarItem(valor[slot])
+    payload[slot] = normalizarItemAtual(valor[slot])
   }
   await setDoc(doc(db, COLLECTION, DOC_ID), payload, { merge: true })
 }

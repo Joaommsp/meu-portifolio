@@ -27,6 +27,12 @@ export function slugify(text: string): string {
     .replace(/^-+|-+$/g, "")
 }
 
+/** Lista em texto corrido: `["a", "b", "c"]` vira `a, b ou c`. */
+export function juntarComOu(itens: readonly string[]): string {
+  if (itens.length <= 1) return itens.join("")
+  return `${itens.slice(0, -1).join(", ")} ou ${itens.at(-1)}`
+}
+
 /**
  * Trunca string preservando palavras (não corta no meio).
  * Ex: truncate("Olá mundo bem-vindo", 10) → "Olá mundo…"

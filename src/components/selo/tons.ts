@@ -16,4 +16,7 @@ export const TOM_SELO = {
     "border-warning/40 bg-[color-mix(in_oklch,var(--warning)_10%,var(--card))] text-warning-texto",
   neutro: "border-border bg-muted text-foreground",
   apagado: "border-muted-foreground/30 bg-muted text-muted-foreground",
+  /** Não há `--destructive-texto`: o destrutivo (L 0,52) já passa de 4,5:1 sobre o fundo a 10%. */
+  perigo:
+    "border-destructive/40 bg-[color-mix(in_oklch,var(--destructive)_10%,var(--card))] text-destructive",
 } as const

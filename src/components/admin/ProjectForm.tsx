@@ -32,8 +32,8 @@ import {
   type ProjectCategory,
   type ProjectStatus,
 } from "@/types/project"
-import type { ProjectInput } from "@/types/project"
 import { slugify } from "@/lib/utils"
+import { projetos } from "@/lib/conteudo/projetos"
 import {
   createProject,
   updateProject,
@@ -71,19 +71,6 @@ const EMPTY: ProjectFormValues = {
 type Props = {
   projectId?: string
   initialValues?: Partial<ProjectFormValues>
-}
-
-function toIsoDate(d: Date): string {
-  // YYYY-MM-DD em fuso local (input type=date espera isso)
-  const yyyy = d.getFullYear()
-  const mm = String(d.getMonth() + 1).padStart(2, "0")
-  const dd = String(d.getDate()).padStart(2, "0")
-  return `${yyyy}-${mm}-${dd}`
-}
-
-function fromIsoDate(s: string): Date {
-  // Sem timezone: cria no local time pra evitar shift de UTC
-  return new Date(`${s}T00:00:00`)
 }
 
 export function ProjectForm({ projectId, initialValues }: Props) {
@@ -164,26 +151,6 @@ export function ProjectForm({ projectId, initialValues }: Props) {
     setDraftAvailable(null)
   }
 
-  /** Converte ProjectFormValues (strings) para ProjectInput (Date + null URLs). */
-  function toProjectInput(values: ProjectFormValues): ProjectInput {
-    return {
-      slug: values.slug,
-      title: values.title,
-      shortDescription: values.shortDescription,
-      fullDescription: values.fullDescription,
-      coverImage: values.coverImage,
-      gallery: values.gallery,
-      technologies: values.technologies,
-      category: values.category,
-      liveUrl: values.liveUrl.trim() || null,
-      githubUrl: values.githubUrl.trim() || null,
-      featured: values.featured,
-      status: values.status,
-      startDate: fromIsoDate(values.startDate),
-      endDate: values.endDate ? fromIsoDate(values.endDate) : null,
-    }
-  }
-
   async function onSubmit(
     values: ProjectFormValues,
     featuredOverride?: boolean
@@ -209,7 +176,7 @@ export function ProjectForm({ projectId, initialValues }: Props) {
 
     setSubmitting(true)
     try {
-      const payload = toProjectInput(finalValues)
+      const payload = projetos.paraEntrada(finalValues)
       if (isEdit && projectId) {
         await updateProject(projectId, payload)
         toast.success("Projeto atualizado")
@@ -625,20 +592,5 @@ export function projectToFormValues(p: {
   startDate: Date
   endDate: Date | null
 }): ProjectFormValues {
-  return {
-    slug: p.slug,
-    title: p.title,
-    shortDescription: p.shortDescription,
-    fullDescription: p.fullDescription,
-    coverImage: p.coverImage,
-    gallery: p.gallery,
-    technologies: p.technologies,
-    category: p.category,
-    liveUrl: p.liveUrl ?? "",
-    githubUrl: p.githubUrl ?? "",
-    featured: p.featured,
-    status: p.status,
-    startDate: toIsoDate(p.startDate),
-    endDate: p.endDate ? toIsoDate(p.endDate) : "",
-  }
+  return projetos.deDocumento(p)
 }

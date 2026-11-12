@@ -12,6 +12,7 @@ import {
   Monitor,
   BookMarked,
   Radio,
+  Plug,
   LogOut,
   ExternalLink,
   Plus,
@@ -75,6 +76,11 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     href: "/admin/uses",
     label: "Uses",
     icon: Monitor,
+  },
+  {
+    href: "/admin/mcp",
+    label: "MCP",
+    icon: Plug,
   },
 ] as const
 

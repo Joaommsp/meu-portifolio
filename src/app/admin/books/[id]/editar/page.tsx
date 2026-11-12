@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { BookForm } from "@/components/admin/BookForm"
 import { getBook } from "@/lib/firebase/books"
-import type { Book, BookInput } from "@/types/book"
+import type { Book } from "@/types/book"
+import { livros } from "@/lib/conteudo/livros"
 
 export default function EditarBookPage() {
   const params = useParams<{ id: string }>()
@@ -60,22 +61,7 @@ export default function EditarBookPage() {
     )
   }
 
-  const initialValues: BookInput = {
-    slug: book.slug,
-    title: book.title,
-    author: book.author,
-    shortDescription: book.shortDescription,
-    synopsis: book.synopsis,
-    whyILikeIt: book.whyILikeIt,
-    coverImage: book.coverImage,
-    genres: book.genres,
-    status: book.status,
-    yearRead: book.yearRead,
-    pages: book.pages,
-    rating: book.rating,
-    featured: book.featured,
-    published: book.published,
-  }
+  const initialValues = livros.deDocumento(book)
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">

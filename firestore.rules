@@ -120,6 +120,31 @@ service cloud.firestore {
         || (request.auth != null && request.auth.uid == userId);
     }
 
+    // ─────────────────────────────────────────────────────────
+    // MCP ACESSOS: chaves pessoais e acessos de uso único
+    //   Guarda só o sha256 do segredo, mas nem isso sai pelo cliente.
+    //   Só o servidor (firebase-admin, que ignora estas regras) lê e grava.
+    // ─────────────────────────────────────────────────────────
+    match /mcpAcessos/{acessoId} {
+      allow read, write: if false;
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // MCP AUDITORIA: o que cada acesso fez
+    //   Fechada ao cliente: a tela lê pela rota de admin do servidor.
+    // ─────────────────────────────────────────────────────────
+    match /mcpAuditoria/{registroId} {
+      allow read, write: if false;
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // MCP LIMITE: contagem de chamadas por acesso e minuto
+    //   Fechada ao cliente: só a transação do servidor conta.
+    // ─────────────────────────────────────────────────────────
+    match /mcpLimite/{janelaId} {
+      allow read, write: if false;
+    }
+
     // Default: nega tudo (defense in depth).
     match /{document=**} {
       allow read, write: if false;

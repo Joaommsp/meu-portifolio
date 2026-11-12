@@ -9,6 +9,8 @@
 
 import imageCompression from "browser-image-compression"
 
+import { ehTipoDeImagem, MENSAGEM_TIPO_NAO_SUPORTADO, urlDeUpload } from "@/lib/imagem"
+
 const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? ""
 const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ?? ""
 const DEFAULT_FOLDER = process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER ?? ""
@@ -38,7 +40,6 @@ type UploadOptions = {
   signal?: AbortSignal
 }
 
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"]
 const MAX_SIZE_BYTES = 10 * 1024 * 1024 // 10 MB no client (Cloudinary aceita até 10MB no plano free)
 
 const COMPRESSION_MAX_SIZE_MB = 1
@@ -58,10 +59,8 @@ export class CloudinaryError extends Error {
 }
 
 export function validateImageFile(file: File): void {
-  if (!ALLOWED_TYPES.includes(file.type)) {
-    throw new CloudinaryError(
-      "Tipo não suportado. Aceitos: JPG, PNG, WebP, GIF."
-    )
+  if (!ehTipoDeImagem(file.type)) {
+    throw new CloudinaryError(MENSAGEM_TIPO_NAO_SUPORTADO)
   }
   if (file.size > MAX_SIZE_BYTES) {
     const sizeMB = (file.size / 1024 / 1024).toFixed(1)
@@ -117,7 +116,7 @@ function sendToCloudinary(
   options: UploadOptions
 ): Promise<CloudinaryUploadResult> {
   return new Promise((resolve, reject) => {
-    const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
+    const url = urlDeUpload(CLOUD_NAME)
     const folder = options.folder ?? DEFAULT_FOLDER
 
     const formData = new FormData()

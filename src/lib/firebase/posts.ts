@@ -18,21 +18,22 @@ import {
 
 import { requireDb } from "./config"
 import type { Post, PostDoc, PostInput } from "@/types/post"
+import { posts } from "@/lib/conteudo/posts"
+import { AGORA, type CamposDerivados } from "@/lib/conteudo/tipos"
 
-const POSTS_COLLECTION = "posts"
+const POSTS_COLLECTION = posts.colecao
 
 /**
- * Estima tempo de leitura: ~200 palavras/min é a média de leitura adulta.
- * Conta palavras no markdown depois de stripear código/links.
+ * Troca a marca `AGORA` dos campos derivados pelo carimbo do servidor.
+ * A regra (readingTime, publishedAt, views) mora em `lib/conteudo/posts`.
  */
-export function estimateReadingTime(content: string): number {
-  const stripped = content
-    .replace(/```[\s\S]*?```/g, "") // code blocks
-    .replace(/`[^`]+`/g, "") // inline code
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // links → texto
-    .replace(/!\[[^\]]*\]\([^)]+\)/g, "") // imagens
-  const words = stripped.split(/\s+/).filter(Boolean).length
-  return Math.max(1, Math.ceil(words / 200))
+function comCarimbo(campos: CamposDerivados): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(campos).map(([k, v]) => [
+      k,
+      v === AGORA ? serverTimestamp() : v,
+    ])
+  )
 }
 
 /** Converte PostDoc (Firestore) → Post (UI). Normaliza arrays ausentes. */
@@ -112,11 +113,9 @@ export async function createPost(input: PostInput): Promise<string> {
   const now = serverTimestamp()
   const payload = {
     ...input,
-    readingTime: estimateReadingTime(input.content),
-    views: 0,
+    ...comCarimbo(posts.derivados!(input, null)),
     createdAt: now,
     updatedAt: now,
-    publishedAt: input.published ? now : null,
   }
   const ref = await addDoc(collection(db, POSTS_COLLECTION), payload)
   return ref.id
@@ -127,21 +126,13 @@ export async function updatePost(
   patch: Partial<PostInput>
 ): Promise<void> {
   const db = requireDb()
+  // Só a primeira publicação precisa ler o documento atual (publishedAt);
+  // nas demais basta dizer que não é criação.
+  const atual = patch.published === true ? ((await getPost(id)) ?? {}) : {}
   const updates: Record<string, unknown> = {
     ...patch,
+    ...comCarimbo(posts.derivados!(patch, atual)),
     updatedAt: serverTimestamp(),
-  }
-  if (patch.content !== undefined) {
-    updates.readingTime = estimateReadingTime(patch.content)
-  }
-  // Define publishedAt na primeira publicação
-  if (patch.published === true) {
-    const current = await getPost(id)
-    if (current && !current.publishedAt) {
-      updates.publishedAt = serverTimestamp()
-    }
-  } else if (patch.published === false) {
-    updates.publishedAt = null
   }
   await updateDoc(doc(db, POSTS_COLLECTION, id), updates)
 }
